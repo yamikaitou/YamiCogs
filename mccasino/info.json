@@ -1,0 +1,10 @@
+{
+    "author": ["YamiKaitou#8975"],
+    "name": "Minecraft Casino",
+    "short": "Play Casino games with random Minecraft stuff",
+    "description": "Play various Casino games using various information from Minecraft",
+    "tags": [
+        "economy", "fun"
+    ],
+    "hidden": true
+}
