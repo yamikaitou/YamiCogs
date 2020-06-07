@@ -131,4 +131,4 @@ dmypy.json
 
 .vscode/
 backend-scripts/mccasino/server.jar
-backend-scripts/mccasino/en_us.json
+backend-scripts/mccasino/assets/minecraft/lang/en_us.json
