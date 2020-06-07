@@ -31,6 +31,8 @@ with zipfile.ZipFile("server.jar") as z:
 with open("assets/minecraft/lang/en_us.json") as f:
     data = json.load(f)
 
+forbidden = ['banner', 'bed', "Jigsaw", "Structure", "head", "gateway", "portal", "Void Air", "Cave Air", "skull", "stem", "egg", "shulker", "power", "command", "vines", "invested", "Frosted Ice", "Wall Torch", "water", "lava", "barrier", ".air"]
 for key,value in data.items():
-    if key[:16] == "block.minecraft." and key[:23] != "block.minecraft.banner.":
-        print(f"{key[16:]} - {value}")
+    if key[:16] == "block.minecraft.":
+        if any(x not in value for x in forbidden) and any(x not in key for x in forbidden):
+            print(f"{key[16:]} - {value}")
