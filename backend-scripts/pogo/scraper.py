@@ -11,8 +11,7 @@ import re
 import json
 
 URL = "https://pokemondb.net/pokedex/all"
-CNDURL = "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/{}.png"
-
+os.chdir(os.path.dirname(__file__))
 
 # DOESNT DO MEGAS ETC.
 
@@ -30,21 +29,22 @@ async def main():
         name = poke.find("a")
         _id = poke.find("span", {"class": "infocard-cell-data"}).get_text()
         small = poke.find("small", {"class": "text-muted"})
-        stats = poke.find_all("td", {"class": "cell-num"})
-        stats_dict = {}
-        for i, stat in enumerate(stats[1:]):
-            stats_dict[stat_headlines[i]] = stat.get_text()
-        icons = poke.find("td", {"class": "cell-icon"})
-        types = []
-        for icon in icons.find_all("a"):
-            types.append(icon.get_text())
         name = name.get_text() if name is not None else f"Undefined-{i}"
         if small is not None:
             small = small.get_text()
         else:
             small = None
         reform = re.compile("(Mega|Alolan|Galarian|Partner)")
-        if small != None and not reform.match(small):
+        if small != None:
+            if not reform.match(small):
+                a["normal"].append(
+                    {
+                        "name": name,
+                        "alias": small,
+                        "id": _id,
+                    }
+                )
+        else:
             a["normal"].append(
                 {
                     "name": name,
@@ -52,28 +52,12 @@ async def main():
                     "id": _id,
                 }
             )
-    #await get_img(a)
     await write(a)
 
 
 async def write(lst):
     with open("pokemon.json", "w", encoding="utf-8") as f:
         f.write(json.dumps(lst, indent=2))
-
-
-async def get_img(lst):
-    session = aiohttp.ClientSession()
-    for pokemon in lst["normal"]:
-        async with session.get(CNDURL.format(id)) as img:
-            if os.path.exists(f'data/{pokemon["name"]}.png'):
-                name = f"data/{pokemon['name']}-{pokemon['alias']}.png"
-            else:
-                name = f"data/{pokemon['name']}.png"
-            with open(name, "wb") as f:
-                f.write(BytesIO(await img.read()).getbuffer())
-        print(pokemon["id"], name)
-
-    await session.close()
 
 
 loop = asyncio.get_event_loop()
