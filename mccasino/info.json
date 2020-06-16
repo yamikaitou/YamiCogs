@@ -6,5 +6,6 @@
     "tags": [
         "economy", "fun"
     ],
-    "hidden": true
+    "hidden": true,
+    "install_msg": "Cog is unsupported and unfinished, use at your own risk"
 }
