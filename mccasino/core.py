@@ -14,7 +14,11 @@ class MinecraftCasino(commands.Cog):
 
         default_guild = {
             "conversion": 100,
-            "poker_cost": 45
+            "poker": {
+                "cost": 45,
+                "min": 4,
+                "stats": 10
+            }
         }
 
         self.config.register_guild(**default_guild)
@@ -28,7 +32,12 @@ class MinecraftCasino(commands.Cog):
     @mccasino.command(name="info")
     async def mcc_info(self, ctx):
         """View configured settings"""
-        pass
+        embed = discord.Embed(title="Minecraft Casino Settings", color=ctx.me.color)
+
+        embed.add_field(name="General", value="Cost per Diamond: {conversion}")
+        embed.add_field(name="Poker", value="Diamonds to Play: {cost}\nMinimun Players: {min}\nNumber of Statistics: {stats}")
+
+        await ctx.send(embed=embed)
     
     @commands.group()
     async def mcpoker(self, ctx):
