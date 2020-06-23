@@ -32,10 +32,12 @@ class MinecraftCasino(commands.Cog):
     @mccasino.command(name="info")
     async def mcc_info(self, ctx):
         """View configured settings"""
-        embed = discord.Embed(title="Minecraft Casino Settings", color=ctx.me.color)
 
-        embed.add_field(name="General", value="Cost per Diamond: {conversion}")
-        embed.add_field(name="Poker", value="Diamonds to Play: {cost}\nMinimun Players: {min}\nNumber of Statistics: {stats}")
+        settings = await self.config.guild(ctx.guild).all()
+
+        embed = discord.Embed(title="Minecraft Casino Settings", color=ctx.me.color)
+        embed.add_field(name="General", value=f"Cost per Diamond: {settings['conversion']}", inline=False)
+        embed.add_field(name="Poker", value=f"Diamonds to Play: {settings['poker']['cost']}\nMinimun Players: {settings['poker']['min']}\nNumber of Statistics: {settings['poker']['stats']}", inline=False)
 
         await ctx.send(embed=embed)
     
