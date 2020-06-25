@@ -1,0 +1,11 @@
+{
+    "author": ["YamiKaitou#8975"],
+    "name": "4 in a Row",
+    "short": "Play a game of 4 in a Row",
+    "description": "Play a game of 4 in a Row, aka Connect 4",
+    "tags": [
+        "games"
+    ],
+    "hidden": true,
+    "install_msg": "Cog is unsupported and unfinished, use at your own risk"
+}
