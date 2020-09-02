@@ -1,0 +1,15 @@
+{
+    "author": ["YamiKaitou#8975"],
+    "name": "PayDay",
+    "short": "Customizable PayDay system",
+    "description": "Customize your Bot's PayDay system with Hourly (1 hour), Daily (1 day), Weekly (7 days), Monthly (30 days), Quarterly (122 days), and Yearly (365 days) payday amounts",
+    "tags": [
+        "utility",
+        "economy"
+    ],
+    "requirements": [
+        "tabulate"
+    ],
+    "min_bot_version": "3.4.0",
+    "end_user_data_statement": "This cog does not persistently store end user data. This cog does store Discord UserIDs as needed for operation."
+}
