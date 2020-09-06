@@ -23,6 +23,28 @@ def guild_only_check():
 
     return commands.check(pred)
 
+# taken from Red-Discordbot bank.py
+def is_owner_if_bank_global():
+    """
+    Command decorator. If the bank is global, it checks if the author is
+    bot owner, otherwise it only checks
+    if command was used in guild - it DOES NOT check any permissions.
+    When used on the command, this should be combined
+    with permissions check like `guildowner_or_permissions()`.
+    """
+
+    async def pred(ctx: commands.Context):
+        author = ctx.author
+        if not await bank.is_global():
+            if not ctx.guild:
+                return False
+            return True
+        else:
+            return await ctx.bot.is_owner(author)
+
+    return commands.check(pred)
+
+
 class PayDay(commands.Cog):
     """
     Customizable PayDay system
@@ -41,19 +63,19 @@ class PayDay(commands.Cog):
 
         default_config = {
             "hour": 10,
-            "day": 0,
-            "week": 0,
-            "month": 0,
-            "quarter": 0,
-            "year": 0
+            "day": 100,
+            "week": 1000,
+            "month": 10000,
+            "quarter": 100000,
+            "year": 1000000
         }
         default_user = {
-            "hour": "2020-09-01T00:00:01-04:00",
-            "day": "2020-09-01T00:00:01-04:00",
-            "week": "2020-09-01T00:00:01-04:00",
-            "month": "2020-09-01T00:00:01-04:00",
-            "quarter": "2020-09-01T00:00:01-04:00",
-            "year": "2020-09-01T00:00:01-04:00"
+            "hour": "2016-01-02T04:25:00-04:00",
+            "day": "2016-01-02T04:25:00-04:00",
+            "week": "2016-01-02T04:25:00-04:00",
+            "month": "2016-01-02T04:25:00-04:00",
+            "quarter": "2016-01-02T04:25:00-04:00",
+            "year": "2016-01-02T04:25:00-04:00"
         }
 
         self.config.register_global(**default_config)
@@ -67,6 +89,7 @@ class PayDay(commands.Cog):
         """Get some free more currency."""
         pass
     
+    @guild_only_check()
     @freecredits.command(name="hourly")
     async def freecredits_hourly(self, ctx):
         """Get some free currency every hour"""
@@ -96,6 +119,7 @@ class PayDay(commands.Cog):
                 else:
                     await ctx.send("Sorry, you still have {} until your next hourly bonus".format(humanize_timedelta(timedelta=(timedelta(hours=1)-(now-last)))))
     
+    @guild_only_check()
     @freecredits.command(name="daily")
     async def freecredits_daily(self, ctx):
         """Get some free currency every day"""
@@ -111,7 +135,7 @@ class PayDay(commands.Cog):
                     await self.config.user(ctx.author).day.set(now.isoformat())
                     await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name())))
                 else:
-                    await ctx.send("Sorry, you still have {} until your next daily bonus".format(humanize_timedelta(timedelta=(timedelta(hours=1)-(now-last)))))
+                    await ctx.send("Sorry, you still have {} until your next daily bonus".format(humanize_timedelta(timedelta=(timedelta(days=1)-(now-last)))))
         else:
             free = await self.config.guild(ctx.guild).day()
             if free > 0:
@@ -123,8 +147,9 @@ class PayDay(commands.Cog):
                     await self.config.member(ctx.author).day.set(now.isoformat())
                     await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild))))
                 else:
-                    await ctx.send("Sorry, you still have {} until your next daily bonus".format(humanize_timedelta(timedelta=(timedelta(hours=1)-(now-last)))))
+                    await ctx.send("Sorry, you still have {} until your next daily bonus".format(humanize_timedelta(timedelta=(timedelta(days=1)-(now-last)))))
     
+    @guild_only_check()
     @freecredits.command(name="weekly")
     async def freecredits_weekly(self, ctx):
         """Get some free currency every week (7 days)"""
@@ -140,7 +165,7 @@ class PayDay(commands.Cog):
                     await self.config.user(ctx.author).week.set(now.isoformat())
                     await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name())))
                 else:
-                    await ctx.send("Sorry, you still have {} until your next weekly bonus".format(humanize_timedelta(timedelta=(timedelta(hours=1)-(now-last)))))
+                    await ctx.send("Sorry, you still have {} until your next weekly bonus".format(humanize_timedelta(timedelta=(timedelta(days=7)-(now-last)))))
         else:
             free = await self.config.guild(ctx.guild).week()
             if free > 0:
@@ -152,8 +177,9 @@ class PayDay(commands.Cog):
                     await self.config.member(ctx.author).week.set(now.isoformat())
                     await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild))))
                 else:
-                    await ctx.send("Sorry, you still have {} until your next weekly bonus".format(humanize_timedelta(timedelta=(timedelta(hours=1)-(now-last)))))
+                    await ctx.send("Sorry, you still have {} until your next weekly bonus".format(humanize_timedelta(timedelta=(timedelta(days=7)-(now-last)))))
     
+    @guild_only_check()
     @freecredits.command(name="monthly")
     async def freecredits_monthly(self, ctx):
         """Get some free currency every month (30 days)"""
@@ -169,7 +195,7 @@ class PayDay(commands.Cog):
                     await self.config.user(ctx.author).month.set(now.isoformat())
                     await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name())))
                 else:
-                    await ctx.send("Sorry, you still have {} until your next monthly bonus".format(humanize_timedelta(timedelta=(timedelta(hours=1)-(now-last)))))
+                    await ctx.send("Sorry, you still have {} until your next monthly bonus".format(humanize_timedelta(timedelta=(timedelta(days=30)-(now-last)))))
         else:
             free = await self.config.guild(ctx.guild).month()
             if free > 0:
@@ -181,8 +207,9 @@ class PayDay(commands.Cog):
                     await self.config.member(ctx.author).month.set(now.isoformat())
                     await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild))))
                 else:
-                    await ctx.send("Sorry, you still have {} until your next monthly bonus".format(humanize_timedelta(timedelta=(timedelta(hours=1)-(now-last)))))
+                    await ctx.send("Sorry, you still have {} until your next monthly bonus".format(humanize_timedelta(timedelta=(timedelta(days=30)-(now-last)))))
     
+    @guild_only_check()
     @freecredits.command(name="quarterly")
     async def freecredits_quarterly(self, ctx):
         """Get some free currency every quarter (122 days)"""
@@ -198,7 +225,7 @@ class PayDay(commands.Cog):
                     await self.config.user(ctx.author).quarter.set(now.isoformat())
                     await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name())))
                 else:
-                    await ctx.send("Sorry, you still have {} until your next quarterly bonus".format(humanize_timedelta(timedelta=(timedelta(hours=1)-(now-last)))))
+                    await ctx.send("Sorry, you still have {} until your next quarterly bonus".format(humanize_timedelta(timedelta=(timedelta(days=122)-(now-last)))))
         else:
             free = await self.config.guild(ctx.guild).quarter()
             if free > 0:
@@ -210,8 +237,9 @@ class PayDay(commands.Cog):
                     await self.config.member(ctx.author).quarter.set(now.isoformat())
                     await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild))))
                 else:
-                    await ctx.send("Sorry, you still have {} until your next quarterly bonus".format(humanize_timedelta(timedelta=(timedelta(hours=1)-(now-last)))))
+                    await ctx.send("Sorry, you still have {} until your next quarterly bonus".format(humanize_timedelta(timedelta=(timedelta(days=122)-(now-last)))))
     
+    @guild_only_check()
     @freecredits.command(name="yearly")
     async def freecredits_quarterly(self, ctx):
         """Get some free currency every year (365 days)"""
@@ -227,7 +255,7 @@ class PayDay(commands.Cog):
                     await self.config.user(ctx.author).year.set(now.isoformat())
                     await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name())))
                 else:
-                    await ctx.send("Sorry, you still have {} until your next yearly bonus".format(humanize_timedelta(timedelta=(timedelta(hours=1)-(now-last)))))
+                    await ctx.send("Sorry, you still have {} until your next yearly bonus".format(humanize_timedelta(timedelta=(timedelta(days=365)-(now-last)))))
         else:
             free = await self.config.guild(ctx.guild).year()
             if free > 0:
@@ -239,7 +267,30 @@ class PayDay(commands.Cog):
                     await self.config.member(ctx.author).year.set(now.isoformat())
                     await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild))))
                 else:
-                    await ctx.send("Sorry, you still have {} until your next yearly bonus".format(humanize_timedelta(timedelta=(timedelta(hours=1)-(now-last)))))
+                    await ctx.send("Sorry, you still have {} until your next yearly bonus".format(humanize_timedelta(timedelta=(timedelta(days=365)-(now-last)))))
+    
+    @is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @commands.group()
+    async def pdconfig(self, ctx):
+        """Configure the `freecredits` options"""
+        pass
+
+    @is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @pdconfig.command(name="hourly")
+    async def pdconfig_hourly(self, ctx):
+        """Configure the `hourly` options"""
+        pass
+
+    
+    @commands.group()
+    async def test(self, ctx):
+        await ctx.send("Hi")
+
+    @test.command()
+    async def ing(self, ctx):
+        await ctx.send(ctx.command)
     
     async def red_delete_data_for_user(
         self,
