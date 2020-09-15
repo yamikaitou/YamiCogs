@@ -8,13 +8,20 @@ class Kill(commands.Cog):
     Kill people in interesting ways
     """
 
+    __version__ = "2.0"
+
+    def format_help_for_context(self, ctx):
+        """Thanks Sinbad."""
+        pre_processed = super().format_help_for_context(ctx)
+        return f"{pre_processed}\nCog Version: {self.__version__}"
+
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=582650109, force_registration=True)
         self.config.register_guild(
             **{
                 "msg": ["{killer} slays {victim}"],
-                "selfkill": "Per the Laws of Robotics, I cannot allow you to kill yourself",
+                "selfkill": "Per the Laws of Robotics, I cannot assist you in killing yourself",
                 "botkill": "Wow, how original. I laugh at your feeble attempt to kill me",
             }
         )
@@ -129,21 +136,11 @@ class Kill(commands.Cog):
                 victim2="*" + user.name + "*",
             )
         )
+    
+    async def red_get_data_for_user(self, *, user_id: int):
+        # this cog does not store any data
+        return {}
 
-    @commands.command()
-    async def trout(self, ctx, *, user: discord.Member):
-        """
-            Slap a user with a trout
-        """
-
-        if user is ctx.guild.me:
-            await ctx.send(
-                "Special delivery for {}\nI slap you with a large pufferfish :blowfish:".format(
-                    ctx.author.mention
-                )
-            )
-        else:
-            await ctx.send(
-                "Special delivery for {}, courtesy of Fish Prime (the freshest fish delivered anywhere)\n"
-                "I slap you with a large trout :fish:".format(user.mention)
-            )
+    async def red_delete_data_for_user(self, *, requester, user_id: int) -> None:
+        # this cog does not store any data
+        pass
