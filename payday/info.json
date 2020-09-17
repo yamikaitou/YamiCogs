@@ -11,5 +11,6 @@
         "tabulate"
     ],
     "min_bot_version": "3.4.0",
-    "end_user_data_statement": "This cog does not persistently store end user data. This cog does store Discord UserIDs as needed for operation."
+    "end_user_data_statement": "This cog does not persistently store end user data. This cog does store Discord UserIDs as needed for operation.",
+    "hidden": true
 }
