@@ -12,5 +12,6 @@
     ],
     "min_bot_version": "3.4.0",
     "end_user_data_statement": "This cog does not persistently store end user data. This cog does store Discord UserIDs as needed for operation.",
-    "hidden": true
+    "hidden": true,
+    "install_msg": "Thanks for installing the beta. Please note that I currently do not support this cog and it can change and/or break at any time. Unless you havea  good reason to use it now, please uninstall it until I've declared it as available (check the repo Readme for a list of released and supported cogs)"
 }
