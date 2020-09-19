@@ -8,7 +8,9 @@ Welcome to YamiCogs's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Cog Guides
+
+   kill
 
 
 
