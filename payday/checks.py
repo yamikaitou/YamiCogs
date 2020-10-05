@@ -33,6 +33,17 @@ def is_owner_if_bank_global():
 
     return commands.check(pred)
 
+def all():
+    async def pred(ctx: commands.Context):
+        if await bank.is_global():
+            return True
+        elif not await bank.is_global() and ctx.guild is not None:
+            return True
+        else:
+            return False
+
+    return commands.check(pred)
+
 def hourly():
     async def pred(ctx: commands.Context):
         if await bank.is_global():

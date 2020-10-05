@@ -1,8 +1,9 @@
 import discord
 from discord.ext import tasks
 from redbot.core import commands, Config, checks, bank
+from redbot.core.commands import BadArgument
 from redbot.core.bot import Red
-from redbot.core.utils.chat_formatting import box, humanize_timedelta
+from redbot.core.utils.chat_formatting import box, humanize_timedelta, inline
 from tabulate import tabulate
 import logging
 from datetime import datetime, timedelta
@@ -18,6 +19,9 @@ class PayDay(commands.Cog):
     """
 
     __version__ = "0.1"
+
+    settings = {'day':1,'week':7,'month':30,'quarter':122,'year':365}
+    friendly = {'hour':"Hourly",'day':"Daily",'week':"Weekly",'month':"Monthly",'quarter':"Quarterly",'year':"Yearly"}
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""
@@ -51,10 +55,91 @@ class PayDay(commands.Cog):
         self.config.register_user(**default_user)
 
     @lc.guild_only_check()
-    @commands.group(invoke_without_command=True)
+    @commands.group()
     async def freecredits(self, ctx):
         """Get some free more currency."""
         pass
+
+    @lc.all()
+    @freecredits.command(name="times")
+    async def freecredits_times(self, ctx):
+        """Display remaining time for all options"""
+
+        if await bank.is_global():
+            amounts = await self.config.all()
+            times = await self.config.user(ctx.author).all()
+            now = datetime.now().astimezone().replace(microsecond=0)
+            strings = ""
+
+            if amounts['hour']:
+                td = (now-datetime.fromisoformat(times['hour']))
+                strings += self.friendly['hour'] + ": " + (humanize_timedelta(timedelta=(timedelta(hours=1)-td)) if td.seconds < 3600 else "Available Now!") + "\n"
+            
+            for k,v in self.settings.items():
+                if amounts[k]:
+                    td = (now-(datetime.fromisoformat(times[k])))
+                    strings += self.friendly[k] + ": " + (humanize_timedelta(timedelta=(timedelta(days=v)-td)) if td.days < v else "Available Now!") + "\n"
+            
+            await ctx.send(strings)
+        else:
+            amounts = await self.config.guild(ctx.guild).all()
+            times = await self.config.member(ctx.author).all()
+            now = datetime.now().astimezone().replace(microsecond=0)
+            strings = ""
+
+            if amounts['hour']:
+                td = (now-(datetime.fromisoformat(times['hour'])))
+                strings += self.friendly['hour'] + ": " + (humanize_timedelta(timedelta=(timedelta(hours=1)-td)) if td.seconds < 3600 else "Available Now!") + "\n"
+            
+            for k,v in self.settings.items():
+                if amounts[k]:
+                    td = (now-(datetime.fromisoformat(times[k])))
+                    strings += self.friendly[k] + ": " + (humanize_timedelta(timedelta=(timedelta(days=v)-td)) if td.days < v else "Available Now!") + "\n"
+            
+            await ctx.send(strings)
+
+
+    
+    @lc.all()
+    @freecredits.command(name="all")
+    async def freecredits_all(self, ctx):
+        """Claim all available freecredits"""
+        
+        amount = 0
+        if await bank.is_global():
+            amounts = await self.config.all()
+            times = await self.config.user(ctx.author).all()
+            now = datetime.now().astimezone().replace(microsecond=0)
+
+            if amounts['hour'] and (now-(datetime.fromisoformat(times['hour']))).seconds >= 3600:
+                amount += await self.config.hour()
+                await self.config.hour.set(now.isoformat())
+
+            for k,v in self.settings.items():
+                if amounts[k] and (now-(datetime.fromisoformat(times[k]))).days >= v:
+                    amount += amounts[k]
+                    await self.config.user(ctx.author).set_raw(k, value=now.isoformat())
+            
+            if amount > 0:
+                await bank.deposit_credits(ctx.author, amount)
+                await ctx.send("You have claimed all available credits from the `freecredits` program! +{} {}".format(amount, (await bank.get_currency_name())))
+        else:
+            amounts = await self.config.guild(ctx.guild).all()
+            times = await self.config.member(ctx.author).all()
+            now = datetime.now().astimezone().replace(microsecond=0)
+
+            if amounts['hour'] and (now-(datetime.fromisoformat(times['hour']))).seconds >= 3600:
+                amount += await self.config.guild(ctx.guild).hour()
+                await self.config.hour.set(now.isoformat())
+
+            for k,v in self.settings.items():
+                if amounts[k] and (now-(datetime.fromisoformat(times[k]))).days >= v:
+                    amount += amounts[k]
+                    await self.config.member(ctx.author).set_raw(k, value=now.isoformat())
+            
+            if amount > 0:
+                await bank.deposit_credits(ctx.author, amount)
+                await ctx.send("You have claimed all available credits from the `freecredits` program! +{} {}".format(amount, (await bank.get_currency_name(ctx.guild))))
     
     @lc.hourly()
     @freecredits.command(name="hourly")
@@ -64,7 +149,7 @@ class PayDay(commands.Cog):
         if await bank.is_global():
             free = await self.config.hour()
             if free > 0:
-                last = datetime.fromisoformat(await self.config.member(ctx.author).hour())
+                last = datetime.fromisoformat(await self.config.user(ctx.author).hour())
                 now = datetime.now().astimezone().replace(microsecond=0)
                 
                 if (now - last).seconds >= 3600:
@@ -94,7 +179,7 @@ class PayDay(commands.Cog):
         if await bank.is_global():
             free = await self.config.day()
             if free > 0:
-                last = datetime.fromisoformat(await self.config.member(ctx.author).day())
+                last = datetime.fromisoformat(await self.config.user(ctx.author).day())
                 now = datetime.now().astimezone().replace(microsecond=0)
                 
                 if (now - last).days >= 1:
@@ -124,7 +209,7 @@ class PayDay(commands.Cog):
         if await bank.is_global():
             free = await self.config.week()
             if free > 0:
-                last = datetime.fromisoformat(await self.config.member(ctx.author).week())
+                last = datetime.fromisoformat(await self.config.user(ctx.author).week())
                 now = datetime.now().astimezone().replace(microsecond=0)
                 
                 if (now - last).days >= 7:
@@ -154,7 +239,7 @@ class PayDay(commands.Cog):
         if await bank.is_global():
             free = await self.config.month()
             if free > 0:
-                last = datetime.fromisoformat(await self.config.member(ctx.author).month())
+                last = datetime.fromisoformat(await self.config.user(ctx.author).month())
                 now = datetime.now().astimezone().replace(microsecond=0)
                 
                 if (now - last).days >= 30:
@@ -184,7 +269,7 @@ class PayDay(commands.Cog):
         if await bank.is_global():
             free = await self.config.quarter()
             if free > 0:
-                last = datetime.fromisoformat(await self.config.member(ctx.author).quarter())
+                last = datetime.fromisoformat(await self.config.user(ctx.author).quarter())
                 now = datetime.now().astimezone().replace(microsecond=0)
                 
                 if (now - last).days >= 122:
@@ -214,7 +299,7 @@ class PayDay(commands.Cog):
         if await bank.is_global():
             free = await self.config.year()
             if free > 0:
-                last = datetime.fromisoformat(await self.config.member(ctx.author).year())
+                last = datetime.fromisoformat(await self.config.user(ctx.author).year())
                 now = datetime.now().astimezone().replace(microsecond=0)
                 
                 if (now - last).days >= 365:
@@ -258,20 +343,94 @@ class PayDay(commands.Cog):
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
-    @pdconfig.command(name="hourly")
-    async def pdconfig_hourly(self, ctx):
+    @pdconfig.command(name="hourly", aliases=["hour"])
+    async def pdconfig_hourly(self, ctx, value: int):
         """Configure the `hourly` options"""
-        pass
 
-    
-    @commands.group()
-    async def test(self, ctx):
-        await ctx.send("Hi")
+        if value < 0:
+            await ctx.send("You must provide a non-negative value or 0")
+        if await bank.is_global():
+            await self.config.hour.set(value)
+            await ctx.tick()
+        else:
+            await self.config.guild(ctx.guild).hour.set(value)
+            await ctx.tick()
 
-    @test.command()
-    async def ing(self, ctx):
-        await ctx.send(ctx.command)
-    
+    @lc.is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @pdconfig.command(name="daily", aliases=["day"])
+    async def pdconfig_daily(self, ctx, value: int):
+        """Configure the `daily` options"""
+
+        if value < 0:
+            await ctx.send("You must provide a non-negative value or 0")
+        if await bank.is_global():
+            await self.config.day.set(value)
+            await ctx.tick()
+        else:
+            await self.config.guild(ctx.guild).day.set(value)
+            await ctx.tick()
+
+    @lc.is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @pdconfig.command(name="weekly", aliases=["week"])
+    async def pdconfig_weekly(self, ctx, value: int):
+        """Configure the `weekly` options"""
+
+        if value < 0:
+            await ctx.send("You must provide a non-negative value or 0")
+        if await bank.is_global():
+            await self.config.week.set(value)
+            await ctx.tick()
+        else:
+            await self.config.guild(ctx.guild).week.set(value)
+            await ctx.tick()
+
+    @lc.is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @pdconfig.command(name="monthly", aliases=["month"])
+    async def pdconfig_monthly(self, ctx, value: int):
+        """Configure the `monthly` options"""
+
+        if value < 0:
+            await ctx.send("You must provide a non-negative value or 0")
+        if await bank.is_global():
+            await self.config.month.set(value)
+            await ctx.tick()
+        else:
+            await self.config.guild(ctx.guild).month.set(value)
+            await ctx.tick()
+
+    @lc.is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @pdconfig.command(name="quarterly", aliases=["quarter"])
+    async def pdconfig_quarterly(self, ctx, value: int):
+        """Configure the `quarterly` options"""
+
+        if value < 0:
+            await ctx.send("You must provide a non-negative value or 0")
+        if await bank.is_global():
+            await self.config.quarter.set(value)
+            await ctx.tick()
+        else:
+            await self.config.guild(ctx.guild).quarter.set(value)
+            await ctx.tick()
+
+    @lc.is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @pdconfig.command(name="yearly", aliases=["year"])
+    async def pdconfig_yearly(self, ctx, value: int):
+        """Configure the `yearly` options"""
+
+        if value < 0:
+            await ctx.send("You must provide a non-negative value or 0")
+        if await bank.is_global():
+            await self.config.year.set(value)
+            await ctx.tick()
+        else:
+            await self.config.guild(ctx.guild).year.set(value)
+            await ctx.tick()
+
     async def red_delete_data_for_user(
         self,
         *,
