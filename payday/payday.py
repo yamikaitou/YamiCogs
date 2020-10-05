@@ -3,6 +3,7 @@ from discord.ext import tasks
 from redbot.core import commands, Config, checks, bank
 from redbot.core.commands import BadArgument
 from redbot.core.bot import Red
+from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import box, humanize_timedelta, inline
 from tabulate import tabulate
 import logging
