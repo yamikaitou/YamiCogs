@@ -134,3 +134,4 @@ dmypy.json
 backend-scripts/mccasino/server.jar
 backend-scripts/mccasino/assets/minecraft/lang/en_us.json
 red/
+red.sh
