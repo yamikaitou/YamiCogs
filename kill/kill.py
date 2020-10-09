@@ -66,6 +66,7 @@ class Kill(commands.Cog):
         await ctx.message.add_reaction("\U00002705")
 
     @killset.command(name="list")
+    @checks.bot_has_permissions(embed_links=True)
     async def _list(self, ctx):
         """
             List all the kill messages
