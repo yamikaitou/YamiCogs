@@ -1,6 +1,6 @@
-===
+====
 Kill
-===
+====
 
 .. note:: These docs are for version **2.0**.
     Make sure you are on the latest version by typing ``[p]cog update``.
@@ -37,11 +37,27 @@ Usage
 
 Here's the list of all commands of this cog.
 
-.. _command-killset:
-    
-~~~
+~~~~~
+kill
+~~~~~
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]kill <user>
+
+**Description**
+
+Perform a random kill action on the User
+
+**Arguments**
+
+* ``<user>``: The user you want to kill. Can be their Name, a Mention, or a UserID
+
+~~~~~~~~
 killset
-~~~
+~~~~~~~~
 
 **Description**
 
@@ -52,9 +68,9 @@ Configure the kill messages
 Bot Admin or Manage Guild
 
 
-~~~
+~~~~~~~~~~~~
 killset add
-~~~
+~~~~~~~~~~~~
 
 **Syntax**
 
@@ -95,9 +111,9 @@ You can enhance your message by leaving spaces for the bot to substitute.
 
 * ``<message>``: The kill message you want to add
 
-~~~
+~~~~~~~~~~~~
 killset bot
-~~~
+~~~~~~~~~~~~
 
 **Syntax**
 
@@ -138,9 +154,9 @@ You can enhance message by leaving spaces for the bot to substitute.
 
 * ``<message>``: The kill message you want to set
 
-~~~
+~~~~~~~~~~~~~
 killset list
-~~~
+~~~~~~~~~~~~~
 
 **Syntax**
 
@@ -164,9 +180,9 @@ Embed Links
 
         [p]killset list
 
-~~~
+~~~~~~~~~~~~~
 killset self
-~~~
+~~~~~~~~~~~~~
 
 **Syntax**
 
