@@ -53,3 +53,15 @@ html_static_path = ['_static']
 
 # The master toctree document.
 master_doc = "index"
+
+# Includes substitutions for all files
+with open("prolog.txt", "r") as file:
+    rst_prolog = file.read()
+
+intersphinx_mapping = {
+    "redbot": ("https://docs.discord.red/en/stable/", None),
+}
+
+extlinks = {
+    "redbot_docs": ("https://docs.discord.red/en/stable/%s", None),
+}

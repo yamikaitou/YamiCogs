@@ -1,45 +1,142 @@
+.. _kill:
+
 ====
 Kill
 ====
 
-.. note:: These docs are for version **2.0**.
-    Make sure you are on the latest version by typing ``[p]cog update``.
-
-This is the docs for the ``kill`` cog. Everything you need is here.
+This is the cog guide for the kill cog. You will
+find detailed docs about usage and commands.
 
 ``[p]`` is considered as your prefix.
 
-------------
-Installation
-------------
-
-To install the cog, first load the downloader cog, included
-in core Red.::
-
-    [p]load downloader
-
-Then you will need to install the YamiCogs repository::
-
-    [p]repo add yamicogs https://github.com/yamikaitou/YamiCogs
-
-Finally, you can install the cog::
-
-    [p]cog install yamicogs kill
-
-.. warning:: The cog is not loaded by default. 
-    To load it, type this::
+.. note:: To use this cog, load it by typing this::
 
         [p]load kill
+
+.. _kill-usage:
 
 -----
 Usage
 -----
 
-Here's the list of all commands of this cog.
+Kill people in interesting ways
 
-~~~~~
+
+.. _kill-commands:
+
+--------
+Commands
+--------
+
+.. _kill-command-killset:
+
+^^^^^^^
+killset
+^^^^^^^
+
+.. note:: |admin-lock|
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]killset 
+
+**Description**
+
+Configure the kill messages
+
+.. _kill-command-killset-list:
+
+""""
+list
+""""
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]killset list 
+
+**Description**
+
+List all the kill messages
+
+.. _kill-command-killset-bot:
+
+"""
+bot
+"""
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]killset bot <msg>
+
+**Description**
+
+Sets the message for killing the bot
+{killer} and {victim} will be replaced with a users mention
+{killer2} and {victim2} will be replaced with a users name in italics
+
+.. _kill-command-killset-add:
+
+"""
+add
+"""
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]killset add <msg>
+
+**Description**
+
+Add a new kill message.
+{killer} and {victim} will be replaced with a users mention
+{killer2} and {victim2} will be replaced with a users name in italics
+
+.. _kill-command-killset-self:
+
+""""
+self
+""""
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]killset self <msg>
+
+**Description**
+
+Sets the message for killing yourself
+{killer} and {victim} will be replaced with a users mention
+{killer2} and {victim2} will be replaced with a users name in italics
+
+.. _kill-command-killset-delete:
+
+""""""
+delete
+""""""
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]killset delete <num>
+
+**Description**
+
+Removes a kill message. Use `[p]killset list` to for the numbers
+
+.. _kill-command-kill:
+
+^^^^
 kill
-~~~~~
+^^^^
 
 **Syntax**
 
@@ -49,176 +146,4 @@ kill
 
 **Description**
 
-Perform a random kill action on the User
-
-**Arguments**
-
-* ``<user>``: The user you want to kill. Can be their Name, a Mention, or a UserID
-
-~~~~~~~~
-killset
-~~~~~~~~
-
-**Description**
-
-Configure the kill messages
-
-**User Permissions**
-
-Bot Admin or Manage Guild
-
-
-~~~~~~~~~~~~
-killset add
-~~~~~~~~~~~~
-
-**Syntax**
-
-.. code-block:: none
-
-    [p]killset add <message>
-
-**Description**
-
-Add a new kill message
-
-**Context Parameters**
-
-You can enhance your message by leaving spaces for the bot to substitute.
-
-+-----------+----------------------------------------------------+
-| Argument  | Substitute                                         |
-+===========+====================================================+
-| {killer}  | The user who called the command, as a Mention      |
-+-----------+----------------------------------------------------+
-| {killer2} | The user who called the command, as normal text    |
-+-----------+----------------------------------------------------+
-| {victim}  | The user is passed to the command, as a Mention    |
-+-----------+----------------------------------------------------+
-| {victim2} | The user is passed to the command, as normal text  |
-+-----------+----------------------------------------------------+
-
-.. tip::
-
-    **Examples**
-    
-    .. code-block:: none
-
-        [p]killset add {killer} slayed {victim}
-        [p]killset add {victim} has spontanously combusted
-
-**Arguments**
-
-* ``<message>``: The kill message you want to add
-
-~~~~~~~~~~~~
-killset bot
-~~~~~~~~~~~~
-
-**Syntax**
-
-.. code-block:: none
-
-    [p]killset bot <message>
-
-**Description**
-
-Set the message for when the user attempts to kill the bot
-Default message is "Wow, how original. I laugh at your feeble attempt to kill me"
-
-**Context Parameters**
-
-You can enhance message by leaving spaces for the bot to substitute.
-
-+-----------+----------------------------------------------------+
-| Argument  | Substitute                                         |
-+===========+====================================================+
-| {killer}  | The user who called the command, as a Mention      |
-+-----------+----------------------------------------------------+
-| {killer2} | The user who called the command, as normal text    |
-+-----------+----------------------------------------------------+
-| {victim}  | The user is passed to the command, as a Mention    |
-+-----------+----------------------------------------------------+
-| {victim2} | The user is passed to the command, as normal text  |
-+-----------+----------------------------------------------------+
-
-.. tip::
-
-    **Examples**
-    
-    .. code-block:: none
-
-        [p]killset bot *My eyes glow bright red as he stares at the knife {victim} is holding. {victim} wets their pants and runs away screaming for their mommy*
-
-**Arguments**
-
-* ``<message>``: The kill message you want to set
-
-~~~~~~~~~~~~~
-killset list
-~~~~~~~~~~~~~
-
-**Syntax**
-
-.. code-block:: none
-
-    [p]killset list
-
-**Description**
-
-Shows the currently configured messages in an embed
-
-**Bot Permissions**
-
-Embed Links
-
-.. tip::
-
-    **Examples**
-    
-    .. code-block:: none
-
-        [p]killset list
-
-~~~~~~~~~~~~~
-killset self
-~~~~~~~~~~~~~
-
-**Syntax**
-
-.. code-block:: none
-
-    [p]killset self <message>
-
-**Description**
-
-Set the message for when the user attempts to kill themself
-Default message is "Per the Laws of Robotics, I cannot assist you in killing yourself"
-
-**Context Parameters**
-
-You can enhance message by leaving spaces for the bot to substitute.
-
-+-----------+----------------------------------------------------+
-| Argument  | Substitute                                         |
-+===========+====================================================+
-| {killer}  | The user who called the command, as a Mention      |
-+-----------+----------------------------------------------------+
-| {killer2} | The user who called the command, as normal text    |
-+-----------+----------------------------------------------------+
-| {victim}  | The user is passed to the command, as a Mention    |
-+-----------+----------------------------------------------------+
-| {victim2} | The user is passed to the command, as normal text  |
-+-----------+----------------------------------------------------+
-
-.. tip::
-
-    **Examples**
-    
-    .. code-block:: none
-
-        [p]killset self *Mourns the lose of {killer}
-
-**Arguments**
-
-* ``<message>``: The kill message you want to set
+Kill a user in a random way
