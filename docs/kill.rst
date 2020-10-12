@@ -13,6 +13,7 @@ find detailed docs about usage and commands.
 
         [p]load kill
 
+
 .. _kill-usage:
 
 -----
@@ -44,21 +45,20 @@ kill
 
 Kill a user in a random way
 
+**Arguments**
+
+<user> - You can either mention the member, provide its ID, its exact name with the tag or not, or its nickname enclosed in quotes if there are spaces.
+
 .. _kill-command-killset:
 
 ^^^^^^^
 killset
 ^^^^^^^
 
-**User Permissions**
+**Permissions**
 
+*User* -
 Bot Admin or Manage Guild
-
-**Syntax**
-
-.. code-block:: none
-
-    [p]killset 
 
 **Description**
 
@@ -70,9 +70,13 @@ Configure the kill messages
 list
 """"
 
-**User Permissions**
+**Permissions**
 
+*User* -
 Bot Admin or Manage Guild
+
+*Bot* -
+Embed Links
 
 **Syntax**
 
@@ -90,8 +94,9 @@ List all the kill messages
 bot
 """
 
-**User Permissions**
+**Permissions**
 
+*User* -
 Bot Admin or Manage Guild
 
 **Syntax**
@@ -103,30 +108,26 @@ Bot Admin or Manage Guild
 **Description**
 
 Sets the message for killing the bot
-{killer} and {victim} will be replaced with a users mention
-{killer2} and {victim2} will be replaced with a users name in italics
 
-.. _kill-command-killset-add:
+**Arguments**
 
-"""
-add
-"""
+<msg> - The message you want to set as the Bot Kill message
 
-**User Permissions**
+**Context Parameters**
 
-Bot Admin or Manage Guild
+You can enhance your message by leaving spaces for the bot to substitute.
 
-**Syntax**
-
-.. code-block:: none
-
-    [p]killset add <msg>
-
-**Description**
-
-Add a new kill message.
-{killer} and {victim} will be replaced with a users mention
-{killer2} and {victim2} will be replaced with a users name in italics
++-----------+----------------------------------------------------+
+| Argument  | Substitute                                         |
++===========+====================================================+
+| {killer}  | The user who called the command, as a Mention      |
++-----------+----------------------------------------------------+
+| {killer2} | The user who called the command, as italic text    |
++-----------+----------------------------------------------------+
+| {victim}  | The user is passed to the command, as a Mention    |
++-----------+----------------------------------------------------+
+| {victim2} | The user is passed to the command, as italic text  |
++-----------+----------------------------------------------------+
 
 .. _kill-command-killset-self:
 
@@ -134,8 +135,9 @@ Add a new kill message.
 self
 """"
 
-**User Permissions**
+**Permissions**
 
+*User* -
 Bot Admin or Manage Guild
 
 **Syntax**
@@ -147,8 +149,67 @@ Bot Admin or Manage Guild
 **Description**
 
 Sets the message for killing yourself
-{killer} and {victim} will be replaced with a users mention
-{killer2} and {victim2} will be replaced with a users name in italics
+
+**Arguments**
+
+<msg> - The message you want to set as the Self Kill message
+
+**Context Parameters**
+
+You can enhance your message by leaving spaces for the bot to substitute.
+
++-----------+----------------------------------------------------+
+| Argument  | Substitute                                         |
++===========+====================================================+
+| {killer}  | The user who called the command, as a Mention      |
++-----------+----------------------------------------------------+
+| {killer2} | The user who called the command, as italic text    |
++-----------+----------------------------------------------------+
+| {victim}  | The user is passed to the command, as a Mention    |
++-----------+----------------------------------------------------+
+| {victim2} | The user is passed to the command, as italic text  |
++-----------+----------------------------------------------------+
+
+.. _kill-command-killset-add:
+
+"""
+add
+"""
+
+**Permissions**
+
+*User* -
+Bot Admin or Manage Guild
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]killset add <msg>
+
+**Description**
+
+Add a new kill message.
+
+**Arguments**
+
+<msg> - The message you want to add to the Kill Messages
+
+**Context Parameters**
+
+You can enhance your message by leaving spaces for the bot to substitute.
+
++-----------+----------------------------------------------------+
+| Argument  | Substitute                                         |
++===========+====================================================+
+| {killer}  | The user who called the command, as a Mention      |
++-----------+----------------------------------------------------+
+| {killer2} | The user who called the command, as italic text    |
++-----------+----------------------------------------------------+
+| {victim}  | The user is passed to the command, as a Mention    |
++-----------+----------------------------------------------------+
+| {victim2} | The user is passed to the command, as italic text  |
++-----------+----------------------------------------------------+
 
 .. _kill-command-killset-delete:
 
@@ -156,8 +217,9 @@ Sets the message for killing yourself
 delete
 """"""
 
-**User Permissions**
+**Permissions**
 
+*User* -
 Bot Admin or Manage Guild
 
 **Syntax**

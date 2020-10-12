@@ -8,7 +8,7 @@ class Kill(commands.Cog):
     Kill people in interesting ways
     """
 
-    __version__ = "2.0"
+    __version__ = "2.1"
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""
@@ -31,6 +31,7 @@ class Kill(commands.Cog):
     async def killset(self, ctx):
         """
             Configure the kill messages
+            More detailed docs: <https://cogs.yamikaitou.dev/kill.html#killset>
         """
 
         pass

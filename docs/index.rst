@@ -11,6 +11,7 @@ Welcome to YamiCogs's documentation!
    :caption: Cog Guides
 
    kill
+   payday
 
 
 

@@ -19,7 +19,7 @@ class PayDay(commands.Cog):
     Customizable PayDay system
     """
 
-    __version__ = "1.0"
+    __version__ = "1.1"
 
     settings = {'day':1,'week':7,'month':30,'quarter':122,'year':365}
     friendly = {'hour':"Hourly",'day':"Daily",'week':"Weekly",'month':"Monthly",'quarter':"Quarterly",'year':"Yearly"}
@@ -326,7 +326,10 @@ class PayDay(commands.Cog):
     @checks.guildowner_or_permissions(administrator=True)
     @commands.group()
     async def pdconfig(self, ctx):
-        """Configure the `freecredits` options"""
+        """
+        Configure the `freecredits` options
+        More detailed docs: <https://cogs.yamikaitou.dev/payday.html#pdconfig>
+        """
         pass
 
     @lc.is_owner_if_bank_global()
@@ -346,7 +349,10 @@ class PayDay(commands.Cog):
     @checks.guildowner_or_permissions(administrator=True)
     @pdconfig.command(name="hourly", aliases=["hour"])
     async def pdconfig_hourly(self, ctx, value: int):
-        """Configure the `hourly` options"""
+        """
+        Configure the `hourly` options
+        Setting this to 0 will disable the command
+        """
 
         if value < 0:
             await ctx.send("You must provide a non-negative value or 0")
@@ -361,7 +367,9 @@ class PayDay(commands.Cog):
     @checks.guildowner_or_permissions(administrator=True)
     @pdconfig.command(name="daily", aliases=["day"])
     async def pdconfig_daily(self, ctx, value: int):
-        """Configure the `daily` options"""
+        """
+        Configure the `daily` options
+        Setting this to 0 will disable the command"""
 
         if value < 0:
             await ctx.send("You must provide a non-negative value or 0")
@@ -376,7 +384,10 @@ class PayDay(commands.Cog):
     @checks.guildowner_or_permissions(administrator=True)
     @pdconfig.command(name="weekly", aliases=["week"])
     async def pdconfig_weekly(self, ctx, value: int):
-        """Configure the `weekly` options"""
+        """
+        Configure the `weekly` options
+        Setting this to 0 will disable the command
+        """
 
         if value < 0:
             await ctx.send("You must provide a non-negative value or 0")
@@ -391,7 +402,10 @@ class PayDay(commands.Cog):
     @checks.guildowner_or_permissions(administrator=True)
     @pdconfig.command(name="monthly", aliases=["month"])
     async def pdconfig_monthly(self, ctx, value: int):
-        """Configure the `monthly` options"""
+        """
+        Configure the `monthly` options
+        Setting this to 0 will disable the command
+        """
 
         if value < 0:
             await ctx.send("You must provide a non-negative value or 0")
@@ -406,7 +420,10 @@ class PayDay(commands.Cog):
     @checks.guildowner_or_permissions(administrator=True)
     @pdconfig.command(name="quarterly", aliases=["quarter"])
     async def pdconfig_quarterly(self, ctx, value: int):
-        """Configure the `quarterly` options"""
+        """
+        Configure the `quarterly` options
+        Setting this to 0 will disable the command
+        """
 
         if value < 0:
             await ctx.send("You must provide a non-negative value or 0")
@@ -421,7 +438,10 @@ class PayDay(commands.Cog):
     @checks.guildowner_or_permissions(administrator=True)
     @pdconfig.command(name="yearly", aliases=["year"])
     async def pdconfig_yearly(self, ctx, value: int):
-        """Configure the `yearly` options"""
+        """
+        Configure the `yearly` options
+        Setting this to 0 will disable the command
+        """
 
         if value < 0:
             await ctx.send("You must provide a non-negative value or 0")
