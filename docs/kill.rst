@@ -28,13 +28,31 @@ Kill people in interesting ways
 Commands
 --------
 
+.. _kill-command-kill:
+
+^^^^
+kill
+^^^^
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]kill <user>
+
+**Description**
+
+Kill a user in a random way
+
 .. _kill-command-killset:
 
 ^^^^^^^
 killset
 ^^^^^^^
 
-.. note:: |admin-lock|
+**User Permissions**
+
+Bot Admin or Manage Guild
 
 **Syntax**
 
@@ -52,6 +70,10 @@ Configure the kill messages
 list
 """"
 
+**User Permissions**
+
+Bot Admin or Manage Guild
+
 **Syntax**
 
 .. code-block:: none
@@ -67,6 +89,10 @@ List all the kill messages
 """
 bot
 """
+
+**User Permissions**
+
+Bot Admin or Manage Guild
 
 **Syntax**
 
@@ -86,6 +112,10 @@ Sets the message for killing the bot
 add
 """
 
+**User Permissions**
+
+Bot Admin or Manage Guild
+
 **Syntax**
 
 .. code-block:: none
@@ -103,6 +133,10 @@ Add a new kill message.
 """"
 self
 """"
+
+**User Permissions**
+
+Bot Admin or Manage Guild
 
 **Syntax**
 
@@ -122,6 +156,10 @@ Sets the message for killing yourself
 delete
 """"""
 
+**User Permissions**
+
+Bot Admin or Manage Guild
+
 **Syntax**
 
 .. code-block:: none
@@ -131,19 +169,3 @@ delete
 **Description**
 
 Removes a kill message. Use `[p]killset list` to for the numbers
-
-.. _kill-command-kill:
-
-^^^^
-kill
-^^^^
-
-**Syntax**
-
-.. code-block:: none
-
-    [p]kill <user>
-
-**Description**
-
-Kill a user in a random way

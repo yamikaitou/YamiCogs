@@ -19,7 +19,7 @@ class PayDay(commands.Cog):
     Customizable PayDay system
     """
 
-    __version__ = "0.1"
+    __version__ = "1.0"
 
     settings = {'day':1,'week':7,'month':30,'quarter':122,'year':365}
     friendly = {'hour':"Hourly",'day':"Daily",'week':"Weekly",'month':"Monthly",'quarter':"Quarterly",'year':"Yearly"}

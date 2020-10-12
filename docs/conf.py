@@ -28,6 +28,13 @@ author = 'YamiKaitou#8975'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.extlinks",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.doctest",
+    "sphinxcontrib_trio",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -53,10 +60,6 @@ html_static_path = ['_static']
 
 # The master toctree document.
 master_doc = "index"
-
-# Includes substitutions for all files
-with open("prolog.txt", "r") as file:
-    rst_prolog = file.read()
 
 intersphinx_mapping = {
     "redbot": ("https://docs.discord.red/en/stable/", None),
