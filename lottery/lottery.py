@@ -3,6 +3,7 @@ import random
 from redbot.core import commands, Config, checks, bank
 from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
 from redbot.core.utils.chat_formatting import humanize_number
+from . import checks as lc
 
 
 class Lottery(commands.Cog):
@@ -42,67 +43,79 @@ class Lottery(commands.Cog):
         settings = await self.config.guild(ctx.guild).all()
         currency = await bank.get_currency_name(ctx.guild)
 
-        match1 = discord.Embed(title="Lottery Games - Match1", color=await ctx.embed_color())
-        match1.description = "Play a daily drawing where if you match the Winning Number, you win!"
-        match1.add_field(
-            name="Rules",
-            inline=False,
-            value="Get a number between 1 and {}.\n"
-            "If your number matches the Winning Number, you win.\n"
-            "Number is drawn daily. Winnings are split between all winners.\n"
-            "If there is no winner, the prize pool rolls to the next drawing.".format(
-                settings["match1"]["max"]
-            ),
-        )
-        match1.add_field(
-            name="Settings",
-            value="Cost per Entry: {1} {0}\nNumber Range: 1 - {2}\nCurrent Prize Pool: {3} {0}".format(
-                currency,
-                humanize_number(settings["match1"]["cost"]),
-                settings["match1"]["max"],
-                humanize_number(settings["match1"]["prize"]),
-            ),
-        )
+        pages = []
 
-        match5 = discord.Embed(title="Lottery Games - Match5", color=await ctx.embed_color())
-        match5.description = (
-            "Play a weekly drawing where if you match the Winning Numbers, you win!"
-        )
-        match5.add_field(name="Rules", value="To be detailed later", inline=False)
-        match5.add_field(
-            name="Settings",
-            value="Cost per Entry: {1} {0}\nNumber Range: 1 - {2}\nCurrent Prize Pool: {3} {0}".format(
-                currency,
-                humanize_number(settings["match5"]["cost"]),
-                settings["match5"]["max"],
-                humanize_number(settings["match5"]["prize"]),
-            ),
-        )
+        if settings["match1"]["enable"]:
+            match1 = discord.Embed(title="Lottery Games - Match1", color=await ctx.embed_color())
+            match1.description = "Play a daily drawing where if you match the Winning Number, you win!"
+            match1.add_field(
+                name="Rules",
+                inline=False,
+                value="Get a number between 1 and {}.\n"
+                "If your number matches the Winning Number, you win.\n"
+                "Number is drawn daily. Winnings are split between all winners.\n"
+                "If there is no winner, the prize pool rolls to the next drawing.".format(
+                    settings["match1"]["max"]
+                ),
+            )
+            match1.add_field(
+                name="Settings",
+                value="Cost per Entry: {1} {0}\nNumber Range: 1 - {2}\nCurrent Prize Pool: {3} {0}".format(
+                    currency,
+                    humanize_number(settings["match1"]["cost"]),
+                    settings["match1"]["max"],
+                    humanize_number(settings["match1"]["prize"]),
+                ),
+            )
+            pages.append(match1)
 
-        lucky3 = discord.Embed(title="Lottery Games - Lucky3", color=await ctx.embed_color())
-        lucky3.description = "Draw 3 Symbols and with a prize if they match!\nTo play, use `{}lottery lucky3`".format(
-            ctx.clean_prefix
-        )
-        lucky3.add_field(
-            name="Rules",
-            inline=False,
-            value="You will get {} random emojis. If you match 2 or 3 of them, you win!".format(
-                settings["lucky3"]["icons"]
-            ),
-        )
-        lucky3.add_field(
-            name="Settings",
-            value="Cost per Entry: {1} {0}\nMatch 2 Prize: {2} {0}\nMatch 3 Prize: {3} {0}\nEmojis: {4}".format(
-                currency,
-                humanize_number(settings["match1"]["cost"]),
-                humanize_number(settings["lucky3"]["win2"]),
-                humanize_number(settings["lucky3"]["win3"]),
-                settings["lucky3"]["icons"],
-            ),
-        )
+        if settings["match5"]["enable"]:
+            match5 = discord.Embed(title="Lottery Games - Match5", color=await ctx.embed_color())
+            match5.description = (
+                "Play a weekly drawing where if you match the Winning Numbers, you win!"
+            )
+            match5.add_field(name="Rules", value="To be detailed later", inline=False)
+            match5.add_field(
+                name="Settings",
+                value="Cost per Entry: {1} {0}\nNumber Range: 1 - {2}\nCurrent Prize Pool: {3} {0}".format(
+                    currency,
+                    humanize_number(settings["match5"]["cost"]),
+                    settings["match5"]["max"],
+                    humanize_number(settings["match5"]["prize"]),
+                ),
+            )
+            pages.append(match5)
 
-        await menu(ctx, [match1, match5, lucky3], DEFAULT_CONTROLS)
+        if settings["lucky3"]["enable"]:
+            lucky3 = discord.Embed(title="Lottery Games - Lucky3", color=await ctx.embed_color())
+            lucky3.description = "Draw 3 Symbols and with a prize if they match!\nTo play, use `{}lottery lucky3`".format(
+                ctx.clean_prefix
+            )
+            lucky3.add_field(
+                name="Rules",
+                inline=False,
+                value="You will get {} random emojis. If you match 2 or 3 of them, you win!".format(
+                    settings["lucky3"]["icons"]
+                ),
+            )
+            lucky3.add_field(
+                name="Settings",
+                value="Cost per Entry: {1} {0}\nMatch 2 Prize: {2} {0}\nMatch 3 Prize: {3} {0}\nEmojis: {4}".format(
+                    currency,
+                    humanize_number(settings["match1"]["cost"]),
+                    humanize_number(settings["lucky3"]["win2"]),
+                    humanize_number(settings["lucky3"]["win3"]),
+                    settings["lucky3"]["icons"],
+                ),
+            )
+            pages.append(lucky3)
+        
+        if pages != []:
+            await menu(ctx, pages, DEFAULT_CONTROLS)
+        else:
+            await ctx.send("No games are enabled")
 
+    @lc.lucky3_enabled()
     @lottery.command(name="lucky3")
     async def l_lucky3(self, ctx):
         """Play a game of Lucky 3"""
@@ -244,7 +257,6 @@ class Lottery(commands.Cog):
         await self.config.guild(ctx.guild).lucky3.win3.set(match3)
         await ctx.tick()
 
-    
     async def red_get_data_for_user(self, *, user_id: int):
         # this cog does not store any data
         return {}
