@@ -2,6 +2,7 @@ import discord
 import random
 from redbot.core import commands, Config, checks
 from redbot.core.utils.predicates import ReactionPredicate
+from redbot.vendored.discord.ext import menus
 import numpy as np
 
 
@@ -9,6 +10,13 @@ class FourInARow(commands.Cog):
     """
     Four In A Row
     """
+
+    __version__ = "0.1"
+
+    def format_help_for_context(self, ctx):
+        """Thanks Sinbad."""
+        pre_processed = super().format_help_for_context(ctx)
+        return f"{pre_processed}\nCog Version: {self.__version__}"
 
     piece = [":black_circle:", ":red_circle:", ":yellow_circle:"]
 
@@ -29,9 +37,9 @@ class FourInARow(commands.Cog):
         embed = discord.Embed(title="Four in a Row", colour=await ctx.embed_color())
         embed.description=self.print_board(game)
         embed.add_field(name="🔴 Turn", value="React with the column number to place your piece or :x: to forfiet")
-        embed.set_footer(text="🔴 YamiKaitou#8975 | 🟡 Eevee#5009")
+        embed.set_footer(text="🔴 YamiKaitou#8975 | 🟡 ItazuaKaitou#5009")
         msg = await ctx.send(embed=embed)
-        for k in range(0,7):
+        for k in range(1,8):
             await msg.add_reaction(ReactionPredicate.NUMBER_EMOJIS[k])
         await msg.add_reaction("❌")
 
@@ -48,3 +56,13 @@ class FourInARow(commands.Cog):
             string += "|\n"
         
         return string
+
+    
+    
+    async def red_get_data_for_user(self, *, user_id: int):
+        # this cog does not store any data
+        return {}
+
+    async def red_delete_data_for_user(self, *, requester, user_id: int) -> None:
+        # this cog does not store any data
+        pass

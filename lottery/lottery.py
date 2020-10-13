@@ -9,6 +9,13 @@ class Lottery(commands.Cog):
     """
     Lottery Games
     """
+    
+    __version__ = "0.1"
+
+    def format_help_for_context(self, ctx):
+        """Thanks Sinbad."""
+        pre_processed = super().format_help_for_context(ctx)
+        return f"{pre_processed}\nCog Version: {self.__version__}"
 
     lucky3 = ["🃏", "🔬", "💰", "🚀", "🏆", "🍰", "🌹", "🦀", "👑"]
 
@@ -236,3 +243,12 @@ class Lottery(commands.Cog):
         await self.config.guild(ctx.guild).lucky3.win2.set(match2)
         await self.config.guild(ctx.guild).lucky3.win3.set(match3)
         await ctx.tick()
+
+    
+    async def red_get_data_for_user(self, *, user_id: int):
+        # this cog does not store any data
+        return {}
+
+    async def red_delete_data_for_user(self, *, requester, user_id: int) -> None:
+        # this cog does not store any data
+        pass
