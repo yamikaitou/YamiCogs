@@ -7,6 +7,7 @@
         "economy", "fun"
     ],
     "hidden": true,
+    "disabled": true,
     "install_msg": "Thanks for installing the beta. Please note that I currently do not support this cog and it can change and/or break at any time. Unless you havea  good reason to use it now, please uninstall it until I've declared it as available (check the repo Readme for a list of released and supported cogs)",
     "end_user_data_statement": "This cog does not persistently store data or metadata about users."
 }
