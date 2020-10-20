@@ -1,4 +1,5 @@
-from redbot.core import commands, bank
+from redbot.core import bank, commands
+
 
 # taken from Red-Discordbot economy.py
 def guild_only_check():
@@ -11,6 +12,7 @@ def guild_only_check():
             return False
 
     return commands.check(pred)
+
 
 # taken from Red-Discordbot bank.py
 def is_owner_if_bank_global():
@@ -33,6 +35,7 @@ def is_owner_if_bank_global():
 
     return commands.check(pred)
 
+
 def all():
     async def pred(ctx: commands.Context):
         if await bank.is_global():
@@ -43,6 +46,7 @@ def all():
             return False
 
     return commands.check(pred)
+
 
 def hourly():
     async def pred(ctx: commands.Context):
@@ -57,6 +61,7 @@ def hourly():
 
     return commands.check(pred)
 
+
 def daily():
     async def pred(ctx: commands.Context):
         if await bank.is_global():
@@ -69,6 +74,7 @@ def daily():
             return False
 
     return commands.check(pred)
+
 
 def weekly():
     async def pred(ctx: commands.Context):
@@ -83,6 +89,7 @@ def weekly():
 
     return commands.check(pred)
 
+
 def monthly():
     async def pred(ctx: commands.Context):
         if await bank.is_global():
@@ -96,6 +103,7 @@ def monthly():
 
     return commands.check(pred)
 
+
 def quarterly():
     async def pred(ctx: commands.Context):
         if await bank.is_global():
@@ -108,6 +116,7 @@ def quarterly():
             return False
 
     return commands.check(pred)
+
 
 def yearly():
     async def pred(ctx: commands.Context):

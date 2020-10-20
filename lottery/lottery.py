@@ -1,8 +1,10 @@
-import discord
 import random
-from redbot.core import commands, Config, checks, bank
-from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
+
+import discord
+from redbot.core import Config, bank, commands
 from redbot.core.utils.chat_formatting import humanize_number
+from redbot.core.utils.menus import DEFAULT_CONTROLS, menu
+
 from . import checks as lc
 
 
@@ -10,7 +12,7 @@ class Lottery(commands.Cog):
     """
     Lottery Games
     """
-    
+
     __version__ = "0.1"
 
     def format_help_for_context(self, ctx):
@@ -22,19 +24,26 @@ class Lottery(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=192153481165930496, force_registration=True)
+        self.config = Config.get_conf(
+            self, identifier=192153481165930496, force_registration=True
+        )
         self.config.register_guild(
             **{
                 "match1": {"enable": False, "cost": 100, "max": 30, "prize": 0},
                 "match5": {"enable": False, "cost": 100, "max": 60, "prize": 0},
-                "lucky3": {"enable": True, "cost": 100, "icons": 3, "win2": 100, "win3": 1000},
+                "lucky3": {
+                    "enable": True,
+                    "cost": 100,
+                    "icons": 3,
+                    "win2": 100,
+                    "win3": 1000,
+                },
             }
         )
 
     @commands.group()
     async def lottery(self, ctx):
         """Lottery Game"""
-        pass
 
     @lottery.command(name="games")
     async def l_games(self, ctx):
@@ -46,8 +55,12 @@ class Lottery(commands.Cog):
         pages = []
 
         if settings["match1"]["enable"]:
-            match1 = discord.Embed(title="Lottery Games - Match1", color=await ctx.embed_color())
-            match1.description = "Play a daily drawing where if you match the Winning Number, you win!"
+            match1 = discord.Embed(
+                title="Lottery Games - Match1", color=await ctx.embed_color()
+            )
+            match1.description = (
+                "Play a daily drawing where if you match the Winning Number, you win!"
+            )
             match1.add_field(
                 name="Rules",
                 inline=False,
@@ -70,7 +83,9 @@ class Lottery(commands.Cog):
             pages.append(match1)
 
         if settings["match5"]["enable"]:
-            match5 = discord.Embed(title="Lottery Games - Match5", color=await ctx.embed_color())
+            match5 = discord.Embed(
+                title="Lottery Games - Match5", color=await ctx.embed_color()
+            )
             match5.description = (
                 "Play a weekly drawing where if you match the Winning Numbers, you win!"
             )
@@ -87,7 +102,9 @@ class Lottery(commands.Cog):
             pages.append(match5)
 
         if settings["lucky3"]["enable"]:
-            lucky3 = discord.Embed(title="Lottery Games - Lucky3", color=await ctx.embed_color())
+            lucky3 = discord.Embed(
+                title="Lottery Games - Lucky3", color=await ctx.embed_color()
+            )
             lucky3.description = "Draw 3 Symbols and with a prize if they match!\nTo play, use `{}lottery lucky3`".format(
                 ctx.clean_prefix
             )
@@ -109,7 +126,7 @@ class Lottery(commands.Cog):
                 ),
             )
             pages.append(lucky3)
-        
+
         if pages != []:
             await menu(ctx, pages, DEFAULT_CONTROLS)
         else:
@@ -127,7 +144,9 @@ class Lottery(commands.Cog):
 
         if not await bank.can_spend(ctx.author, cost):
             await ctx.send(
-                "You do not have enough {} to play, you need at least {}".format(currency, cost)
+                "You do not have enough {} to play, you need at least {}".format(
+                    currency, cost
+                )
             )
             return
 
@@ -143,10 +162,14 @@ class Lottery(commands.Cog):
         await ctx.send(f"{self.lucky3[num1]}{self.lucky3[num2]}{self.lucky3[num3]}")
 
         if num1 == num2 and num1 == num3:
-            await ctx.send("🥳 WINNER!!! 🥳 +{} {}".format(humanize_number(prize3), currency))
+            await ctx.send(
+                "🥳 WINNER!!! 🥳 +{} {}".format(humanize_number(prize3), currency)
+            )
             await bank.deposit_credits(ctx.author, prize3)
         elif num1 == num2 or num1 == num3 or num2 == num3:
-            await ctx.send("🎉 WINNER!! 🎉 +{} {}".format(humanize_number(prize2), currency))
+            await ctx.send(
+                "🎉 WINNER!! 🎉 +{} {}".format(humanize_number(prize2), currency)
+            )
             await bank.deposit_credits(ctx.author, prize2)
         else:
             await ctx.send("Not a winner 😢")
@@ -154,7 +177,6 @@ class Lottery(commands.Cog):
     @commands.group()
     async def lottoset(self, ctx):
         """Lottery Settings"""
-        pass
 
     @lottoset.command(name="info")
     async def ls_info(self, ctx):
@@ -198,7 +220,6 @@ class Lottery(commands.Cog):
     @lottoset.group(name="lucky3")
     async def ls_lucky3(self, ctx):
         """Configure settings for Lucky 3"""
-        pass
 
     @ls_lucky3.command(name="enable")
     async def ls3_enable(self, ctx, state: str):

@@ -1,6 +1,7 @@
-import discord
 import random
-from redbot.core import commands, Config, checks
+
+import discord
+from redbot.core import Config, checks, commands
 
 
 class Kill(commands.Cog):
@@ -17,7 +18,9 @@ class Kill(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=582650109, force_registration=True)
+        self.config = Config.get_conf(
+            self, identifier=582650109, force_registration=True
+        )
         self.config.register_guild(
             **{
                 "msg": ["{killer} slays {victim}"],
@@ -30,18 +33,16 @@ class Kill(commands.Cog):
     @checks.admin_or_permissions(manage_guild=True)
     async def killset(self, ctx):
         """
-            Configure the kill messages
-            More detailed docs: <https://cogs.yamikaitou.dev/kill.html#killset>
+        Configure the kill messages
+        More detailed docs: <https://cogs.yamikaitou.dev/kill.html#killset>
         """
-
-        pass
 
     @killset.command(name="add")
     async def _add(self, ctx, *, msg):
         """
-            Add a new kill message.
-            {killer} and {victim} will be replaced with a users mention
-            {killer2} and {victim2} will be replaced with a users name in italics
+        Add a new kill message.
+        {killer} and {victim} will be replaced with a users mention
+        {killer2} and {victim2} will be replaced with a users name in italics
         """
 
         async with self.config.guild(ctx.guild).msg() as kill:
@@ -52,7 +53,7 @@ class Kill(commands.Cog):
     @killset.command(name="delete")
     async def _delete(self, ctx, num: int):
         """
-            Removes a kill message. Use `[p]killset list` to for the numbers
+        Removes a kill message. Use `[p]killset list` to for the numbers
         """
 
         async with self.config.guild(ctx.guild).msg() as kill:
@@ -70,7 +71,7 @@ class Kill(commands.Cog):
     @checks.bot_has_permissions(embed_links=True)
     async def _list(self, ctx):
         """
-            List all the kill messages
+        List all the kill messages
         """
 
         embed = discord.Embed(
@@ -95,9 +96,9 @@ class Kill(commands.Cog):
     @killset.command(name="bot")
     async def _bot(self, ctx, *, msg):
         """
-            Sets the message for killing the bot
-            {killer} and {victim} will be replaced with a users mention
-            {killer2} and {victim2} will be replaced with a users name in italics
+        Sets the message for killing the bot
+        {killer} and {victim} will be replaced with a users mention
+        {killer2} and {victim2} will be replaced with a users name in italics
         """
 
         await self.config.guild(ctx.guild).botkill.set(msg)
@@ -107,9 +108,9 @@ class Kill(commands.Cog):
     @killset.command(name="self")
     async def _self(self, ctx, *, msg):
         """
-            Sets the message for killing yourself
-            {killer} and {victim} will be replaced with a users mention
-            {killer2} and {victim2} will be replaced with a users name in italics
+        Sets the message for killing yourself
+        {killer} and {victim} will be replaced with a users mention
+        {killer2} and {victim2} will be replaced with a users name in italics
         """
 
         await self.config.guild(ctx.guild).selfkill.set(msg)
@@ -119,7 +120,7 @@ class Kill(commands.Cog):
     @commands.command()
     async def kill(self, ctx, *, user: discord.Member):
         """
-            Kill a user in a random way
+        Kill a user in a random way
         """
 
         if user is ctx.author:
@@ -138,7 +139,7 @@ class Kill(commands.Cog):
                 victim2="*" + user.name + "*",
             )
         )
-    
+
     async def red_get_data_for_user(self, *, user_id: int):
         # this cog does not store any data
         return {}

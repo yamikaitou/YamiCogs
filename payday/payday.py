@@ -1,18 +1,17 @@
-import discord
-from discord.ext import tasks
-from redbot.core import commands, Config, checks, bank
-from redbot.core.commands import BadArgument
-from redbot.core.bot import Red
-from redbot.core.utils import AsyncIter
-from redbot.core.utils.chat_formatting import box, humanize_timedelta, inline
-from tabulate import tabulate
 import logging
 from datetime import datetime, timedelta
 from typing import Literal
+
+from redbot.core import Config, bank, checks, commands
+from redbot.core.bot import Red
+from redbot.core.utils import AsyncIter
+from redbot.core.utils.chat_formatting import box, humanize_timedelta
+from tabulate import tabulate
+
 from . import checks as lc
 
-
 log = logging.getLogger("red.yamicogs.payday")
+
 
 class PayDay(commands.Cog):
     """
@@ -21,8 +20,15 @@ class PayDay(commands.Cog):
 
     __version__ = "1.1"
 
-    settings = {'day':1,'week':7,'month':30,'quarter':122,'year':365}
-    friendly = {'hour':"Hourly",'day':"Daily",'week':"Weekly",'month':"Monthly",'quarter':"Quarterly",'year':"Yearly"}
+    settings = {"day": 1, "week": 7, "month": 30, "quarter": 122, "year": 365}
+    friendly = {
+        "hour": "Hourly",
+        "day": "Daily",
+        "week": "Weekly",
+        "month": "Monthly",
+        "quarter": "Quarterly",
+        "year": "Yearly",
+    }
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""
@@ -31,7 +37,9 @@ class PayDay(commands.Cog):
 
     def __init__(self, bot: Red):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=582650109, force_registration=True)
+        self.config = Config.get_conf(
+            self, identifier=582650109, force_registration=True
+        )
 
         default_config = {
             "hour": 0,
@@ -39,7 +47,7 @@ class PayDay(commands.Cog):
             "week": 0,
             "month": 0,
             "quarter": 0,
-            "year": 0
+            "year": 0,
         }
         default_user = {
             "hour": "2016-01-02T04:25:00-04:00",
@@ -47,7 +55,7 @@ class PayDay(commands.Cog):
             "week": "2016-01-02T04:25:00-04:00",
             "month": "2016-01-02T04:25:00-04:00",
             "quarter": "2016-01-02T04:25:00-04:00",
-            "year": "2016-01-02T04:25:00-04:00"
+            "year": "2016-01-02T04:25:00-04:00",
         }
 
         self.config.register_global(**default_config)
@@ -59,7 +67,6 @@ class PayDay(commands.Cog):
     @commands.group()
     async def freecredits(self, ctx):
         """Get some free more currency."""
-        pass
 
     @lc.all()
     @freecredits.command(name="times")
@@ -72,15 +79,33 @@ class PayDay(commands.Cog):
             now = datetime.now().astimezone().replace(microsecond=0)
             strings = ""
 
-            if amounts['hour']:
-                td = (now-datetime.fromisoformat(times['hour']))
-                strings += self.friendly['hour'] + ": " + (humanize_timedelta(timedelta=(timedelta(hours=1)-td)) if td.seconds < 3600 else "Available Now!") + "\n"
-            
-            for k,v in self.settings.items():
+            if amounts["hour"]:
+                td = now - datetime.fromisoformat(times["hour"])
+                strings += (
+                    self.friendly["hour"]
+                    + ": "
+                    + (
+                        humanize_timedelta(timedelta=(timedelta(hours=1) - td))
+                        if td.seconds < 3600
+                        else "Available Now!"
+                    )
+                    + "\n"
+                )
+
+            for k, v in self.settings.items():
                 if amounts[k]:
-                    td = (now-(datetime.fromisoformat(times[k])))
-                    strings += self.friendly[k] + ": " + (humanize_timedelta(timedelta=(timedelta(days=v)-td)) if td.days < v else "Available Now!") + "\n"
-            
+                    td = now - (datetime.fromisoformat(times[k]))
+                    strings += (
+                        self.friendly[k]
+                        + ": "
+                        + (
+                            humanize_timedelta(timedelta=(timedelta(days=v) - td))
+                            if td.days < v
+                            else "Available Now!"
+                        )
+                        + "\n"
+                    )
+
             await ctx.send(strings)
         else:
             amounts = await self.config.guild(ctx.guild).all()
@@ -88,60 +113,92 @@ class PayDay(commands.Cog):
             now = datetime.now().astimezone().replace(microsecond=0)
             strings = ""
 
-            if amounts['hour']:
-                td = (now-(datetime.fromisoformat(times['hour'])))
-                strings += self.friendly['hour'] + ": " + (humanize_timedelta(timedelta=(timedelta(hours=1)-td)) if td.seconds < 3600 else "Available Now!") + "\n"
-            
-            for k,v in self.settings.items():
+            if amounts["hour"]:
+                td = now - (datetime.fromisoformat(times["hour"]))
+                strings += (
+                    self.friendly["hour"]
+                    + ": "
+                    + (
+                        humanize_timedelta(timedelta=(timedelta(hours=1) - td))
+                        if td.seconds < 3600
+                        else "Available Now!"
+                    )
+                    + "\n"
+                )
+
+            for k, v in self.settings.items():
                 if amounts[k]:
-                    td = (now-(datetime.fromisoformat(times[k])))
-                    strings += self.friendly[k] + ": " + (humanize_timedelta(timedelta=(timedelta(days=v)-td)) if td.days < v else "Available Now!") + "\n"
-            
+                    td = now - (datetime.fromisoformat(times[k]))
+                    strings += (
+                        self.friendly[k]
+                        + ": "
+                        + (
+                            humanize_timedelta(timedelta=(timedelta(days=v) - td))
+                            if td.days < v
+                            else "Available Now!"
+                        )
+                        + "\n"
+                    )
+
             await ctx.send(strings)
 
-
-    
     @lc.all()
     @freecredits.command(name="all")
     async def freecredits_all(self, ctx):
         """Claim all available freecredits"""
-        
+
         amount = 0
         if await bank.is_global():
             amounts = await self.config.all()
             times = await self.config.user(ctx.author).all()
             now = datetime.now().astimezone().replace(microsecond=0)
 
-            if amounts['hour'] and (now-(datetime.fromisoformat(times['hour']))).seconds >= 3600:
+            if (
+                amounts["hour"]
+                and (now - (datetime.fromisoformat(times["hour"]))).seconds >= 3600
+            ):
                 amount += await self.config.hour()
                 await self.config.hour.set(now.isoformat())
 
-            for k,v in self.settings.items():
-                if amounts[k] and (now-(datetime.fromisoformat(times[k]))).days >= v:
+            for k, v in self.settings.items():
+                if amounts[k] and (now - (datetime.fromisoformat(times[k]))).days >= v:
                     amount += amounts[k]
                     await self.config.user(ctx.author).set_raw(k, value=now.isoformat())
-            
+
             if amount > 0:
                 await bank.deposit_credits(ctx.author, amount)
-                await ctx.send("You have claimed all available credits from the `freecredits` program! +{} {}".format(amount, (await bank.get_currency_name())))
+                await ctx.send(
+                    "You have claimed all available credits from the `freecredits` program! +{} {}".format(
+                        amount, (await bank.get_currency_name())
+                    )
+                )
         else:
             amounts = await self.config.guild(ctx.guild).all()
             times = await self.config.member(ctx.author).all()
             now = datetime.now().astimezone().replace(microsecond=0)
 
-            if amounts['hour'] and (now-(datetime.fromisoformat(times['hour']))).seconds >= 3600:
+            if (
+                amounts["hour"]
+                and (now - (datetime.fromisoformat(times["hour"]))).seconds >= 3600
+            ):
                 amount += await self.config.guild(ctx.guild).hour()
                 await self.config.hour.set(now.isoformat())
 
-            for k,v in self.settings.items():
-                if amounts[k] and (now-(datetime.fromisoformat(times[k]))).days >= v:
+            for k, v in self.settings.items():
+                if amounts[k] and (now - (datetime.fromisoformat(times[k]))).days >= v:
                     amount += amounts[k]
-                    await self.config.member(ctx.author).set_raw(k, value=now.isoformat())
-            
+                    await self.config.member(ctx.author).set_raw(
+                        k, value=now.isoformat()
+                    )
+
             if amount > 0:
                 await bank.deposit_credits(ctx.author, amount)
-                await ctx.send("You have claimed all available credits from the `freecredits` program! +{} {}".format(amount, (await bank.get_currency_name(ctx.guild))))
-    
+                await ctx.send(
+                    "You have claimed all available credits from the `freecredits` program! +{} {}".format(
+                        amount, (await bank.get_currency_name(ctx.guild))
+                    )
+                )
+
     @lc.hourly()
     @freecredits.command(name="hourly")
     async def freecredits_hourly(self, ctx):
@@ -152,26 +209,48 @@ class PayDay(commands.Cog):
             if free > 0:
                 last = datetime.fromisoformat(await self.config.user(ctx.author).hour())
                 now = datetime.now().astimezone().replace(microsecond=0)
-                
+
                 if (now - last).seconds >= 3600:
                     await bank.deposit_credits(ctx.author, free)
                     await self.config.user(ctx.author).hour.set(now.isoformat())
-                    await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name())))
+                    await ctx.send(
+                        "You have been given {} {}".format(
+                            free, (await bank.get_currency_name())
+                        )
+                    )
                 else:
-                    await ctx.send("Sorry, you still have {} until your next hourly bonus".format(humanize_timedelta(timedelta=(timedelta(hours=1)-(now-last)))))
+                    await ctx.send(
+                        "Sorry, you still have {} until your next hourly bonus".format(
+                            humanize_timedelta(
+                                timedelta=(timedelta(hours=1) - (now - last))
+                            )
+                        )
+                    )
         else:
             free = await self.config.guild(ctx.guild).hour()
             if free > 0:
-                last = datetime.fromisoformat(await self.config.member(ctx.author).hour())
+                last = datetime.fromisoformat(
+                    await self.config.member(ctx.author).hour()
+                )
                 now = datetime.now().astimezone().replace(microsecond=0)
-                
+
                 if (now - last).seconds >= 3600:
                     await bank.deposit_credits(ctx.author, free)
                     await self.config.member(ctx.author).hour.set(now.isoformat())
-                    await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild))))
+                    await ctx.send(
+                        "You have been given {} {}".format(
+                            free, (await bank.get_currency_name(ctx.guild))
+                        )
+                    )
                 else:
-                    await ctx.send("Sorry, you still have {} until your next hourly bonus".format(humanize_timedelta(timedelta=(timedelta(hours=1)-(now-last)))))
-    
+                    await ctx.send(
+                        "Sorry, you still have {} until your next hourly bonus".format(
+                            humanize_timedelta(
+                                timedelta=(timedelta(hours=1) - (now - last))
+                            )
+                        )
+                    )
+
     @lc.daily()
     @freecredits.command(name="daily")
     async def freecredits_daily(self, ctx):
@@ -182,26 +261,48 @@ class PayDay(commands.Cog):
             if free > 0:
                 last = datetime.fromisoformat(await self.config.user(ctx.author).day())
                 now = datetime.now().astimezone().replace(microsecond=0)
-                
+
                 if (now - last).days >= 1:
                     await bank.deposit_credits(ctx.author, free)
                     await self.config.user(ctx.author).day.set(now.isoformat())
-                    await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name())))
+                    await ctx.send(
+                        "You have been given {} {}".format(
+                            free, (await bank.get_currency_name())
+                        )
+                    )
                 else:
-                    await ctx.send("Sorry, you still have {} until your next daily bonus".format(humanize_timedelta(timedelta=(timedelta(days=1)-(now-last)))))
+                    await ctx.send(
+                        "Sorry, you still have {} until your next daily bonus".format(
+                            humanize_timedelta(
+                                timedelta=(timedelta(days=1) - (now - last))
+                            )
+                        )
+                    )
         else:
             free = await self.config.guild(ctx.guild).day()
             if free > 0:
-                last = datetime.fromisoformat(await self.config.member(ctx.author).day())
+                last = datetime.fromisoformat(
+                    await self.config.member(ctx.author).day()
+                )
                 now = datetime.now().astimezone().replace(microsecond=0)
-                
+
                 if (now - last).days >= 1:
                     await bank.deposit_credits(ctx.author, free)
                     await self.config.member(ctx.author).day.set(now.isoformat())
-                    await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild))))
+                    await ctx.send(
+                        "You have been given {} {}".format(
+                            free, (await bank.get_currency_name(ctx.guild))
+                        )
+                    )
                 else:
-                    await ctx.send("Sorry, you still have {} until your next daily bonus".format(humanize_timedelta(timedelta=(timedelta(days=1)-(now-last)))))
-    
+                    await ctx.send(
+                        "Sorry, you still have {} until your next daily bonus".format(
+                            humanize_timedelta(
+                                timedelta=(timedelta(days=1) - (now - last))
+                            )
+                        )
+                    )
+
     @lc.weekly()
     @freecredits.command(name="weekly")
     async def freecredits_weekly(self, ctx):
@@ -212,26 +313,48 @@ class PayDay(commands.Cog):
             if free > 0:
                 last = datetime.fromisoformat(await self.config.user(ctx.author).week())
                 now = datetime.now().astimezone().replace(microsecond=0)
-                
+
                 if (now - last).days >= 7:
                     await bank.deposit_credits(ctx.author, free)
                     await self.config.user(ctx.author).week.set(now.isoformat())
-                    await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name())))
+                    await ctx.send(
+                        "You have been given {} {}".format(
+                            free, (await bank.get_currency_name())
+                        )
+                    )
                 else:
-                    await ctx.send("Sorry, you still have {} until your next weekly bonus".format(humanize_timedelta(timedelta=(timedelta(days=7)-(now-last)))))
+                    await ctx.send(
+                        "Sorry, you still have {} until your next weekly bonus".format(
+                            humanize_timedelta(
+                                timedelta=(timedelta(days=7) - (now - last))
+                            )
+                        )
+                    )
         else:
             free = await self.config.guild(ctx.guild).week()
             if free > 0:
-                last = datetime.fromisoformat(await self.config.member(ctx.author).week())
+                last = datetime.fromisoformat(
+                    await self.config.member(ctx.author).week()
+                )
                 now = datetime.now().astimezone().replace(microsecond=0)
-                
+
                 if (now - last).days >= 7:
                     await bank.deposit_credits(ctx.author, free)
                     await self.config.member(ctx.author).week.set(now.isoformat())
-                    await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild))))
+                    await ctx.send(
+                        "You have been given {} {}".format(
+                            free, (await bank.get_currency_name(ctx.guild))
+                        )
+                    )
                 else:
-                    await ctx.send("Sorry, you still have {} until your next weekly bonus".format(humanize_timedelta(timedelta=(timedelta(days=7)-(now-last)))))
-    
+                    await ctx.send(
+                        "Sorry, you still have {} until your next weekly bonus".format(
+                            humanize_timedelta(
+                                timedelta=(timedelta(days=7) - (now - last))
+                            )
+                        )
+                    )
+
     @lc.monthly()
     @freecredits.command(name="monthly")
     async def freecredits_monthly(self, ctx):
@@ -240,28 +363,52 @@ class PayDay(commands.Cog):
         if await bank.is_global():
             free = await self.config.month()
             if free > 0:
-                last = datetime.fromisoformat(await self.config.user(ctx.author).month())
+                last = datetime.fromisoformat(
+                    await self.config.user(ctx.author).month()
+                )
                 now = datetime.now().astimezone().replace(microsecond=0)
-                
+
                 if (now - last).days >= 30:
                     await bank.deposit_credits(ctx.author, free)
                     await self.config.user(ctx.author).month.set(now.isoformat())
-                    await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name())))
+                    await ctx.send(
+                        "You have been given {} {}".format(
+                            free, (await bank.get_currency_name())
+                        )
+                    )
                 else:
-                    await ctx.send("Sorry, you still have {} until your next monthly bonus".format(humanize_timedelta(timedelta=(timedelta(days=30)-(now-last)))))
+                    await ctx.send(
+                        "Sorry, you still have {} until your next monthly bonus".format(
+                            humanize_timedelta(
+                                timedelta=(timedelta(days=30) - (now - last))
+                            )
+                        )
+                    )
         else:
             free = await self.config.guild(ctx.guild).month()
             if free > 0:
-                last = datetime.fromisoformat(await self.config.member(ctx.author).month())
+                last = datetime.fromisoformat(
+                    await self.config.member(ctx.author).month()
+                )
                 now = datetime.now().astimezone().replace(microsecond=0)
-                
+
                 if (now - last).days >= 30:
                     await bank.deposit_credits(ctx.author, free)
                     await self.config.member(ctx.author).month.set(now.isoformat())
-                    await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild))))
+                    await ctx.send(
+                        "You have been given {} {}".format(
+                            free, (await bank.get_currency_name(ctx.guild))
+                        )
+                    )
                 else:
-                    await ctx.send("Sorry, you still have {} until your next monthly bonus".format(humanize_timedelta(timedelta=(timedelta(days=30)-(now-last)))))
-    
+                    await ctx.send(
+                        "Sorry, you still have {} until your next monthly bonus".format(
+                            humanize_timedelta(
+                                timedelta=(timedelta(days=30) - (now - last))
+                            )
+                        )
+                    )
+
     @lc.quarterly()
     @freecredits.command(name="quarterly")
     async def freecredits_quarterly(self, ctx):
@@ -270,28 +417,52 @@ class PayDay(commands.Cog):
         if await bank.is_global():
             free = await self.config.quarter()
             if free > 0:
-                last = datetime.fromisoformat(await self.config.user(ctx.author).quarter())
+                last = datetime.fromisoformat(
+                    await self.config.user(ctx.author).quarter()
+                )
                 now = datetime.now().astimezone().replace(microsecond=0)
-                
+
                 if (now - last).days >= 122:
                     await bank.deposit_credits(ctx.author, free)
                     await self.config.user(ctx.author).quarter.set(now.isoformat())
-                    await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name())))
+                    await ctx.send(
+                        "You have been given {} {}".format(
+                            free, (await bank.get_currency_name())
+                        )
+                    )
                 else:
-                    await ctx.send("Sorry, you still have {} until your next quarterly bonus".format(humanize_timedelta(timedelta=(timedelta(days=122)-(now-last)))))
+                    await ctx.send(
+                        "Sorry, you still have {} until your next quarterly bonus".format(
+                            humanize_timedelta(
+                                timedelta=(timedelta(days=122) - (now - last))
+                            )
+                        )
+                    )
         else:
             free = await self.config.guild(ctx.guild).quarter()
             if free > 0:
-                last = datetime.fromisoformat(await self.config.member(ctx.author).quarter())
+                last = datetime.fromisoformat(
+                    await self.config.member(ctx.author).quarter()
+                )
                 now = datetime.now().astimezone().replace(microsecond=0)
-                
+
                 if (now - last).days >= 122:
                     await bank.deposit_credits(ctx.author, free)
                     await self.config.member(ctx.author).quarter.set(now.isoformat())
-                    await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild))))
+                    await ctx.send(
+                        "You have been given {} {}".format(
+                            free, (await bank.get_currency_name(ctx.guild))
+                        )
+                    )
                 else:
-                    await ctx.send("Sorry, you still have {} until your next quarterly bonus".format(humanize_timedelta(timedelta=(timedelta(days=122)-(now-last)))))
-    
+                    await ctx.send(
+                        "Sorry, you still have {} until your next quarterly bonus".format(
+                            humanize_timedelta(
+                                timedelta=(timedelta(days=122) - (now - last))
+                            )
+                        )
+                    )
+
     @lc.yearly()
     @freecredits.command(name="yearly")
     async def freecredits_yearly(self, ctx):
@@ -302,26 +473,48 @@ class PayDay(commands.Cog):
             if free > 0:
                 last = datetime.fromisoformat(await self.config.user(ctx.author).year())
                 now = datetime.now().astimezone().replace(microsecond=0)
-                
+
                 if (now - last).days >= 365:
                     await bank.deposit_credits(ctx.author, free)
                     await self.config.user(ctx.author).year.set(now.isoformat())
-                    await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name())))
+                    await ctx.send(
+                        "You have been given {} {}".format(
+                            free, (await bank.get_currency_name())
+                        )
+                    )
                 else:
-                    await ctx.send("Sorry, you still have {} until your next yearly bonus".format(humanize_timedelta(timedelta=(timedelta(days=365)-(now-last)))))
+                    await ctx.send(
+                        "Sorry, you still have {} until your next yearly bonus".format(
+                            humanize_timedelta(
+                                timedelta=(timedelta(days=365) - (now - last))
+                            )
+                        )
+                    )
         else:
             free = await self.config.guild(ctx.guild).year()
             if free > 0:
-                last = datetime.fromisoformat(await self.config.member(ctx.author).year())
+                last = datetime.fromisoformat(
+                    await self.config.member(ctx.author).year()
+                )
                 now = datetime.now().astimezone().replace(microsecond=0)
-                
+
                 if (now - last).days >= 365:
                     await bank.deposit_credits(ctx.author, free)
                     await self.config.member(ctx.author).year.set(now.isoformat())
-                    await ctx.send("You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild))))
+                    await ctx.send(
+                        "You have been given {} {}".format(
+                            free, (await bank.get_currency_name(ctx.guild))
+                        )
+                    )
                 else:
-                    await ctx.send("Sorry, you still have {} until your next yearly bonus".format(humanize_timedelta(timedelta=(timedelta(days=365)-(now-last)))))
-    
+                    await ctx.send(
+                        "Sorry, you still have {} until your next yearly bonus".format(
+                            humanize_timedelta(
+                                timedelta=(timedelta(days=365) - (now - last))
+                            )
+                        )
+                    )
+
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
     @commands.group()
@@ -330,14 +523,13 @@ class PayDay(commands.Cog):
         Configure the `freecredits` options
         More detailed docs: <https://cogs.yamikaitou.dev/payday.html#pdconfig>
         """
-        pass
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
     @pdconfig.command(name="settings")
     async def pdconfig_info(self, ctx):
         """Print the `freecredits` options"""
-        
+
         if await bank.is_global():
             conf = await self.config.all()
             await ctx.send(box(tabulate(conf.items())))
@@ -465,7 +657,7 @@ class PayDay(commands.Cog):
             async for guild_id, members in AsyncIter(data.items(), steps=100):
                 if user_id in members:
                     await self.config.member_from_ids(guild_id, user_id).clear()
-            
+
             data = await self.config.all_users()
             async for users in AsyncIter(data.items(), steps=100):
                 if user_id in users:

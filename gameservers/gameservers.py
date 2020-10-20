@@ -1,10 +1,11 @@
 import discord
 from discord.ext import tasks
-from redbot.core import commands, Config, checks
+from redbot.core import Config, checks, commands
 from redbot.core.bot import Red
 from redbot.core.utils.chat_formatting import box
 from tabulate import tabulate
-#from menus import gslist
+
+# from menus import gslist
 
 
 class GameServers(commands.Cog):
@@ -21,15 +22,12 @@ class GameServers(commands.Cog):
 
     def __init__(self, bot: Red):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier=582650109, force_registration=True)
-
-        self.config.register_guild(
-            **{
-                "servers": [],
-                "statuschannel": 0
-            }
+        self.config = Config.get_conf(
+            self, identifier=582650109, force_registration=True
         )
-    
+
+        self.config.register_guild(**{"servers": [], "statuschannel": 0})
+
     async def red_get_data_for_user(self, *, user_id: int):
         # this cog does not store any data
         return {}
@@ -51,10 +49,11 @@ class GameServers(commands.Cog):
     @checks.admin_or_permissions(manage_channels=True)
     async def gameserver(self, ctx: commands.GuildContext):
         """I'll put something here later"""
-        pass
 
     @gameserver.command(name="new")
-    async def gs_new(self, ctx: commands.GuildContext, name: str, ip: str, port: int = 27015):
+    async def gs_new(
+        self, ctx: commands.GuildContext, name: str, ip: str, port: int = 27015
+    ):
         """
         Add a new game server.
 
@@ -71,16 +70,22 @@ class GameServers(commands.Cog):
             "down": False,
             "count": 0,
             "enable": False,
-            "announce": False
+            "announce": False,
         }
         async with self.config.guild(ctx.guild).servers() as servers:
             servers.append(server)
             id = servers.index(server)
-        
-        await ctx.send("Server has been added, configure the other options with `{}gameserver config {}`".format(ctx.clean_prefix, id))
-    
+
+        await ctx.send(
+            "Server has been added, configure the other options with `{}gameserver config {}`".format(
+                ctx.clean_prefix, id
+            )
+        )
+
     @gameserver.command(name="config")
-    async def gs_config(self, ctx: commands.GuildContext, serverid: int, key: str, *, value: str):
+    async def gs_config(
+        self, ctx: commands.GuildContext, serverid: int, key: str, *, value: str
+    ):
         """
         Configure the additional settings for game servers
 
@@ -96,42 +101,42 @@ class GameServers(commands.Cog):
         `enable` = Toggle the Status Post (valid options are `yes` and `no`)
         `announce` = Toggle the Down Announcer Post (valid options are `yes` and `no`)
         """
-        
+
         if key == "name":
             async with self.config.guild(guild).servers() as servers:
-                servers[serverid]['name'] = value
+                servers[serverid]["name"] = value
             await ctx.tick()
         elif key == "ip":
             async with self.config.guild(guild).servers() as servers:
-                servers[serverid]['ip'] = value
+                servers[serverid]["ip"] = value
             await ctx.tick()
         elif key == "port":
             async with self.config.guild(guild).servers() as servers:
-                servers[serverid]['port'] = value
+                servers[serverid]["port"] = value
             await ctx.tick()
         elif key == "password":
             async with self.config.guild(guild).servers() as servers:
-                servers[serverid]['password'] = value
+                servers[serverid]["password"] = value
             await ctx.tick()
         elif key == "enable":
             async with self.config.guild(guild).servers() as servers:
-                if value == 'yes':
-                    servers[serverid]['enable'] = True
+                if value == "yes":
+                    servers[serverid]["enable"] = True
                     await ctx.tick()
-                elif value == 'no':
-                    servers[serverid]['enable'] = False
+                elif value == "no":
+                    servers[serverid]["enable"] = False
                     await ctx.tick()
         elif key == "announce":
             async with self.config.guild(guild).servers() as servers:
-                if value == 'yes':
-                    servers[serverid]['announce'] = True
+                if value == "yes":
+                    servers[serverid]["announce"] = True
                     await ctx.tick()
-                elif value == 'no':
-                    servers[serverid]['announce'] = False
+                elif value == "no":
+                    servers[serverid]["announce"] = False
                     await ctx.tick()
         else:
             await ctx.send("Unknown Key")
-    
+
     @gameserver.command(name="list")
     async def gs_list(self, ctx: commands.GuildContext, serverid: int = None):
         """
@@ -139,24 +144,23 @@ class GameServers(commands.Cog):
 
         [serverid] = If provided, only that server will be returned. All will be provided in a menu if omitted
         """
-        
+
         if serverid != None:
             servers = await self.config.guild(ctx.guild).servers()
             try:
                 server = []
-                for k,v in servers[serverid].items():
-                    if k in ['ip', 'port', 'password']:
-                        server.append([k,v])
-                    elif k in ['enable', 'announce']:
-                        server.append([k, ("Yes" if v else "No") ])
+                for k, v in servers[serverid].items():
+                    if k in ["ip", "port", "password"]:
+                        server.append([k, v])
+                    elif k in ["enable", "announce"]:
+                        server.append([k, ("Yes" if v else "No")])
             except KeyError:
                 await ctx.send("Unknown Server ID")
             else:
                 embed = discord.Embed()
-                embed.title = servers[serverid]['name']
+                embed.title = servers[serverid]["name"]
                 embed.set_footer(text="Server ID {}".format(serverid))
                 embed.description = box(tabulate(server), "properties")
                 await ctx.send(embed=embed)
         else:
             await ctx.send("I don't work yet")
-            
