@@ -18,7 +18,7 @@ class PayDay(commands.Cog):
     Customizable PayDay system
     """
 
-    __version__ = "1.1"
+    __version__ = "1.2"
 
     settings = {"day": 1, "week": 7, "month": 30, "quarter": 122, "year": 365}
     friendly = {
@@ -181,12 +181,12 @@ class PayDay(commands.Cog):
                 amounts["hour"]
                 and (now - (datetime.fromisoformat(times["hour"]))).seconds >= 3600
             ):
-                amount += await self.config.guild(ctx.guild).hour()
+                amount += int(await self.config.guild(ctx.guild).hour())
                 await self.config.hour.set(now.isoformat())
 
             for k, v in self.settings.items():
                 if amounts[k] and (now - (datetime.fromisoformat(times[k]))).days >= v:
-                    amount += amounts[k]
+                    amount += int(amounts[k])
                     await self.config.member(ctx.author).set_raw(
                         k, value=now.isoformat()
                     )
