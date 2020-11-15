@@ -157,12 +157,12 @@ class PayDay(commands.Cog):
                 amounts["hour"]
                 and (now - (datetime.fromisoformat(times["hour"]))).seconds >= 3600
             ):
-                amount += await self.config.hour()
+                amount += int(await self.config.hour())
                 await self.config.hour.set(now.isoformat())
 
             for k, v in self.settings.items():
                 if amounts[k] and (now - (datetime.fromisoformat(times[k]))).days >= v:
-                    amount += amounts[k]
+                    amount += int(amounts[k])
                     await self.config.user(ctx.author).set_raw(k, value=now.isoformat())
 
             if amount > 0:
