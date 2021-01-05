@@ -1,6 +1,6 @@
 # thanks zeph
 # thanks flare
-PYTHON ?= python
+PYTHON ?= /home/codespace/workspace/YamiCogs/pythonenv3.8/bin/python
 DIFF := $(shell git diff --name-only --staged "*.py" "*.pyi")
 ifeq ($(DIFF),)
 	DIFF := $(shell git ls-files "*.py" "*.pyi")
@@ -18,6 +18,11 @@ reformat:
 	$(PYTHON) -m black $(DIFF)
 reformatblack:
 	$(PYTHON) -m black $(DIFF)
+update:
+	$(PYTHON) -m pip install -U pip wheel setuptools autoflake isort black
+	$(PYTHON) -m pip install -U Red-Discordbot[dev]
+run:
+	$(PYTHON) -O -m redbot dev --dev --debug
 
 # Translations
 gettext:
