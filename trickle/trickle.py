@@ -1,14 +1,9 @@
 import logging
-from datetime import datetime, timedelta
 from typing import Literal
 
-from redbot.core import Config, bank, checks, commands
+from redbot.core import Config, bank, commands
 from redbot.core.bot import Red
-from redbot.core.utils import AsyncIter
-from redbot.core.utils.chat_formatting import box, humanize_timedelta
 from tabulate import tabulate
-from discord.ext import tasks
-import discord
 
 from . import checks as lc
 
@@ -33,10 +28,7 @@ class Trickle(commands.Cog):
             self, identifier=582650109, force_registration=True
         )
 
-        default_config = {
-            "credits": 0,
-            "messages": 0
-        }
+        default_config = {"credits": 0, "messages": 0}
 
         self.config.register_global(**default_config)
         self.config.register_guild(**default_config)
@@ -51,7 +43,7 @@ class Trickle(commands.Cog):
         else:
             self.cache = await self.config.all_guilds()
         self.msg = {}
-    
+
     @commands.Cog.listener()
     async def on_message_without_command(self, message):
 
@@ -59,8 +51,10 @@ class Trickle(commands.Cog):
             return
         if message.guild == None:
             return
-        
-        log.info(f"{message.author.display_name} || {message.guild.name} || {message.channel.name}")
+
+        log.info(
+            f"{message.author.display_name} || {message.guild.name} || {message.channel.name}"
+        )
         if await bank.is_global():
             try:
                 self.msg[str(message.author.id)].append(message.id)
@@ -71,57 +65,60 @@ class Trickle(commands.Cog):
                 self.msg[message.guild.id][str(message.author.id)].append(message.id)
             except KeyError:
                 self.msg[message.guild.id][str(message.author.id)] = [message.id]
-            
+
     @commands.is_owner()
     @commands.command()
     async def trickle(self, ctx):
-        
+
         dev = {}
         if await bank.is_global():
-            for user,msg in self.msg.items():
+            for user, msg in self.msg.items():
                 dev[(await self.bot.get_or_fetch_user(user)).display_name] = len(msg)
             await ctx.send(dev)
         else:
-            for user,msg in self.msg[ctx.guild.id].items():
-                dev[(await self.bot.get_or_fetch_member(ctx.guild, user)).display_name] = len(msg)
+            for user, msg in self.msg[ctx.guild.id].items():
+                dev[
+                    (await self.bot.get_or_fetch_member(ctx.guild, user)).display_name
+                ] = len(msg)
             await ctx.send(dev)
-        
-    
+
     @commands.admin_or_permissions(manage_guild=True)
     @commands.group()
     async def trickleset(self, ctx):
         """ Configure various settings """
-        
-        pass
-    
+
     @trickleset.command(name="credits")
     async def ts_credits(self, ctx, number: int):
         """
         Set the number of credits to grant
-        
+
         Set the number to 0 to disable
         """
 
         if await bank.is_global():
             if 0 <= number <= (await bank.get_max_balance()):
                 await self.config.credits.set(number)
-                self.cache['credits'] = number
+                self.cache["credits"] = number
                 await ctx.tick()
             else:
-                await ctx.send(f"You must specify a value that is not less than 0 and not more than {(await bank.get_max_balance())}")
+                await ctx.send(
+                    f"You must specify a value that is not less than 0 and not more than {(await bank.get_max_balance())}"
+                )
         else:
             if 0 <= number <= (await bank.get_max_balance(ctx.guild)):
                 await self.config.guild(ctx.guild).credits.set(number)
-                self.cache[ctx.guild.id]['credits'] = number
+                self.cache[ctx.guild.id]["credits"] = number
                 await ctx.tick()
             else:
-                await ctx.send(f"You must specify a value that is not less than 0 and not more than {(await bank.get_max_balance())}")
-    
+                await ctx.send(
+                    f"You must specify a value that is not less than 0 and not more than {(await bank.get_max_balance())}"
+                )
+
     @trickleset.command(name="messages")
     async def ts_messages(self, ctx, number: int):
         """
         Set the number of messages required to gain credits
-        
+
         Set the number to 0 to disable
         Max value is 100
         """
@@ -129,19 +126,22 @@ class Trickle(commands.Cog):
         if await bank.is_global():
             if 0 <= number <= 100:
                 await self.config.messages.set(number)
-                self.cache['messages'] = number
+                self.cache["messages"] = number
                 await ctx.tick()
             else:
-                await ctx.send(f"You must specify a value that is not less than 0 and not more than 100")
+                await ctx.send(
+                    f"You must specify a value that is not less than 0 and not more than 100"
+                )
         else:
             if 0 <= number <= 100:
                 await self.config.guild(ctx.guild).messages.set(number)
-                self.cache[ctx.guild.id]['messages'] = number
+                self.cache[ctx.guild.id]["messages"] = number
                 await ctx.tick()
             else:
-                await ctx.send(f"You must specify a value that is not less than 0 and not more than 100")
-    
-    
+                await ctx.send(
+                    f"You must specify a value that is not less than 0 and not more than 100"
+                )
+
     async def red_delete_data_for_user(
         self,
         *,

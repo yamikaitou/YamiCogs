@@ -1,6 +1,10 @@
 # thanks zeph
 # thanks flare
-PYTHON ?= /home/codespace/workspace/YamiCogs/pythonenv3.8/bin/python
+ifeq ($(USER), "codespace")
+	PYTHON ?= /home/codespace/workspace/YamiCogs/pythonenv3.8/bin/python
+else
+	PYTHON ?= python3.8
+endif
 DIFF := $(shell git diff --name-only --staged "*.py" "*.pyi")
 ifeq ($(DIFF),)
 	DIFF := $(shell git ls-files "*.py" "*.pyi")
