@@ -2,10 +2,10 @@ import logging
 import math
 from typing import Literal
 
+from discord.ext import tasks
 from redbot.core import Config, bank, commands
 from redbot.core.bot import Red
 from tabulate import tabulate
-from discord.ext import tasks
 
 from . import checks as lc
 
@@ -75,14 +75,30 @@ class Trickle(commands.Cog):
 
     @tasks.loop(minutes=1)
     async def trickle(self):
-        msgs = self.msg
-        for user, msg in msgs:
-            if len(msg) >= self.cache["messages"]:
-                num = math.floor(len(msg) / self.cache["messages"])
-                del (self.msg[user])[0 : (num * self.cache["messages"])]
-                await bank.deposit_credits(
-                    (await bot.get_or_fetch_user(user)), num * self.cache["credits"]
-                )
+        if await bank.is_global():
+            msgs = self.msg
+            for user, msg in msgs.items():
+                if len(msg) >= self.cache["messages"]:
+                    num = math.floor(len(msg) / self.cache["messages"])
+                    del (self.msg[user])[0 : (num * self.cache["messages"])]
+                    await bank.deposit_credits(
+                        (await bot.get_or_fetch_user(user)), num * self.cache["credits"]
+                    )
+        else:
+            msgs = self.msg
+            for guild, users in msgs.items():
+                for user, msg in users.items():
+                    if len(msg) >= self.cache["messages"]:
+                        num = math.floor(len(msg) / self.cache["messages"])
+                        del (self.msg[user])[0 : (num * self.cache["messages"])]
+                        await bank.deposit_credits(
+                            (
+                                await bot.get_or_fetch_member(
+                                    self.bot.get_guild(guild), user
+                                )
+                            ),
+                            num * self.cache["credits"],
+                        )
 
     @trickle.before_loop
     async def before_trickle(self):
@@ -95,7 +111,7 @@ class Trickle(commands.Cog):
         dev = {}
         if await bank.is_global():
             msgs = self.msg
-            for user, msg in msgs:
+            for user, msg in msgs.items():
                 num = math.floor(len(msg) / self.cache["messages"])
                 del self.msg[user][:num]
                 dev[(await self.bot.get_or_fetch_user(user)).display_name] = (
