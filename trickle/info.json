@@ -14,5 +14,6 @@
     "min_bot_version": "3.4.0",
     "end_user_data_statement": "This cog does not persistently store end user data.",
     "hidden": true,
-    "disabled": true
+    "disabled": false,
+    "install_msg": "This cog is not ready for use yet. It may break your entire install"
 }
