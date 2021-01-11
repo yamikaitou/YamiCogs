@@ -71,10 +71,17 @@ class Trickle(commands.Cog):
             try:
                 self.msg[message.guild.id][str(message.author.id)].append(message.id)
             except KeyError:
-                self.msg[message.guild.id][str(message.author.id)] = [message.id]
+                self.msg[message.guild.id] = {str(message.author.id): [message.id]}
 
     @tasks.loop(minutes=1)
     async def trickle(self):
+        if self.bank is not await bank.is_global():
+            if await bank.is_global():
+                self.cache = await self.config.all()
+            else:
+                self.cache = await self.config.all_guilds()
+            self.bank = await bank.is_global()
+        
         if await bank.is_global():
             msgs = self.msg
             for user, msg in msgs.items():
