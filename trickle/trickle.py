@@ -1,4 +1,5 @@
 import logging
+import math
 from typing import Literal
 
 from redbot.core import Config, bank, commands
@@ -34,6 +35,7 @@ class Trickle(commands.Cog):
         self.config.register_guild(**default_config)
 
         self.bot.loop.create_task(self.initialize())
+        self.trickle.start()
 
     async def initialize(self):
         await self.bot.wait_until_red_ready()
@@ -43,6 +45,10 @@ class Trickle(commands.Cog):
         else:
             self.cache = await self.config.all_guilds()
         self.msg = {}
+        self.bank = await bank.is_global()
+
+    def cog_unload(self):
+        self.trickle.cancel()
 
     @commands.Cog.listener()
     async def on_message_without_command(self, message):
@@ -66,14 +72,34 @@ class Trickle(commands.Cog):
             except KeyError:
                 self.msg[message.guild.id][str(message.author.id)] = [message.id]
 
+    @tasks.loop(minutes=1)
+    async def trickle(self):
+        msgs = self.msg
+        for user, msg in msgs:
+            if len(msg) >= self.cache["messages"]:
+                num = math.floor(len(msg) / self.cache["messages"])
+                del (self.msg[user])[0 : (num * self.cache["messages"])]
+                await bank.deposit_credits(
+                    (await bot.get_or_fetch_user(user)), num * self.cache["credits"]
+                )
+
+    @trickle.before_loop
+    async def before_trickle(self):
+        await self.bot.wait_until_red_ready()
+
     @commands.is_owner()
     @commands.command()
-    async def trickle(self, ctx):
+    async def trickles(self, ctx):
 
         dev = {}
         if await bank.is_global():
-            for user, msg in self.msg.items():
-                dev[(await self.bot.get_or_fetch_user(user)).display_name] = len(msg)
+            msgs = self.msg
+            for user, msg in msgs:
+                num = math.floor(len(msg) / self.cache["messages"])
+                del self.msg[user][:num]
+                dev[(await self.bot.get_or_fetch_user(user)).display_name] = (
+                    num * self.cache["credits"]
+                )
             await ctx.send(dev)
         else:
             for user, msg in self.msg[ctx.guild.id].items():
@@ -107,7 +133,7 @@ class Trickle(commands.Cog):
         else:
             if 0 <= number <= (await bank.get_max_balance(ctx.guild)):
                 await self.config.guild(ctx.guild).credits.set(number)
-                self.cache[ctx.guild.id]["credits"] = number
+                self.cache[ctx.guild.id] = await self.config.guild(ctx.guild).all()
                 await ctx.tick()
             else:
                 await ctx.send(
@@ -135,7 +161,7 @@ class Trickle(commands.Cog):
         else:
             if 0 <= number <= 100:
                 await self.config.guild(ctx.guild).messages.set(number)
-                self.cache[ctx.guild.id]["messages"] = number
+                self.cache[ctx.guild.id] = await self.config.guild(ctx.guild).all()
                 await ctx.tick()
             else:
                 await ctx.send(
