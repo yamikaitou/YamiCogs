@@ -66,7 +66,7 @@ class PayDay(commands.Cog):
     @lc.guild_only_check()
     @commands.group()
     async def freecredits(self, ctx):
-        """Get some free more currency."""
+        """More options to get free credits"""
 
     @lc.all()
     @freecredits.command(name="times")
@@ -105,8 +105,10 @@ class PayDay(commands.Cog):
                         )
                         + "\n"
                     )
-
-            await ctx.send(strings)
+            if strings == "":
+                await ctx.send("No freecredit options have been configured yet")
+            else: 
+                await ctx.send(strings)
         else:
             amounts = await self.config.guild(ctx.guild).all()
             times = await self.config.member(ctx.author).all()
@@ -140,7 +142,10 @@ class PayDay(commands.Cog):
                         + "\n"
                     )
 
-            await ctx.send(strings)
+            if strings == "":
+                await ctx.send("No freecredit options have been configured yet")
+            else: 
+                await ctx.send(strings)
 
     @lc.all()
     @freecredits.command(name="all")
@@ -172,6 +177,8 @@ class PayDay(commands.Cog):
                         amount, (await bank.get_currency_name())
                     )
                 )
+            else:
+                await ctx.send("You have no available credits for claiming.")
         else:
             amounts = await self.config.guild(ctx.guild).all()
             times = await self.config.member(ctx.author).all()
@@ -198,6 +205,8 @@ class PayDay(commands.Cog):
                         amount, (await bank.get_currency_name(ctx.guild))
                     )
                 )
+            else:
+                await ctx.send("You have no available credits for claiming.")
 
     @lc.hourly()
     @freecredits.command(name="hourly")
@@ -547,7 +556,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.hour.set(value)
             await ctx.tick()
@@ -564,7 +573,7 @@ class PayDay(commands.Cog):
         Setting this to 0 will disable the command"""
 
         if value < 0:
-            await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.day.set(value)
             await ctx.tick()
@@ -582,7 +591,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.week.set(value)
             await ctx.tick()
@@ -600,7 +609,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.month.set(value)
             await ctx.tick()
@@ -618,7 +627,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.quarter.set(value)
             await ctx.tick()
@@ -636,7 +645,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.year.set(value)
             await ctx.tick()
