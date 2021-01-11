@@ -9,7 +9,7 @@ class Kill(commands.Cog):
     Kill people in interesting ways
     """
 
-    __version__ = "2.1"
+    __version__ = "2.2"
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""
@@ -92,7 +92,9 @@ class Kill(commands.Cog):
             killmsg += "`" + str(k) + ") " + msg + "`\n"
             k += 1
         if k == 0:
-            embed.add_field(name="Kill Messages", value="There are no messages configured")
+            embed.add_field(
+                name="Kill Messages", value="There are no messages configured"
+            )
         else:
             embed.add_field(name="Kill Messages", value=killmsg)
 
@@ -137,11 +139,17 @@ class Kill(commands.Cog):
         else:
             kills = await self.config.guild(ctx.guild).msg()
             if len(kills) == 0:
-                return await ctx.send("Your life has been spared this time as I do not have any kill methods configured")
+                return await ctx.send(
+                    "Your life has been spared this time as I do not have any kill methods configured"
+                )
             msg = kills[random.randint(0, len(kills) - 1)]
 
-        
-        await ctx.send(msg.replace("{killer}", ctx.author.mention).replace("{killer2}", "*" + ctx.author.name + "*").replace("{victim}", ctx.me.mention).replace("{victim2}", "*" + user.name + "*"))
+        await ctx.send(
+            msg.replace("{killer}", ctx.author.mention)
+            .replace("{killer2}", "*" + ctx.author.name + "*")
+            .replace("{victim}", ctx.me.mention)
+            .replace("{victim2}", "*" + user.name + "*")
+        )
 
     async def red_get_data_for_user(self, *, user_id: int):
         # this cog does not store any data

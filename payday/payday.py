@@ -18,7 +18,7 @@ class PayDay(commands.Cog):
     Customizable PayDay system
     """
 
-    __version__ = "1.3"
+    __version__ = "1.4"
 
     settings = {"day": 1, "week": 7, "month": 30, "quarter": 122, "year": 365}
     friendly = {
@@ -107,7 +107,7 @@ class PayDay(commands.Cog):
                     )
             if strings == "":
                 await ctx.send("No freecredit options have been configured yet")
-            else: 
+            else:
                 await ctx.send(strings)
         else:
             amounts = await self.config.guild(ctx.guild).all()
@@ -144,7 +144,7 @@ class PayDay(commands.Cog):
 
             if strings == "":
                 await ctx.send("No freecredit options have been configured yet")
-            else: 
+            else:
                 await ctx.send(strings)
 
     @lc.all()
