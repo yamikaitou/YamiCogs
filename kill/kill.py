@@ -146,9 +146,9 @@ class Kill(commands.Cog):
 
         await ctx.send(
             msg.replace("{killer}", ctx.author.mention)
-            .replace("{killer2}", "*" + ctx.author.name + "*")
+            .replace("{killer2}", "*" + ctx.author.display_name + "*")
             .replace("{victim}", ctx.me.mention)
-            .replace("{victim2}", "*" + user.name + "*")
+            .replace("{victim2}", "*" + user.display_name + "*")
         )
 
     async def red_get_data_for_user(self, *, user_id: int):
