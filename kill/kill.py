@@ -34,6 +34,7 @@ class Kill(commands.Cog):
     async def killset(self, ctx):
         """
         Configure the kill messages
+
         More detailed docs: <https://cogs.yamikaitou.dev/kill.html#killset>
         """
 
@@ -41,6 +42,7 @@ class Kill(commands.Cog):
     async def _add(self, ctx, *, msg):
         """
         Add a new kill message.
+
         {killer} and {victim} will be replaced with a users mention
         {killer2} and {victim2} will be replaced with a users name in italics
         """
@@ -48,7 +50,7 @@ class Kill(commands.Cog):
         async with self.config.guild(ctx.guild).msg() as kill:
             kill.append(msg)
 
-        await ctx.message.add_reaction("\U00002705")
+        await ctx.tick()
 
     @killset.command(name="delete")
     async def _delete(self, ctx, num: int):
@@ -58,14 +60,14 @@ class Kill(commands.Cog):
 
         async with self.config.guild(ctx.guild).msg() as kill:
             if num > len(kill):
-                await ctx.send(
-                    "Sorry, but you don't have a kill message with that number."
+                return await ctx.send(
+                    "Sorry, but you don't have a kill message with that number. "
                     "Please use `[p]killset list` to get the number of the message you wish to delete"
                 )
 
             kill.pop(num)
 
-        await ctx.message.add_reaction("\U00002705")
+        await ctx.tick()
 
     @killset.command(name="list")
     @checks.bot_has_permissions(embed_links=True)
@@ -89,7 +91,10 @@ class Kill(commands.Cog):
         for msg in killmsgs:
             killmsg += "`" + str(k) + ") " + msg + "`\n"
             k += 1
-        embed.add_field(name="Kill Messages", value=killmsg)
+        if k == 0:
+            embed.add_field(name="Kill Messages", value="There are no messages configured")
+        else:
+            embed.add_field(name="Kill Messages", value=killmsg)
 
         await ctx.send(embed=embed)
 
@@ -97,25 +102,27 @@ class Kill(commands.Cog):
     async def _bot(self, ctx, *, msg):
         """
         Sets the message for killing the bot
+
         {killer} and {victim} will be replaced with a users mention
         {killer2} and {victim2} will be replaced with a users name in italics
         """
 
         await self.config.guild(ctx.guild).botkill.set(msg)
 
-        await ctx.message.add_reaction("\U00002705")
+        await ctx.tick()
 
     @killset.command(name="self")
     async def _self(self, ctx, *, msg):
         """
         Sets the message for killing yourself
+
         {killer} and {victim} will be replaced with a users mention
         {killer2} and {victim2} will be replaced with a users name in italics
         """
 
         await self.config.guild(ctx.guild).selfkill.set(msg)
 
-        await ctx.message.add_reaction("\U00002705")
+        await ctx.tick()
 
     @commands.command()
     async def kill(self, ctx, *, user: discord.Member):
@@ -125,20 +132,16 @@ class Kill(commands.Cog):
 
         if user is ctx.author:
             msg = await self.config.guild(ctx.guild).selfkill()
-        elif user is ctx.guild.me:
+        elif user is ctx.me:
             msg = await self.config.guild(ctx.guild).botkill()
         else:
             kills = await self.config.guild(ctx.guild).msg()
+            if len(kills) == 0:
+                return await ctx.send("Your life has been spared this time as I do not have any kill methods configured")
             msg = kills[random.randint(0, len(kills) - 1)]
 
-        await ctx.send(
-            msg.format(
-                killer=ctx.author.mention,
-                victim=user.mention,
-                killer2="*" + ctx.author.name + "*",
-                victim2="*" + user.name + "*",
-            )
-        )
+        
+        await ctx.send(msg.replace("{killer}", ctx.author.mention).replace("{killer2}", "*" + ctx.author.name + "*").replace("{victim}", ctx.me.mention).replace("{victim2}", "*" + user.name + "*"))
 
     async def red_get_data_for_user(self, *, user_id: int):
         # this cog does not store any data
