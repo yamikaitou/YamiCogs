@@ -81,7 +81,7 @@ class Trickle(commands.Cog):
             else:
                 self.cache = await self.config.all_guilds()
             self.bank = await bank.is_global()
-        
+
         if await bank.is_global():
             msgs = self.msg
             for user, msg in msgs.items():
