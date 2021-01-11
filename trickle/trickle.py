@@ -98,7 +98,9 @@ class Trickle(commands.Cog):
                 for user, msg in users.items():
                     if len(msg) >= self.cache[guild]["messages"]:
                         num = math.floor(len(msg) / self.cache[guild]["messages"])
-                        del (self.msg[user])[0 : (num * self.cache[guild]["messages"])]
+                        del (self.msg[guild][user])[
+                            0 : (num * self.cache[guild]["messages"])
+                        ]
                         await bank.deposit_credits(
                             (
                                 await self.bot.get_or_fetch_member(
