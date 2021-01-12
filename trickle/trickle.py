@@ -93,25 +93,29 @@ class Trickle(commands.Cog):
                         f"Global || {await self.bot.get_or_fetch_user(user)} || {val} || {num}"
                     )
         else:
+            log.info(f"Local || Starting task")
             msgs = self.msg
-            for guild, users in msgs.items():
-                for user, msg in users.items():
-                    if len(msg) >= self.cache[guild]["messages"]:
-                        num = math.floor(len(msg) / self.cache[guild]["messages"])
-                        del (self.msg[guild][user])[
-                            0 : (num * self.cache[guild]["messages"])
-                        ]
-                        val = await bank.deposit_credits(
-                            (
-                                await self.bot.get_or_fetch_member(
-                                    self.bot.get_guild(guild), user
-                                )
-                            ),
-                            num * self.cache[guild]["credits"],
-                        )
-                        log.info(
-                            f"Local || {self.bot.get_guild(guild).name} || {await self.bot.get_or_fetch_member(self.bot.get_guild(guild), user)} || {val} || {num}"
-                        )
+            try:
+                for guild, users in msgs.items():
+                    for user, msg in users.items():
+                        if len(msg) >= self.cache[guild]["messages"]:
+                            num = math.floor(len(msg) / self.cache[guild]["messages"])
+                            del (self.msg[guild][user])[
+                                0 : (num * self.cache[guild]["messages"])
+                            ]
+                            val = await bank.deposit_credits(
+                                (
+                                    await self.bot.get_or_fetch_member(
+                                        self.bot.get_guild(guild), user
+                                    )
+                                ),
+                                num * self.cache[guild]["credits"],
+                            )
+                            log.info(
+                                f"Local || {self.bot.get_guild(guild).name} || {await self.bot.get_or_fetch_member(self.bot.get_guild(guild), user)} || {val} || {num}"
+                            )
+            except Exception as e:
+                log.warning(e)
 
     @trickle.before_loop
     async def before_trickle(self):
