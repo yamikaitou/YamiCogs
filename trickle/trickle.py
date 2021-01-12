@@ -36,6 +36,7 @@ class Trickle(commands.Cog):
         self.config.register_guild(**default_config)
 
         self.bot.loop.create_task(self.initialize())
+        self.msg = {}
         self.trickle.start()
 
     async def initialize(self):
@@ -45,7 +46,6 @@ class Trickle(commands.Cog):
             self.cache = await self.config.all()
         else:
             self.cache = await self.config.all_guilds()
-        self.msg = {}
         self.bank = await bank.is_global()
 
     def cog_unload(self):
@@ -67,11 +67,17 @@ class Trickle(commands.Cog):
                 self.msg[str(message.author.id)].append(message.id)
             except KeyError:
                 self.msg[str(message.author.id)] = [message.id]
+            log.info(
+                f"Global || {message.author.display_name} || {message.guild.name} || {message.channel.name}"
+            )
         else:
             try:
                 self.msg[message.guild.id][str(message.author.id)].append(message.id)
             except KeyError:
                 self.msg[message.guild.id] = {str(message.author.id): [message.id]}
+            log.info(
+                f"Local || {message.author.display_name} || {message.guild.name} || {message.channel.name}"
+            )
 
     @tasks.loop(minutes=1)
     async def trickle(self):
@@ -88,9 +94,12 @@ class Trickle(commands.Cog):
                 if len(msg) >= self.cache["messages"]:
                     num = math.floor(len(msg) / self.cache["messages"])
                     del (self.msg[user])[0 : (num * self.cache["messages"])]
-                    await bank.deposit_credits(
+                    val = await bank.deposit_credits(
                         (await self.bot.get_or_fetch_user(user)),
                         num * self.cache["credits"],
+                    )
+                    log.info(
+                        f"Global || {await self.bot.get_or_fetch_user(user)} || {val} || {num}"
                     )
         else:
             msgs = self.msg
@@ -101,13 +110,16 @@ class Trickle(commands.Cog):
                         del (self.msg[guild][user])[
                             0 : (num * self.cache[guild]["messages"])
                         ]
-                        await bank.deposit_credits(
+                        val = await bank.deposit_credits(
                             (
                                 await self.bot.get_or_fetch_member(
                                     self.bot.get_guild(guild), user
                                 )
                             ),
                             num * self.cache[guild]["credits"],
+                        )
+                        log.info(
+                            f"Local || {self.bot.get_guild(guild).name} || {await self.bot.get_or_fetch_member(self.bot.get_guild(guild), user)} || {val} || {num}"
                         )
 
     @trickle.before_loop
