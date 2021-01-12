@@ -61,21 +61,23 @@ class Trickle(commands.Cog):
 
         if await bank.is_global():
             try:
-                self.msg[str(message.author.id)].append(message.id)
+                self.msg[message.author.id].append(message.id)
             except KeyError:
-                self.msg[str(message.author.id)] = [message.id]
+                self.msg[message.author.id] = [message.id]
         else:
-            if hasattr(self.msg, str(message.guild.id)):
+            print(self.msg)
+            try:
+                self.msg[message.guild.id]
                 try:
-                    self.msg[self.msg[message.guild.id][str(message.author.id)]].append(
+                    self.msg[message.guild.id][message.author.id].append(
                         message.id
                     )
                 except KeyError:
-                    self.msg[str(message.guild.id)][str(message.author.id)] = [
-                        message.id
-                    ]
-            else:
-                self.msg[str(message.guild.id)] = {str(message.author.id): [message.id]}
+                    self.msg[message.guild.id][message.author.id] = [message.id]
+            except KeyError:
+                self.msg[message.guild.id] = {message.author.id: [message.id]}
+            
+            print(self.msg)
 
     @tasks.loop(minutes=1)
     async def trickle(self):
@@ -87,6 +89,7 @@ class Trickle(commands.Cog):
             self.bank = await bank.is_global()
 
         if await bank.is_global():
+            log.info(f"Global || Starting task")
             msgs = self.msg
             for user, msg in msgs.items():
                 if len(msg) >= self.cache["messages"]:
@@ -104,10 +107,10 @@ class Trickle(commands.Cog):
             msgs = self.msg
             for guild, users in msgs.items():
                 for user, msg in users.items():
-                    if len(msg) >= self.cache[int(guild)]["messages"]:
-                        num = math.floor(len(msg) / self.cache[int(guild)]["messages"])
+                    if len(msg) >= self.cache[guild]["messages"]:
+                        num = math.floor(len(msg) / self.cache[guild]["messages"])
                         del (self.msg[guild][user])[
-                            0 : (num * self.cache[int(guild)]["messages"])
+                            0 : (num * self.cache[guild]["messages"])
                         ]
                         val = await bank.deposit_credits(
                             (
@@ -115,7 +118,7 @@ class Trickle(commands.Cog):
                                     self.bot.get_guild(guild), user
                                 )
                             ),
-                            num * self.cache[int(guild)]["credits"],
+                            num * self.cache[guild]["credits"],
                         )
                         log.info(
                             f"Local || {self.bot.get_guild(guild).name} || {await self.bot.get_or_fetch_member(self.bot.get_guild(guild), user)} || {val} || {num}"
@@ -140,7 +143,7 @@ class Trickle(commands.Cog):
                 )
             await ctx.send(dev)
         else:
-            for user, msg in self.msg[str(ctx.guild.id)].items():
+            for user, msg in self.msg[ctx.guild.id].items():
                 dev[
                     (await self.bot.get_or_fetch_member(ctx.guild, user)).display_name
                 ] = len(msg)
