@@ -64,17 +64,11 @@ class Trickle(commands.Cog):
                 self.msg[str(message.author.id)].append(message.id)
             except KeyError:
                 self.msg[str(message.author.id)] = [message.id]
-            log.info(
-                f"Global || {message.author.display_name} || {message.guild.name} || {message.channel.name}"
-            )
         else:
             try:
                 self.msg[message.guild.id][str(message.author.id)].append(message.id)
             except KeyError:
                 self.msg[message.guild.id] = {str(message.author.id): [message.id]}
-            log.info(
-                f"Local || {message.author.display_name} || {message.guild.name} || {message.channel.name}"
-            )
 
     @tasks.loop(minutes=1)
     async def trickle(self):
