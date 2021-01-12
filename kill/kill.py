@@ -9,7 +9,7 @@ class Kill(commands.Cog):
     Kill people in interesting ways
     """
 
-    __version__ = "2.2"
+    __version__ = "2.3"
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""
@@ -50,7 +50,8 @@ class Kill(commands.Cog):
         async with self.config.guild(ctx.guild).msg() as kill:
             kill.append(msg)
 
-        await ctx.tick()
+        if not await ctx.tick():
+            await ctx.send("Message added")
 
     @killset.command(name="delete")
     async def _delete(self, ctx, num: int):
@@ -67,7 +68,8 @@ class Kill(commands.Cog):
 
             kill.pop(num)
 
-        await ctx.tick()
+        if not await ctx.tick():
+            await ctx.send("Message removed")
 
     @killset.command(name="list")
     @checks.bot_has_permissions(embed_links=True)
@@ -111,7 +113,8 @@ class Kill(commands.Cog):
 
         await self.config.guild(ctx.guild).botkill.set(msg)
 
-        await ctx.tick()
+        if not await ctx.tick():
+            await ctx.send("Message saved")
 
     @killset.command(name="self")
     async def _self(self, ctx, *, msg):
@@ -124,7 +127,8 @@ class Kill(commands.Cog):
 
         await self.config.guild(ctx.guild).selfkill.set(msg)
 
-        await ctx.tick()
+        if not await ctx.tick():
+            await ctx.send("Message saved")
 
     @commands.command()
     async def kill(self, ctx, *, user: discord.Member):

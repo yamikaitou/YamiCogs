@@ -1,6 +1,5 @@
 import logging
 import math
-from typing import Literal
 
 from discord.ext import tasks
 from redbot.core import Config, bank, commands
@@ -38,7 +37,7 @@ class EconomyTrickle(commands.Cog):
     Trickle credits into your Economy
     """
 
-    __version__ = "1.0"
+    __version__ = "1.1"
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""
@@ -147,6 +146,21 @@ class EconomyTrickle(commands.Cog):
 
     @is_owner_if_bank_global()
     @commands.admin_or_permissions(manage_guild=True)
+    @economytrickle.command(name="info", aliases=["settings"])
+    async def ts_info(self, ctx, number: int):
+        """ Show the current settings """
+
+        if await bank.is_global():
+            await ctx.send(
+                f"Credits: {self.cache['credits']}\nMessages: {self.cache['messages']}"
+            )
+        else:
+            await ctx.send(
+                f"Credits: {self.cache[ctx.guild.id]['credits']}\nMessages: {self.cache[ctx.guild.id]['messages']}"
+            )
+
+    @is_owner_if_bank_global()
+    @commands.admin_or_permissions(manage_guild=True)
     @economytrickle.command(name="credits")
     async def ts_credits(self, ctx, number: int):
         """
@@ -160,7 +174,8 @@ class EconomyTrickle(commands.Cog):
             if 0 <= number <= 1000:
                 await self.config.credits.set(number)
                 self.cache["credits"] = number
-                await ctx.tick()
+                if not await ctx.tick():
+                    await ctx.send("Setting saved")
             else:
                 await ctx.send(
                     f"You must specify a value that is not less than 0 and not more than 1000"
@@ -169,7 +184,8 @@ class EconomyTrickle(commands.Cog):
             if 0 <= number <= 1000:
                 await self.config.guild(ctx.guild).credits.set(number)
                 self.cache[ctx.guild.id] = await self.config.guild(ctx.guild).all()
-                await ctx.tick()
+                if not await ctx.tick():
+                    await ctx.send("Setting saved")
             else:
                 await ctx.send(
                     f"You must specify a value that is not less than 0 and not more than 1000"
@@ -190,7 +206,8 @@ class EconomyTrickle(commands.Cog):
             if 0 <= number <= 100:
                 await self.config.messages.set(number)
                 self.cache["messages"] = number
-                await ctx.tick()
+                if not await ctx.tick():
+                    await ctx.send("Setting saved")
             else:
                 await ctx.send(
                     f"You must specify a value that is not less than 0 and not more than 100"
@@ -199,16 +216,17 @@ class EconomyTrickle(commands.Cog):
             if 0 <= number <= 100:
                 await self.config.guild(ctx.guild).messages.set(number)
                 self.cache[ctx.guild.id] = await self.config.guild(ctx.guild).all()
-                await ctx.tick()
+                if not await ctx.tick():
+                    await ctx.send("Setting saved")
             else:
                 await ctx.send(
                     f"You must specify a value that is not less than 0 and not more than 100"
                 )
 
-    async def red_delete_data_for_user(
-        self,
-        *,
-        requester: Literal["discord_deleted_user", "owner", "user", "user_strict"],
-        user_id: int,
-    ):
+    async def red_get_data_for_user(self, *, user_id: int):
+        # this cog does not store any data
+        return {}
+
+    async def red_delete_data_for_user(self, *, requester, user_id: int) -> None:
+        # this cog does not store any data
         pass

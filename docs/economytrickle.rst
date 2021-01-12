@@ -48,6 +48,24 @@ economytrickle
 
 Configure various settings 
 
+.. _economytrickle-command-economytrickle-info:
+
+""""
+info
+""""
+
+.. note:: |admin-lock|
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]economytrickle info <number>
+
+**Description**
+
+Show the current settings 
+
 .. _economytrickle-command-economytrickle-messages:
 
 """"""""

@@ -18,7 +18,7 @@ class PayDay(commands.Cog):
     Customizable PayDay system
     """
 
-    __version__ = "1.4"
+    __version__ = "1.5"
 
     settings = {"day": 1, "week": 7, "month": 30, "quarter": 122, "year": 365}
     friendly = {
@@ -559,10 +559,12 @@ class PayDay(commands.Cog):
             return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.hour.set(value)
-            await ctx.tick()
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
         else:
             await self.config.guild(ctx.guild).hour.set(value)
-            await ctx.tick()
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -576,10 +578,12 @@ class PayDay(commands.Cog):
             return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.day.set(value)
-            await ctx.tick()
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
         else:
             await self.config.guild(ctx.guild).day.set(value)
-            await ctx.tick()
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -594,10 +598,12 @@ class PayDay(commands.Cog):
             return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.week.set(value)
-            await ctx.tick()
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
         else:
             await self.config.guild(ctx.guild).week.set(value)
-            await ctx.tick()
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -612,10 +618,12 @@ class PayDay(commands.Cog):
             return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.month.set(value)
-            await ctx.tick()
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
         else:
             await self.config.guild(ctx.guild).month.set(value)
-            await ctx.tick()
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -630,10 +638,12 @@ class PayDay(commands.Cog):
             return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.quarter.set(value)
-            await ctx.tick()
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
         else:
             await self.config.guild(ctx.guild).quarter.set(value)
-            await ctx.tick()
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -648,10 +658,12 @@ class PayDay(commands.Cog):
             return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.year.set(value)
-            await ctx.tick()
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
         else:
             await self.config.guild(ctx.guild).year.set(value)
-            await ctx.tick()
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
 
     async def red_delete_data_for_user(
         self,
