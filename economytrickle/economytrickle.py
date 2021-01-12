@@ -9,15 +9,36 @@ from tabulate import tabulate
 
 from . import checks as lc
 
-log = logging.getLogger("red.yamicogs.trickle")
+log = logging.getLogger("red.yamicogs.economytrickle")
+
+# taken from Red-Discordbot bank.py
+def is_owner_if_bank_global():
+    """
+    Command decorator. If the bank is global, it checks if the author is
+    bot owner, otherwise it only checks
+    if command was used in guild - it DOES NOT check any permissions.
+    When used on the command, this should be combined
+    with permissions check like `guildowner_or_permissions()`.
+    """
+
+    async def pred(ctx: commands.Context):
+        author = ctx.author
+        if not await bank.is_global():
+            if not ctx.guild:
+                return False
+            return True
+        else:
+            return await ctx.bot.is_owner(author)
+
+    return commands.check(pred)
 
 
-class Trickle(commands.Cog):
+class EconomyTrickle(commands.Cog):
     """
     Trickle credits into your Economy
     """
 
-    __version__ = "0.1"
+    __version__ = "1.0"
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""
@@ -58,6 +79,8 @@ class Trickle(commands.Cog):
             return
         if message.guild == None:
             return
+        if self.bot.cog_disabled_in_guild(self, message.guild):
+            return
 
         if await bank.is_global():
             try:
@@ -84,7 +107,6 @@ class Trickle(commands.Cog):
             self.bank = await bank.is_global()
 
         if await bank.is_global():
-            log.info(f"Global || Starting task")
             msgs = self.msg
             for user, msg in msgs.items():
                 if len(msg) >= self.cache["messages"]:
@@ -94,89 +116,68 @@ class Trickle(commands.Cog):
                         (await self.bot.get_or_fetch_user(user)),
                         num * self.cache["credits"],
                     )
-                    log.info(
-                        f"Global || {await self.bot.get_or_fetch_user(user)} || {val} || {num}"
-                    )
         else:
-            log.info(f"Local || Starting task")
             msgs = self.msg
             for guild, users in msgs.items():
-                for user, msg in users.items():
-                    if len(msg) >= self.cache[guild]["messages"]:
-                        num = math.floor(len(msg) / self.cache[guild]["messages"])
-                        del (self.msg[guild][user])[
-                            0 : (num * self.cache[guild]["messages"])
-                        ]
-                        val = await bank.deposit_credits(
-                            (
-                                await self.bot.get_or_fetch_member(
-                                    self.bot.get_guild(guild), user
-                                )
-                            ),
-                            num * self.cache[guild]["credits"],
-                        )
-                        log.info(
-                            f"Local || {self.bot.get_guild(guild).name} || {await self.bot.get_or_fetch_member(self.bot.get_guild(guild), user)} || {val} || {num}"
-                        )
+                if not self.bot.cog_disabled_in_guild(self, self.bog.get_guild(guild)):
+                    for user, msg in users.items():
+                        if len(msg) >= self.cache[guild]["messages"]:
+                            num = math.floor(len(msg) / self.cache[guild]["messages"])
+                            del (self.msg[guild][user])[
+                                0 : (num * self.cache[guild]["messages"])
+                            ]
+                            val = await bank.deposit_credits(
+                                (
+                                    await self.bot.get_or_fetch_member(
+                                        self.bot.get_guild(guild), user
+                                    )
+                                ),
+                                num * self.cache[guild]["credits"],
+                            )
 
     @trickle.before_loop
     async def before_trickle(self):
         await self.bot.wait_until_red_ready()
 
-    @commands.is_owner()
-    @commands.command()
-    async def trickles(self, ctx):
-
-        dev = {}
-        if await bank.is_global():
-            msgs = self.msg
-            for user, msg in msgs.items():
-                num = math.floor(len(msg) / self.cache["messages"])
-                del self.msg[user][:num]
-                dev[(await self.bot.get_or_fetch_user(user)).display_name] = (
-                    num * self.cache["credits"]
-                )
-            await ctx.send(dev)
-        else:
-            for user, msg in self.msg[ctx.guild.id].items():
-                dev[
-                    (await self.bot.get_or_fetch_member(ctx.guild, user)).display_name
-                ] = len(msg)
-            await ctx.send(dev)
-
+    @is_owner_if_bank_global()
     @commands.admin_or_permissions(manage_guild=True)
-    @commands.group()
-    async def trickleset(self, ctx):
+    @commands.group(aliases=["trickleset"])
+    async def economytrickle(self, ctx):
         """ Configure various settings """
 
-    @trickleset.command(name="credits")
+    @is_owner_if_bank_global()
+    @commands.admin_or_permissions(manage_guild=True)
+    @economytrickle.command(name="credits")
     async def ts_credits(self, ctx, number: int):
         """
         Set the number of credits to grant
 
         Set the number to 0 to disable
+        Max value is 1000
         """
 
         if await bank.is_global():
-            if 0 <= number <= (await bank.get_max_balance()):
+            if 0 <= number <= 1000:
                 await self.config.credits.set(number)
                 self.cache["credits"] = number
                 await ctx.tick()
             else:
                 await ctx.send(
-                    f"You must specify a value that is not less than 0 and not more than {(await bank.get_max_balance())}"
+                    f"You must specify a value that is not less than 0 and not more than 1000"
                 )
         else:
-            if 0 <= number <= (await bank.get_max_balance(ctx.guild)):
+            if 0 <= number <= 1000:
                 await self.config.guild(ctx.guild).credits.set(number)
                 self.cache[ctx.guild.id] = await self.config.guild(ctx.guild).all()
                 await ctx.tick()
             else:
                 await ctx.send(
-                    f"You must specify a value that is not less than 0 and not more than {(await bank.get_max_balance())}"
+                    f"You must specify a value that is not less than 0 and not more than 1000"
                 )
 
-    @trickleset.command(name="messages")
+    @is_owner_if_bank_global()
+    @commands.admin_or_permissions(manage_guild=True)
+    @economytrickle.command(name="messages")
     async def ts_messages(self, ctx, number: int):
         """
         Set the number of messages required to gain credits

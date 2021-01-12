@@ -1,15 +1,11 @@
 {
     "author": ["YamiKaitou#8975"],
-    "name": "Trickle",
+    "name": "EconomyTrickle",
     "short": "Trickle credits into your economy",
     "description": "Trickle credits into your economy",
     "tags": [
         "economy",
-        "economytrickle",
         "trickle"
-    ],
-    "requirements": [
-        "tabulate"
     ],
     "min_bot_version": "3.4.0",
     "end_user_data_statement": "This cog does not persistently store end user data.",
