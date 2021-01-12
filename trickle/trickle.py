@@ -65,19 +65,14 @@ class Trickle(commands.Cog):
             except KeyError:
                 self.msg[message.author.id] = [message.id]
         else:
-            print(self.msg)
             try:
                 self.msg[message.guild.id]
                 try:
-                    self.msg[message.guild.id][message.author.id].append(
-                        message.id
-                    )
+                    self.msg[message.guild.id][message.author.id].append(message.id)
                 except KeyError:
                     self.msg[message.guild.id][message.author.id] = [message.id]
             except KeyError:
                 self.msg[message.guild.id] = {message.author.id: [message.id]}
-            
-            print(self.msg)
 
     @tasks.loop(minutes=1)
     async def trickle(self):
