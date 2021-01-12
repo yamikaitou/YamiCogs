@@ -67,11 +67,15 @@ class Trickle(commands.Cog):
         else:
             if hasattr(self.msg, str(message.guild.id)):
                 try:
-                    self.msg[self.msg[message.guild.id][str(message.author.id)]].append(message.id)
+                    self.msg[self.msg[message.guild.id][str(message.author.id)]].append(
+                        message.id
+                    )
                 except KeyError:
-                    self.msg[str(message.guild.id)][str(message.author.id)] = [message.id]
+                    self.msg[str(message.guild.id)][str(message.author.id)] = [
+                        message.id
+                    ]
             else:
-                self.msg[str(message.guild.id)] = {[str(message.author.id)]: [message.id]}
+                self.msg[str(message.guild.id)] = {str(message.author.id): [message.id]}
 
     @tasks.loop(minutes=1)
     async def trickle(self):
