@@ -59,9 +59,6 @@ class Trickle(commands.Cog):
         if message.guild == None:
             return
 
-        log.info(
-            f"{message.author.display_name} || {message.guild.name} || {message.channel.name}"
-        )
         if await bank.is_global():
             try:
                 self.msg[str(message.author.id)].append(message.id)
