@@ -12,7 +12,7 @@ Welcome to YamiCogs's documentation!
 
    kill
    payday
-
+   economytrickle
 
 
 Indices and tables
