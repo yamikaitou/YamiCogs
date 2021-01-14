@@ -36,8 +36,6 @@ Commands
 economytrickle
 ^^^^^^^^^^^^^^
 
-.. note:: |admin-lock|
-
 **Syntax**
 
 .. code-block:: none
@@ -54,7 +52,11 @@ Configure various settings
 info
 """"
 
-.. note:: |admin-lock|
+**Permissions**
+
+*User* -
+Global Bank - Bot Owner
+Local Bank - Bot Admin or Manage Guild
 
 **Syntax**
 
@@ -72,7 +74,11 @@ Show the current settings
 messages
 """"""""
 
-.. note:: |admin-lock|
+**Permissions**
+
+*User* -
+Global Bank - Bot Owner
+Local Bank - Bot Admin or Manage Guild
 
 **Syntax**
 
@@ -93,7 +99,11 @@ Max value is 100
 credits
 """""""
 
-.. note:: |admin-lock|
+**Permissions**
+
+*User* -
+Global Bank - Bot Owner
+Local Bank - Bot Admin or Manage Guild
 
 **Syntax**
 

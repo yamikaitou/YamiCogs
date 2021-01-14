@@ -6,8 +6,6 @@ from redbot.core import Config, bank, commands
 from redbot.core.bot import Red
 from tabulate import tabulate
 
-from . import checks as lc
-
 log = logging.getLogger("red.yamicogs.economytrickle")
 
 # taken from Red-Discordbot bank.py
@@ -78,7 +76,7 @@ class EconomyTrickle(commands.Cog):
             return
         if message.guild == None:
             return
-        if self.bot.cog_disabled_in_guild(self, message.guild):
+        if await self.bot.cog_disabled_in_guild(self, message.guild):
             return
 
         if await bank.is_global():
@@ -147,7 +145,7 @@ class EconomyTrickle(commands.Cog):
     @is_owner_if_bank_global()
     @commands.admin_or_permissions(manage_guild=True)
     @economytrickle.command(name="info", aliases=["settings"])
-    async def ts_info(self, ctx, number: int):
+    async def ts_info(self, ctx):
         """ Show the current settings """
 
         if await bank.is_global():
