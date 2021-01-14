@@ -59,8 +59,10 @@ class Kill(commands.Cog):
         Removes a kill message. Use `[p]killset list` to for the numbers
         """
 
+        if num < 0:
+            return await ctx.send("Negative numbers are not supported")
         async with self.config.guild(ctx.guild).msg() as kill:
-            if num > len(kill):
+            if num >= len(kill):
                 return await ctx.send(
                     "Sorry, but you don't have a kill message with that number. "
                     "Please use `[p]killset list` to get the number of the message you wish to delete"
