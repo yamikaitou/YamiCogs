@@ -9,7 +9,7 @@ class Kill(commands.Cog):
     Kill people in interesting ways
     """
 
-    __version__ = "2.3"
+    __version__ = "2.4"
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""
@@ -153,7 +153,7 @@ class Kill(commands.Cog):
         await ctx.send(
             msg.replace("{killer}", ctx.author.mention)
             .replace("{killer2}", "*" + ctx.author.display_name + "*")
-            .replace("{victim}", ctx.me.mention)
+            .replace("{victim}", user.mention)
             .replace("{victim2}", "*" + user.display_name + "*")
         )
 
