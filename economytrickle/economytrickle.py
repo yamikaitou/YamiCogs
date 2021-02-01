@@ -121,7 +121,9 @@ class EconomyTrickle(commands.Cog):
         else:
             msgs = self.msg
             for guild, users in msgs.items():
-                if not await self.bot.cog_disabled_in_guild(self, self.bot.get_guild(guild)):
+                if not await self.bot.cog_disabled_in_guild(
+                    self, self.bot.get_guild(guild)
+                ):
                     for user, msg in users.items():
                         if len(msg) >= self.cache[guild]["messages"]:
                             num = math.floor(len(msg) / self.cache[guild]["messages"])
