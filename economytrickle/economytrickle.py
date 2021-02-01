@@ -35,7 +35,7 @@ class EconomyTrickle(commands.Cog):
     Trickle credits into your Economy
     """
 
-    __version__ = "1.1"
+    __version__ = "1.2"
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""
@@ -81,11 +81,15 @@ class EconomyTrickle(commands.Cog):
 
         if await bank.is_global():
             try:
+                log.debug(f"Found message from {message.author.id}")
                 self.msg[message.author.id].append(message.id)
             except KeyError:
                 self.msg[message.author.id] = [message.id]
         else:
             try:
+                log.debug(
+                    f"Found message from {message.author.id} in {message.guild.id}"
+                )
                 self.msg[message.guild.id]
                 try:
                     self.msg[message.guild.id][message.author.id].append(message.id)
@@ -108,6 +112,7 @@ class EconomyTrickle(commands.Cog):
             for user, msg in msgs.items():
                 if len(msg) >= self.cache["messages"]:
                     num = math.floor(len(msg) / self.cache["messages"])
+                    log.debug(f"Processing {num} messages for {user}")
                     del (self.msg[user])[0 : (num * self.cache["messages"])]
                     val = await bank.deposit_credits(
                         (await self.bot.get_or_fetch_user(user)),
@@ -116,10 +121,13 @@ class EconomyTrickle(commands.Cog):
         else:
             msgs = self.msg
             for guild, users in msgs.items():
-                if not self.bot.cog_disabled_in_guild(self, self.bot.get_guild(guild)):
+                if not await self.bot.cog_disabled_in_guild(self, self.bot.get_guild(guild)):
                     for user, msg in users.items():
                         if len(msg) >= self.cache[guild]["messages"]:
                             num = math.floor(len(msg) / self.cache[guild]["messages"])
+                            log.debug(
+                                f"Processing {num} messages for {user} in {guild}"
+                            )
                             del (self.msg[guild][user])[
                                 0 : (num * self.cache[guild]["messages"])
                             ]
