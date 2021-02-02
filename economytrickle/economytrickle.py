@@ -4,6 +4,7 @@ import math
 from discord.ext import tasks
 from redbot.core import Config, bank, commands
 from redbot.core.bot import Red
+
 from tabulate import tabulate
 
 log = logging.getLogger("red.yamicogs.economytrickle")
@@ -35,7 +36,7 @@ class EconomyTrickle(commands.Cog):
     Trickle credits into your Economy
     """
 
-    __version__ = "1.2"
+    __version__ = "1.3"
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""
@@ -53,17 +54,10 @@ class EconomyTrickle(commands.Cog):
         self.config.register_global(**default_config)
         self.config.register_guild(**default_config)
 
-        self.bot.loop.create_task(self.initialize())
         self.msg = {}
         self.trickle.start()
 
     async def initialize(self):
-        await self.bot.wait_until_red_ready()
-
-        if await bank.is_global():
-            self.cache = await self.config.all()
-        else:
-            self.cache = await self.config.all_guilds()
         self.bank = await bank.is_global()
 
     def cog_unload(self):
@@ -109,14 +103,15 @@ class EconomyTrickle(commands.Cog):
 
         if await bank.is_global():
             msgs = self.msg
+            cache = await self.config.all()
             for user, msg in msgs.items():
-                if len(msg) >= self.cache["messages"]:
-                    num = math.floor(len(msg) / self.cache["messages"])
+                if len(msg) >= cache["messages"]:
+                    num = math.floor(len(msg) / cache["messages"])
                     log.debug(f"Processing {num} messages for {user}")
-                    del (self.msg[user])[0 : (num * self.cache["messages"])]
+                    del (self.msg[user])[0 : (num * cache["messages"])]
                     val = await bank.deposit_credits(
                         (await self.bot.get_or_fetch_user(user)),
-                        num * self.cache["credits"],
+                        num * cache["credits"],
                     )
         else:
             msgs = self.msg
@@ -124,23 +119,25 @@ class EconomyTrickle(commands.Cog):
                 if not await self.bot.cog_disabled_in_guild(
                     self, self.bot.get_guild(guild)
                 ):
-                    for user, msg in users.items():
-                        if len(msg) >= self.cache[guild]["messages"]:
-                            num = math.floor(len(msg) / self.cache[guild]["messages"])
-                            log.debug(
-                                f"Processing {num} messages for {user} in {guild}"
-                            )
-                            del (self.msg[guild][user])[
-                                0 : (num * self.cache[guild]["messages"])
-                            ]
-                            val = await bank.deposit_credits(
-                                (
-                                    await self.bot.get_or_fetch_member(
-                                        self.bot.get_guild(guild), user
-                                    )
-                                ),
-                                num * self.cache[guild]["credits"],
-                            )
+                    cache = await self.config.guild_from_id(guild).all()
+                    if cache["messages"] != 0:
+                        for user, msg in users.items():
+                            if len(msg) >= cache["messages"]:
+                                num = math.floor(len(msg) / cache["messages"])
+                                log.debug(
+                                    f"Processing {num} messages for {user} in {guild}"
+                                )
+                                del (self.msg[guild][user])[
+                                    0 : (num * cache["messages"])
+                                ]
+                                val = await bank.deposit_credits(
+                                    (
+                                        await self.bot.get_or_fetch_member(
+                                            self.bot.get_guild(guild), user
+                                        )
+                                    ),
+                                    num * cache["credits"],
+                                )
 
     @trickle.before_loop
     async def before_trickle(self):
@@ -181,7 +178,6 @@ class EconomyTrickle(commands.Cog):
         if await bank.is_global():
             if 0 <= number <= 1000:
                 await self.config.credits.set(number)
-                self.cache["credits"] = number
                 if not await ctx.tick():
                     await ctx.send("Setting saved")
             else:
@@ -191,7 +187,6 @@ class EconomyTrickle(commands.Cog):
         else:
             if 0 <= number <= 1000:
                 await self.config.guild(ctx.guild).credits.set(number)
-                self.cache[ctx.guild.id] = await self.config.guild(ctx.guild).all()
                 if not await ctx.tick():
                     await ctx.send("Setting saved")
             else:
@@ -213,7 +208,6 @@ class EconomyTrickle(commands.Cog):
         if await bank.is_global():
             if 0 <= number <= 100:
                 await self.config.messages.set(number)
-                self.cache["messages"] = number
                 if not await ctx.tick():
                     await ctx.send("Setting saved")
             else:
@@ -223,7 +217,6 @@ class EconomyTrickle(commands.Cog):
         else:
             if 0 <= number <= 100:
                 await self.config.guild(ctx.guild).messages.set(number)
-                self.cache[ctx.guild.id] = await self.config.guild(ctx.guild).all()
                 if not await ctx.tick():
                     await ctx.send("Setting saved")
             else:

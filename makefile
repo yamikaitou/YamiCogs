@@ -1,10 +1,6 @@
 # thanks zeph
 # thanks flare
-ifeq ($(USER), "codespace")
-	PYTHON ?= /home/codespace/workspace/YamiCogs/pythonenv3.8/bin/python
-else
-	PYTHON ?= python3.8
-endif
+PYTHON ?= python3.8
 DIFF := $(shell git diff --name-only --staged "*.py" "*.pyi")
 ifeq ($(DIFF),)
 	DIFF := $(shell git ls-files "*.py" "*.pyi")
@@ -26,7 +22,7 @@ update:
 	$(PYTHON) -m pip install -U pip wheel setuptools autoflake isort black
 	$(PYTHON) -m pip install -U Red-Discordbot[dev]
 run:
-	$(PYTHON) -O -m redbot dev --dev --debug
+	$(PYTHON) -O -m redbot yamicogs --dev --debug
 
 # Translations
 gettext:
