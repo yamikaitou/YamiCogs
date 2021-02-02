@@ -162,7 +162,7 @@ class EconomyTrickle(commands.Cog):
             )
         else:
             if ctx.guild is not None:
-                cache = await self.config.guild_from_id(guild).all()
+                cache = await self.config.guild_from_id(ctx.guild).all()
                 await ctx.send(
                     f"Credits: {cache['credits']}\nMessages: {cache['messages']}"
                 )
