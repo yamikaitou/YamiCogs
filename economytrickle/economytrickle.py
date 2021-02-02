@@ -36,7 +36,7 @@ class EconomyTrickle(commands.Cog):
     Trickle credits into your Economy
     """
 
-    __version__ = "1.3"
+    __version__ = "1.4"
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""
@@ -156,13 +156,20 @@ class EconomyTrickle(commands.Cog):
         """ Show the current settings """
 
         if await bank.is_global():
+            cache = await self.config.all()
             await ctx.send(
-                f"Credits: {self.cache['credits']}\nMessages: {self.cache['messages']}"
+                f"Credits: {cache['credits']}\nMessages: {cache['messages']}"
             )
         else:
-            await ctx.send(
-                f"Credits: {self.cache[ctx.guild.id]['credits']}\nMessages: {self.cache[ctx.guild.id]['messages']}"
-            )
+            if ctx.guild is not None:
+                cache = await self.config.guild_from_id(guild).all()
+                await ctx.send(
+                    f"Credits: {cache['credits']}\nMessages: {cache['messages']}"
+                )
+            else:
+                await ctx.send(
+                    "Your bank is set to per-server. Please try this command in a server instead"
+                )
 
     @is_owner_if_bank_global()
     @commands.admin_or_permissions(manage_guild=True)
