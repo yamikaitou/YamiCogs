@@ -36,7 +36,7 @@ class EconomyTrickle(commands.Cog):
     Trickle credits into your Economy
     """
 
-    __version__ = "1.4"
+    __version__ = "1.5"
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""

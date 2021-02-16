@@ -1,7 +1,8 @@
 import discord
-import numpy as np
 from redbot.core import Config, commands
 from redbot.core.utils.predicates import ReactionPredicate
+
+import numpy as np
 
 
 class FourInARow(commands.Cog):
