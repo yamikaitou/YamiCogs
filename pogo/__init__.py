@@ -1,4 +1,4 @@
-from .core import PokemonGo
+from .pogo import PokemonGo
 
 
 def setup(bot):
