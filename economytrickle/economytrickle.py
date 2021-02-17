@@ -4,7 +4,6 @@ import math
 from discord.ext import tasks
 from redbot.core import Config, bank, commands
 from redbot.core.bot import Red
-
 from tabulate import tabulate
 
 log = logging.getLogger("red.yamicogs.economytrickle")

@@ -7,7 +7,7 @@
         "economy", "fun"
     ],
     "hidden": true,
-    "disabled": true,
-    "install_msg": "Thanks for installing the beta. Please note that I currently do not support this cog and it can change and/or break at any time. Unless you havea  good reason to use it now, please uninstall it until I've declared it as available (check the repo Readme for a list of released and supported cogs)",
+    "disabled": false,
+    "install_msg": "Thanks for installing the cog, please note that this cog is currently in Beta status while the 3 games are being worked on.\nI'm in the Cog Support server if you need help with anything. Make sure you take a look under `[p]lottoset` before getting started, the games are disabled by default",
     "end_user_data_statement": "This cog does not persistently store data or metadata about users."
 }

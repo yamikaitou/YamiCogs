@@ -13,6 +13,7 @@ Welcome to YamiCogs's documentation!
    kill
    payday
    economytrickle
+   lottery
 
 
 Indices and tables

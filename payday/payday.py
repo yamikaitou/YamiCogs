@@ -6,7 +6,6 @@ from redbot.core import Config, bank, checks, commands
 from redbot.core.bot import Red
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import box, humanize_timedelta
-
 from tabulate import tabulate
 
 from . import checks as lc

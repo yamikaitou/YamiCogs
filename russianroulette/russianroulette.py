@@ -9,7 +9,6 @@ from discord.ext import tasks
 from redbot.core import Config, bank, commands
 from redbot.core.bot import Red
 from redbot.core.utils.chat_formatting import box
-
 from tabulate import tabulate
 
 log = logging.getLogger("red.yamicogs.russianroulette")

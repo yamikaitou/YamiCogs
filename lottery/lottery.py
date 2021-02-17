@@ -13,7 +13,7 @@ class Lottery(commands.Cog):
     Lottery Games
     """
 
-    __version__ = "0.1"
+    __version__ = "0.2"
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""
@@ -25,18 +25,17 @@ class Lottery(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(
-            self, identifier=192153481165930496, force_registration=True
+            self, identifier=582650109, force_registration=True
         )
         self.config.register_guild(
             **{
                 "match1": {"enable": False, "cost": 100, "max": 30, "prize": 0},
                 "match5": {"enable": False, "cost": 100, "max": 60, "prize": 0},
                 "lucky3": {
-                    "enable": True,
+                    "enable": False,
                     "cost": 100,
                     "icons": 3,
-                    "win2": 100,
-                    "win3": 1000,
+                    "prize": 1000,
                 },
             }
         )
@@ -105,23 +104,22 @@ class Lottery(commands.Cog):
             lucky3 = discord.Embed(
                 title="Lottery Games - Lucky3", color=await ctx.embed_color()
             )
-            lucky3.description = "Draw 3 Symbols and with a prize if they match!\nTo play, use `{}lottery lucky3`".format(
+            lucky3.description = "Draw 3 Symbols and with a prize if they all match!\nTo play, use `{}lottery lucky3`".format(
                 ctx.clean_prefix
             )
             lucky3.add_field(
                 name="Rules",
                 inline=False,
-                value="You will get {} random emojis. If you match 2 or 3 of them, you win!".format(
+                value="You will get {} random emojis. If you match 3 of them, you win!".format(
                     settings["lucky3"]["icons"]
                 ),
             )
             lucky3.add_field(
                 name="Settings",
-                value="Cost per Entry: {1} {0}\nMatch 2 Prize: {2} {0}\nMatch 3 Prize: {3} {0}\nEmojis: {4}".format(
+                value="Cost per Entry: {1} {0}\nPrize: {2} {0}\nEmojis: {3}".format(
                     currency,
                     humanize_number(settings["match1"]["cost"]),
-                    humanize_number(settings["lucky3"]["win2"]),
-                    humanize_number(settings["lucky3"]["win3"]),
+                    humanize_number(settings["lucky3"]["prize"]),
                     settings["lucky3"]["icons"],
                 ),
             )
@@ -151,8 +149,7 @@ class Lottery(commands.Cog):
             return
 
         icons = await self.config.guild(ctx.guild).lucky3.icons() - 1
-        prize2 = await self.config.guild(ctx.guild).lucky3.win2()
-        prize3 = await self.config.guild(ctx.guild).lucky3.win3()
+        prize = await self.config.guild(ctx.guild).lucky3.win()
 
         num1 = random.randrange(0, icons)
         num2 = random.randrange(0, icons)
@@ -163,14 +160,9 @@ class Lottery(commands.Cog):
 
         if num1 == num2 and num1 == num3:
             await ctx.send(
-                "🥳 WINNER!!! 🥳 +{} {}".format(humanize_number(prize3), currency)
+                "🥳 WINNER!!! 🎉 +{} {}".format(humanize_number(prize), currency)
             )
-            await bank.deposit_credits(ctx.author, prize3)
-        elif num1 == num2 or num1 == num3 or num2 == num3:
-            await ctx.send(
-                "🎉 WINNER!! 🎉 +{} {}".format(humanize_number(prize2), currency)
-            )
-            await bank.deposit_credits(ctx.author, prize2)
+            await bank.deposit_credits(ctx.author, prize)
         else:
             await ctx.send("Not a winner 😢")
 
@@ -186,8 +178,8 @@ class Lottery(commands.Cog):
 
         embed = discord.Embed(title="Lottery Settings", color=await ctx.embed_color())
         embed.add_field(
-            name="Match 1",
-            inline=False,
+            name="Match 1 (Not yet implemented)",
+            inline=True,
             value="Enabled?: {0}\nCost: {1}\nMax #: {2}".format(
                 settings["match1"]["enable"],
                 humanize_number(settings["match1"]["cost"]),
@@ -195,8 +187,8 @@ class Lottery(commands.Cog):
             ),
         )
         embed.add_field(
-            name="Match 5",
-            inline=False,
+            name="Match 5 (Not yet implemented)",
+            inline=True,
             value="Enabled?: {0}\nCost: {1}\nMax #: {2}".format(
                 settings["match5"]["enable"],
                 humanize_number(settings["match5"]["cost"]),
@@ -205,13 +197,12 @@ class Lottery(commands.Cog):
         )
         embed.add_field(
             name="Lucky 3",
-            inline=False,
-            value="Enabled?: {0}\nCost: {1}\nIcons: {2}\nMatch 2 Prize: {3}\nMatch 3 Prize: {4}".format(
+            inline=True,
+            value="Enabled?: {0}\nCost: {1}\nIcons: {2}\nPrize: {3}".format(
                 settings["lucky3"]["enable"],
                 humanize_number(settings["lucky3"]["cost"]),
                 settings["lucky3"]["icons"],
-                humanize_number(settings["lucky3"]["win2"]),
-                humanize_number(settings["lucky3"]["win3"]),
+                humanize_number(settings["lucky3"]["prize"]),
             ),
         )
 
@@ -243,24 +234,25 @@ class Lottery(commands.Cog):
         """
         Sets the number of Emojis to choose from
 
-        Valid options are 3-9
+        Valid options are 2-9
         Approximate Win percentrages are
         ```
-        Icons: 3 | Two: 66.6% | Three: 11.1%
-        Icons: 4 | Two: 56.2% | Three:  6.2%
-        Icons: 5 | Two: 48.0% | Three:  4.0%
-        Icons: 6 | Two: 41.6% | Three:  2.8%
-        Icons: 7 | Two: 36.7% | Three:  2.0%
-        Icons: 8 | Two: 32.8% | Three:  1.6%
-        Icons: 9 | Two: 29.6% | Three:  1.2%```
+        Icons: 2 | 25.0%
+        Icons: 3 | 11.1%
+        Icons: 4 |  6.3%
+        Icons: 5 |  4.0%
+        Icons: 6 |  2.8%
+        Icons: 7 |  2.1%
+        Icons: 8 |  1.6%
+        Icons: 9 |  1.2%```
         """
 
-        if 3 <= icons <= 9:
+        if 2 <= icons <= 9:
             await self.config.guild(ctx.guild).lucky3.icons.set(icons)
             await ctx.tick()
         else:
             await ctx.send(
-                "Sorry, but **3** is the lowest and **9** is the highest settings supported"
+                "Sorry, but **2** is the lowest and **9** is the highest settings supported"
             )
 
     @ls_lucky3.command(name="cost")
@@ -271,11 +263,10 @@ class Lottery(commands.Cog):
         await ctx.tick()
 
     @ls_lucky3.command(name="prize")
-    async def ls3_prize(self, ctx, match2: int, match3: int):
+    async def ls3_prize(self, ctx, prize: int):
         """Set the Prize amount"""
 
-        await self.config.guild(ctx.guild).lucky3.win2.set(match2)
-        await self.config.guild(ctx.guild).lucky3.win3.set(match3)
+        await self.config.guild(ctx.guild).lucky3.prize.set(prize)
         await ctx.tick()
 
     async def red_get_data_for_user(self, *, user_id: int):
