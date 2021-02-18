@@ -13,7 +13,7 @@ class Lottery(commands.Cog):
     Lottery Games
     """
 
-    __version__ = "0.2"
+    __version__ = "0.2.1"
 
     def format_help_for_context(self, ctx):
         """Thanks Sinbad."""
@@ -149,7 +149,7 @@ class Lottery(commands.Cog):
             return
 
         icons = await self.config.guild(ctx.guild).lucky3.icons() - 1
-        prize = await self.config.guild(ctx.guild).lucky3.win()
+        prize = await self.config.guild(ctx.guild).lucky3.prize()
 
         num1 = random.randrange(0, icons)
         num2 = random.randrange(0, icons)
