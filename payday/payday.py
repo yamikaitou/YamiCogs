@@ -18,7 +18,7 @@ class PayDay(commands.Cog):
     Customizable PayDay system
     """
 
-    __version__ = "1.5"
+    __version__ = "1.6"
 
     settings = {"day": 1, "week": 7, "month": 30, "quarter": 122, "year": 365}
     friendly = {
@@ -170,15 +170,18 @@ class PayDay(commands.Cog):
                     amount += amounts[k]
                     await self.config.user(ctx.author).set_raw(k, value=now.isoformat())
 
+            bankname = await bank.get_currency_name()
             if amount > 0:
                 await bank.deposit_credits(ctx.author, amount)
                 await ctx.send(
-                    "You have claimed all available credits from the `freecredits` program! +{} {}".format(
-                        amount, (await bank.get_currency_name())
+                    "You have claimed all available {} from the `freecredits` program! +{} {}".format(
+                        bankname, amount, bankname
                     )
                 )
             else:
-                await ctx.send("You have no available credits for claiming.")
+                await ctx.send(
+                    "You have no available {} for claiming.".format(bankname)
+                )
         else:
             amounts = await self.config.guild(ctx.guild).all()
             times = await self.config.member(ctx.author).all()
@@ -197,16 +200,18 @@ class PayDay(commands.Cog):
                     await self.config.member(ctx.author).set_raw(
                         k, value=now.isoformat()
                     )
-
+            bankname = await bank.get_currency_name(ctx.guild)
             if amount > 0:
                 await bank.deposit_credits(ctx.author, amount)
                 await ctx.send(
-                    "You have claimed all available credits from the `freecredits` program! +{} {}".format(
-                        amount, (await bank.get_currency_name(ctx.guild))
+                    "You have claimed all available {} from the `freecredits` program! +{} {}".format(
+                        bankname, amount, bankname
                     )
                 )
             else:
-                await ctx.send("You have no available credits for claiming.")
+                await ctx.send(
+                    "You have no available {} for claiming.".format(bankname)
+                )
 
     @lc.hourly()
     @freecredits.command(name="hourly")
