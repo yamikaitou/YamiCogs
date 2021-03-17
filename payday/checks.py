@@ -27,9 +27,7 @@ def is_owner_if_bank_global():
     async def pred(ctx: commands.Context):
         author = ctx.author
         if not await bank.is_global():
-            if not ctx.guild:
-                return False
-            return True
+            return bool(ctx.guild)
         else:
             return await ctx.bot.is_owner(author)
 

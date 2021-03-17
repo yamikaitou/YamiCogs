@@ -21,9 +21,7 @@ def is_owner_if_bank_global():
     async def pred(ctx: commands.Context):
         author = ctx.author
         if not await bank.is_global():
-            if not ctx.guild:
-                return False
-            return True
+            return bool(ctx.guild)
         else:
             return await ctx.bot.is_owner(author)
 
@@ -67,7 +65,7 @@ class EconomyTrickle(commands.Cog):
 
         if message.author.bot:
             return
-        if message.guild == None:
+        if message.guild is None:
             return
         if await self.bot.cog_disabled_in_guild(self, message.guild):
             return
