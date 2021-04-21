@@ -670,7 +670,7 @@ class PayDay(commands.Cog):
             await self.config.guild(ctx.guild).year.set(value)
             if not await ctx.tick():
                 await ctx.send("Setting saved")
-    
+
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
     @pdconfig.command(name="debug", hidden=True)
@@ -701,15 +701,16 @@ class PayDay(commands.Cog):
                 f"{tabulate(times.items())}"
                 "```"
             )
-            
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
     @pdconfig.command(name="reset", hidden=True)
-    async def pdconfig_reset(self, ctx, person: Union[discord.Member, discord.User], *, options: str):
+    async def pdconfig_reset(
+        self, ctx, person: Union[discord.Member, discord.User], *, options: str
+    ):
         """
         Forcibly reset the time for a user. WARNING, this will allow the user to claim the credits right away
-        
+
         For <options>, you can provide any combination of the following (seperate by a space to include multiple)
         hour
         day
@@ -732,7 +733,9 @@ class PayDay(commands.Cog):
                 await self.config.user(person).quarter.set("2016-01-02T04:25:00-04:00")
             if "year" in options:
                 await self.config.user(person).year.set("2016-01-02T04:25:00-04:00")
-            await ctx.send(f"The provided times for {person.display_name} have been reset")
+            await ctx.send(
+                f"The provided times for {person.display_name} have been reset"
+            )
         else:
             if "hour" in options:
                 await self.config.member(person).hour.set("2016-01-02T04:25:00-04:00")
@@ -743,10 +746,14 @@ class PayDay(commands.Cog):
             if "month" in options:
                 await self.config.member(person).month.set("2016-01-02T04:25:00-04:00")
             if "quarter" in options:
-                await self.config.member(person).quarter.set("2016-01-02T04:25:00-04:00")
+                await self.config.member(person).quarter.set(
+                    "2016-01-02T04:25:00-04:00"
+                )
             if "year" in options:
                 await self.config.member(person).year.set("2016-01-02T04:25:00-04:00")
-            await ctx.send(f"The provided times for {person.display_name} have been reset")
+            await ctx.send(
+                f"The provided times for {person.display_name} have been reset"
+            )
 
     async def red_delete_data_for_user(
         self,
