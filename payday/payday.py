@@ -77,76 +77,42 @@ class PayDay(commands.Cog):
         if await bank.is_global():
             amounts = await self.config.all()
             times = await self.config.user(ctx.author).all()
-            now = datetime.now().astimezone().replace(microsecond=0)
-            strings = ""
-
-            if amounts["hour"]:
-                td = now - datetime.fromisoformat(times["hour"])
-                strings += (
-                    self.friendly["hour"]
-                    + ": "
-                    + (
-                        humanize_timedelta(timedelta=(timedelta(hours=1) - td))
-                        if td.seconds < 3600
-                        else "Available Now!"
-                    )
-                    + "\n"
-                )
-
-            for k, v in self.settings.items():
-                if amounts[k]:
-                    td = now - (datetime.fromisoformat(times[k]))
-                    strings += (
-                        self.friendly[k]
-                        + ": "
-                        + (
-                            humanize_timedelta(timedelta=(timedelta(days=v) - td))
-                            if td.days < v
-                            else "Available Now!"
-                        )
-                        + "\n"
-                    )
-            if strings == "":
-                await ctx.send("No freecredit options have been configured yet")
-            else:
-                await ctx.send(strings)
         else:
             amounts = await self.config.guild(ctx.guild).all()
             times = await self.config.member(ctx.author).all()
-            now = datetime.now().astimezone().replace(microsecond=0)
-            strings = ""
+        now = datetime.now().astimezone().replace(microsecond=0)
+        strings = ""
 
-            if amounts["hour"]:
-                td = now - (datetime.fromisoformat(times["hour"]))
+        if amounts["hour"]:
+            td = now - datetime.fromisoformat(times["hour"])
+            strings += (
+                self.friendly["hour"]
+                + ": "
+                + (
+                    humanize_timedelta(timedelta=(timedelta(hours=1) - td))
+                    if td.seconds < 3600
+                    else "Available Now!"
+                )
+                + "\n"
+            )
+
+        for k, v in self.settings.items():
+            if amounts[k]:
+                td = now - (datetime.fromisoformat(times[k]))
                 strings += (
-                    self.friendly["hour"]
+                    self.friendly[k]
                     + ": "
                     + (
-                        humanize_timedelta(timedelta=(timedelta(hours=1) - td))
-                        if td.seconds < 3600
+                        humanize_timedelta(timedelta=(timedelta(days=v) - td))
+                        if td.days < v
                         else "Available Now!"
                     )
                     + "\n"
                 )
-
-            for k, v in self.settings.items():
-                if amounts[k]:
-                    td = now - (datetime.fromisoformat(times[k]))
-                    strings += (
-                        self.friendly[k]
-                        + ": "
-                        + (
-                            humanize_timedelta(timedelta=(timedelta(days=v) - td))
-                            if td.days < v
-                            else "Available Now!"
-                        )
-                        + "\n"
-                    )
-
-            if strings == "":
-                await ctx.send("No freecredit options have been configured yet")
-            else:
-                await ctx.send(strings)
+        if strings == "":
+            await ctx.send("No freecredit options have been configured yet")
+        else:
+            await ctx.send(strings)
 
     @lc.all()
     @freecredits.command(name="all")
@@ -172,17 +138,6 @@ class PayDay(commands.Cog):
                     await self.config.user(ctx.author).set_raw(k, value=now.isoformat())
 
             bankname = await bank.get_currency_name()
-            if amount > 0:
-                await bank.deposit_credits(ctx.author, amount)
-                await ctx.send(
-                    "You have claimed all available {} from the `freecredits` program! +{} {}".format(
-                        bankname, amount, bankname
-                    )
-                )
-            else:
-                await ctx.send(
-                    "You have no available {} for claiming.".format(bankname)
-                )
         else:
             amounts = await self.config.guild(ctx.guild).all()
             times = await self.config.member(ctx.author).all()
@@ -202,17 +157,17 @@ class PayDay(commands.Cog):
                         k, value=now.isoformat()
                     )
             bankname = await bank.get_currency_name(ctx.guild)
-            if amount > 0:
-                await bank.deposit_credits(ctx.author, amount)
-                await ctx.send(
-                    "You have claimed all available {} from the `freecredits` program! +{} {}".format(
-                        bankname, amount, bankname
-                    )
+        if amount > 0:
+            await bank.deposit_credits(ctx.author, amount)
+            await ctx.send(
+                "You have claimed all available {} from the `freecredits` program! +{} {}".format(
+                    bankname, amount, bankname
                 )
-            else:
-                await ctx.send(
-                    "You have no available {} for claiming.".format(bankname)
-                )
+            )
+        else:
+            await ctx.send(
+                "You have no available {} for claiming.".format(bankname)
+            )
 
     @lc.hourly()
     @freecredits.command(name="hourly")
@@ -547,10 +502,10 @@ class PayDay(commands.Cog):
 
         if await bank.is_global():
             conf = await self.config.all()
-            await ctx.send(box(tabulate(conf.items())))
         else:
             conf = await self.config.guild(ctx.guild).all()
-            await ctx.send(box(tabulate(conf.items())))
+
+        await ctx.send(box(tabulate(conf.items())))
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -565,12 +520,10 @@ class PayDay(commands.Cog):
             return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.hour.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
         else:
             await self.config.guild(ctx.guild).hour.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
+        if not await ctx.tick():
+            await ctx.send("Setting saved")
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -584,12 +537,10 @@ class PayDay(commands.Cog):
             return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.day.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
         else:
             await self.config.guild(ctx.guild).day.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
+        if not await ctx.tick():
+            await ctx.send("Setting saved")
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -604,12 +555,10 @@ class PayDay(commands.Cog):
             return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.week.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
         else:
             await self.config.guild(ctx.guild).week.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
+        if not await ctx.tick():
+            await ctx.send("Setting saved")
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -624,12 +573,10 @@ class PayDay(commands.Cog):
             return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.month.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
         else:
             await self.config.guild(ctx.guild).month.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
+        if not await ctx.tick():
+            await ctx.send("Setting saved")
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -644,12 +591,10 @@ class PayDay(commands.Cog):
             return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.quarter.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
         else:
             await self.config.guild(ctx.guild).quarter.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
+        if not await ctx.tick():
+            await ctx.send("Setting saved")
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -664,12 +609,10 @@ class PayDay(commands.Cog):
             return await ctx.send("You must provide a non-negative value or 0")
         if await bank.is_global():
             await self.config.year.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
         else:
             await self.config.guild(ctx.guild).year.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
+        if not await ctx.tick():
+            await ctx.send("Setting saved")
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -733,9 +676,6 @@ class PayDay(commands.Cog):
                 await self.config.user(person).quarter.set("2016-01-02T04:25:00-04:00")
             if "year" in options:
                 await self.config.user(person).year.set("2016-01-02T04:25:00-04:00")
-            await ctx.send(
-                f"The provided times for {person.display_name} have been reset"
-            )
         else:
             if "hour" in options:
                 await self.config.member(person).hour.set("2016-01-02T04:25:00-04:00")
@@ -751,9 +691,10 @@ class PayDay(commands.Cog):
                 )
             if "year" in options:
                 await self.config.member(person).year.set("2016-01-02T04:25:00-04:00")
-            await ctx.send(
-                f"The provided times for {person.display_name} have been reset"
-            )
+
+        await ctx.send(
+            f"The provided times for {person.display_name} have been reset"
+        )
 
     async def red_delete_data_for_user(
         self,
