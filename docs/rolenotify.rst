@@ -13,6 +13,9 @@ find detailed docs about usage and commands.
 
         [p]load rolenotify
 
+.. note:: 
+    This cog requires the Members Intent
+
 .. _rolenotify-usage:
 
 -----
