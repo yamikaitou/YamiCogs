@@ -80,9 +80,7 @@ class RussianRoulette(commands.Cog):
     async def game_tick(self):
 
         async with self.config.all_channels() as channels:
-            if channels["active"] == 1:
-
-                pass
+            pass
 
     @commands.command(name="dev")
     @commands.is_owner()
@@ -118,11 +116,15 @@ class RussianRoulette(commands.Cog):
         elif action == "play":
             await self.config.channel(ctx.channel).active.set(True)
             users = await self.config.channel(ctx.channel).players()
-            names = []
-            for u in users:
-                names.append(
-                    [u, (await self.bot.get_or_fetch_member(ctx.guild, u)).display_name]
-                )
+            names = [
+                [
+                    u,
+                    (
+                        await self.bot.get_or_fetch_member(ctx.guild, u)
+                    ).display_name,
+                ]
+                for u in users
+            ]
 
             mode = await self.config.guild(ctx.guild).mode()
             size = await self.config.guild(ctx.guild).chamber()
