@@ -1,6 +1,6 @@
 # thanks zeph
 # thanks flare
-PYTHON ?= python3.8
+PYTHON ?= /home/code/workspaces/yamicogs/.venv/bin/python3.8
 DIFF := $(shell git diff --name-only --staged "*.py" "*.pyi")
 ifeq ($(DIFF),)
 	DIFF := $(shell git ls-files "*.py" "*.pyi")
@@ -19,10 +19,11 @@ reformat:
 reformatblack:
 	$(PYTHON) -m black $(DIFF)
 update:
-	$(PYTHON) -m pip install -U pip wheel setuptools autoflake isort black
-	$(PYTHON) -m pip install -U Red-Discordbot[dev]
+	$(PYTHON) -m pip install -U pip wheel setuptools autoflake isort black flake8 Red-Discordbot[dev]
 run:
 	$(PYTHON) -O -m redbot yamicogs --dev --debug
+new:
+	$(PYTHON) -m cookiecutter https://github.com/Cog-Creators/cog-cookiecutter config_identifier=582650109 authors="YamiKaitou#8975"
 
 # Translations
 gettext:

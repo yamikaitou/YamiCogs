@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "YamiCogs"
-copyright = "2020, YamiKaitou"
+copyright = "2020-2021, YamiKaitou"
 author = "YamiKaitou#8975"
 
 

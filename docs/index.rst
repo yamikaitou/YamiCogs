@@ -14,6 +14,7 @@ Welcome to YamiCogs's documentation!
    payday
    economytrickle
    lottery
+   rolenotify
 
 
 Indices and tables
