@@ -41,7 +41,7 @@ class RussianRoulette(commands.Cog):
     @commands.group(invoke_without_command=True)
     @commands.guild_only()
     async def russian(self, ctx):
-        """ Create or Join a game of Russian Roulette """
+        """Create or Join a game of Russian Roulette"""
 
         c = await self.config.guild(ctx.guild).all()
 
@@ -203,7 +203,7 @@ class RussianRoulette(commands.Cog):
     @russian.command(name="reset", hidden=True)
     @commands.admin_or_permissions(manage_guild=True)
     async def russian_reset(self, ctx):
-        """ Stop a game. Do not use unless instructed, no refunds """
+        """Stop a game. Do not use unless instructed, no refunds"""
 
         chan = await self.config.guild(ctx.guild).channel()
         await self.config.channel_from_id(chan).clear()

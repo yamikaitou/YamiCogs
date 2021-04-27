@@ -146,13 +146,13 @@ class EconomyTrickle(commands.Cog):
     @commands.admin_or_permissions(manage_guild=True)
     @commands.group(aliases=["trickleset"])
     async def economytrickle(self, ctx):
-        """ Configure various settings """
+        """Configure various settings"""
 
     @is_owner_if_bank_global()
     @commands.admin_or_permissions(manage_guild=True)
     @economytrickle.command(name="info", aliases=["settings"])
     async def ts_info(self, ctx):
-        """ Show the current settings """
+        """Show the current settings"""
 
         if await bank.is_global():
             cache = await self.config.all()
