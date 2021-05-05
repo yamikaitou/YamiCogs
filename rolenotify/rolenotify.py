@@ -88,7 +88,6 @@ class RoleNotify(commands.Cog):
     @rolenotify.group(name="role")
     async def rolenotify_role(self, ctx):
         """Configure settings for a Role"""
-        pass
 
     @rolenotify_role.command(name="info")
     async def rolenotify_role_info(self, ctx, role: discord.Role):
@@ -123,14 +122,22 @@ class RoleNotify(commands.Cog):
 
     @rolenotify_role.command(name="add")
     async def rolenotify_role_add(self, ctx, role: discord.Role, state: bool):
-        """Set if the notification should be sent on Role Add"""
+        """
+        Set if the notification should be sent on Role Add
+
+        <state> should be any of these combinations, `on/off`, `yes/no`, `1/0`, `true/false`
+        """
 
         await self.config.role(role).add.set(state)
         await ctx.send("Add Notificaiton has been set")
 
     @rolenotify_role.command(name="remove")
     async def rolenotify_role_remove(self, ctx, role: discord.Role, state: bool):
-        """Set if the notification should be sent on Role Remove"""
+        """
+        Set if the notification should be sent on Role Remove
+
+        <state> should be any of these combinations, `on/off`, `yes/no`, `1/0`, `true/false`
+        """
 
         await self.config.role(role).remove.set(state)
         await ctx.send("Remove Notificaiton has been set")

@@ -155,6 +155,9 @@ Bot Admin or Manage Roles
 
 Set if the notification should be sent on Role Add
 
+<state> should be any of these combinations,
+`on/off`, `yes/no`, `1/0`, `true/false`
+
 .. _rolenotify-command-rolenotify-role-remove:
 
 """"""
@@ -174,3 +177,6 @@ Bot Admin or Manage Roles
 **Description**
 
 Set if the notification should be sent on Role Remove
+
+<state> should be any of these combinations,
+`on/off`, `yes/no`, `1/0`, `true/false`
