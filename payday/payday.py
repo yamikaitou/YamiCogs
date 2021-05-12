@@ -2,12 +2,12 @@ import logging
 from datetime import datetime, timedelta
 from typing import Literal, Union
 
+import discord
 from redbot.core import Config, bank, checks, commands
 from redbot.core.bot import Red
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import box, humanize_timedelta
 from tabulate import tabulate
-import discord
 
 from . import checks as lc
 
@@ -19,8 +19,6 @@ class PayDay(commands.Cog):
     Customizable PayDay system
     """
 
-    __version__ = "1.6"
-
     settings = {"day": 1, "week": 7, "month": 30, "quarter": 122, "year": 365}
     friendly = {
         "hour": "Hourly",
@@ -30,11 +28,6 @@ class PayDay(commands.Cog):
         "quarter": "Quarterly",
         "year": "Yearly",
     }
-
-    def format_help_for_context(self, ctx):
-        """Thanks Sinbad."""
-        pre_processed = super().format_help_for_context(ctx)
-        return f"{pre_processed}\nCog Version: {self.__version__}"
 
     def __init__(self, bot: Red):
         self.bot = bot
@@ -49,6 +42,15 @@ class PayDay(commands.Cog):
             "month": 0,
             "quarter": 0,
             "year": 0,
+            "streaks": {
+                "hour": 0,
+                "day": 0,
+                "week": 0,
+                "month": 0,
+                "quarter": 0,
+                "year": 0,
+                "percent": False,
+            },
         }
         default_user = {
             "hour": "2016-01-02T04:25:00-04:00",
@@ -77,76 +79,43 @@ class PayDay(commands.Cog):
         if await bank.is_global():
             amounts = await self.config.all()
             times = await self.config.user(ctx.author).all()
-            now = datetime.now().astimezone().replace(microsecond=0)
-            strings = ""
-
-            if amounts["hour"]:
-                td = now - datetime.fromisoformat(times["hour"])
-                strings += (
-                    self.friendly["hour"]
-                    + ": "
-                    + (
-                        humanize_timedelta(timedelta=(timedelta(hours=1) - td))
-                        if td.seconds < 3600
-                        else "Available Now!"
-                    )
-                    + "\n"
-                )
-
-            for k, v in self.settings.items():
-                if amounts[k]:
-                    td = now - (datetime.fromisoformat(times[k]))
-                    strings += (
-                        self.friendly[k]
-                        + ": "
-                        + (
-                            humanize_timedelta(timedelta=(timedelta(days=v) - td))
-                            if td.days < v
-                            else "Available Now!"
-                        )
-                        + "\n"
-                    )
-            if strings == "":
-                await ctx.send("No freecredit options have been configured yet")
-            else:
-                await ctx.send(strings)
         else:
             amounts = await self.config.guild(ctx.guild).all()
             times = await self.config.member(ctx.author).all()
-            now = datetime.now().astimezone().replace(microsecond=0)
-            strings = ""
 
-            if amounts["hour"]:
-                td = now - (datetime.fromisoformat(times["hour"]))
+        now = datetime.now().astimezone().replace(microsecond=0)
+        strings = ""
+
+        if amounts["hour"]:
+            td = now - datetime.fromisoformat(times["hour"])
+            strings += (
+                self.friendly["hour"]
+                + ": "
+                + (
+                    humanize_timedelta(timedelta=(timedelta(hours=1) - td))
+                    if td.seconds < 3600
+                    else "Available Now!"
+                )
+                + "\n"
+            )
+
+        for k, v in self.settings.items():
+            if amounts[k]:
+                td = now - (datetime.fromisoformat(times[k]))
                 strings += (
-                    self.friendly["hour"]
+                    self.friendly[k]
                     + ": "
                     + (
-                        humanize_timedelta(timedelta=(timedelta(hours=1) - td))
-                        if td.seconds < 3600
+                        humanize_timedelta(timedelta=(timedelta(days=v) - td))
+                        if td.days < v
                         else "Available Now!"
                     )
                     + "\n"
                 )
-
-            for k, v in self.settings.items():
-                if amounts[k]:
-                    td = now - (datetime.fromisoformat(times[k]))
-                    strings += (
-                        self.friendly[k]
-                        + ": "
-                        + (
-                            humanize_timedelta(timedelta=(timedelta(days=v) - td))
-                            if td.days < v
-                            else "Available Now!"
-                        )
-                        + "\n"
-                    )
-
-            if strings == "":
-                await ctx.send("No freecredit options have been configured yet")
-            else:
-                await ctx.send(strings)
+        if strings == "":
+            await ctx.send("No freecredit options have been configured yet")
+        else:
+            await ctx.send(strings)
 
     @lc.all()
     @freecredits.command(name="all")
@@ -221,50 +190,45 @@ class PayDay(commands.Cog):
 
         if await bank.is_global():
             free = await self.config.hour()
-            if free > 0:
-                last = datetime.fromisoformat(await self.config.user(ctx.author).hour())
-                now = datetime.now().astimezone().replace(microsecond=0)
-
-                if (now - last).seconds >= 3600:
-                    await bank.deposit_credits(ctx.author, free)
-                    await self.config.user(ctx.author).hour.set(now.isoformat())
-                    await ctx.send(
-                        "You have been given {} {}".format(
-                            free, (await bank.get_currency_name())
-                        )
-                    )
-                else:
-                    await ctx.send(
-                        "Sorry, you still have {} until your next hourly bonus".format(
-                            humanize_timedelta(
-                                timedelta=(timedelta(hours=1) - (now - last))
-                            )
-                        )
-                    )
+            streak = await self.config.streaks.hour()
+            perc = await self.config.streaks.percent()
+            config = self.config.user(ctx.author)
         else:
             free = await self.config.guild(ctx.guild).hour()
-            if free > 0:
-                last = datetime.fromisoformat(
-                    await self.config.member(ctx.author).hour()
-                )
-                now = datetime.now().astimezone().replace(microsecond=0)
+            streak = await self.config.guild(ctx.guild).streaks.hour()
+            perc = await self.config.guild(ctx.guild).streaks.percent()
+            config = self.config.member(ctx.author)
 
-                if (now - last).seconds >= 3600:
-                    await bank.deposit_credits(ctx.author, free)
-                    await self.config.member(ctx.author).hour.set(now.isoformat())
-                    await ctx.send(
-                        "You have been given {} {}".format(
-                            free, (await bank.get_currency_name(ctx.guild))
+        if free > 0:
+            last = datetime.fromisoformat(await config.hour())
+            now = datetime.now().astimezone().replace(microsecond=0)
+
+            if streak > 0 and (timedelta(hours=2) > (now - last) >= timedelta(hours=1)):
+                if perc:
+                    streak = free * streak
+                await bank.deposit_credits(ctx.author, free + streak)
+                await config.hour.set(now.isoformat())
+                await ctx.send(
+                    "You have been given {} {} plus {} for maintaining a streak".format(
+                        free, (await bank.get_currency_name()), streak
+                    )
+                )
+            elif (now - last).seconds >= timedelta(hours=1):
+                await bank.deposit_credits(ctx.author, free)
+                await config.hour.set(now.isoformat())
+                await ctx.send(
+                    "You have been given {} {}".format(
+                        free, (await bank.get_currency_name())
+                    )
+                )
+            else:
+                await ctx.send(
+                    "Sorry, you still have {} until your next hourly bonus".format(
+                        humanize_timedelta(
+                            timedelta=(timedelta(hours=1) - (now - last))
                         )
                     )
-                else:
-                    await ctx.send(
-                        "Sorry, you still have {} until your next hourly bonus".format(
-                            humanize_timedelta(
-                                timedelta=(timedelta(hours=1) - (now - last))
-                            )
-                        )
-                    )
+                )
 
     @lc.daily()
     @freecredits.command(name="daily")
@@ -273,50 +237,43 @@ class PayDay(commands.Cog):
 
         if await bank.is_global():
             free = await self.config.day()
-            if free > 0:
-                last = datetime.fromisoformat(await self.config.user(ctx.author).day())
-                now = datetime.now().astimezone().replace(microsecond=0)
-
-                if (now - last).days >= 1:
-                    await bank.deposit_credits(ctx.author, free)
-                    await self.config.user(ctx.author).day.set(now.isoformat())
-                    await ctx.send(
-                        "You have been given {} {}".format(
-                            free, (await bank.get_currency_name())
-                        )
-                    )
-                else:
-                    await ctx.send(
-                        "Sorry, you still have {} until your next daily bonus".format(
-                            humanize_timedelta(
-                                timedelta=(timedelta(days=1) - (now - last))
-                            )
-                        )
-                    )
+            streak = await self.config.streaks.day()
+            perc = await self.config.streaks.percent()
+            config = self.config.user(ctx.author)
         else:
             free = await self.config.guild(ctx.guild).day()
-            if free > 0:
-                last = datetime.fromisoformat(
-                    await self.config.member(ctx.author).day()
-                )
-                now = datetime.now().astimezone().replace(microsecond=0)
+            streak = await self.config.guild(ctx.guild).streaks.day()
+            perc = await self.config.guild(ctx.guild).streaks.percent()
+            config = self.config.member(ctx.author)
 
-                if (now - last).days >= 1:
-                    await bank.deposit_credits(ctx.author, free)
-                    await self.config.member(ctx.author).day.set(now.isoformat())
-                    await ctx.send(
-                        "You have been given {} {}".format(
-                            free, (await bank.get_currency_name(ctx.guild))
-                        )
+        if free > 0:
+            last = datetime.fromisoformat(await config.day())
+            now = datetime.now().astimezone().replace(microsecond=0)
+
+            if streak > 0 and (timedelta(days=2) > (now - last) >= timedelta(days=1)):
+                if perc:
+                    streak = free * streak
+                await bank.deposit_credits(ctx.author, free + streak)
+                await config.day.set(now.isoformat())
+                await ctx.send(
+                    "You have been given {} {} plus {} for maintaining a streak".format(
+                        free, (await bank.get_currency_name()), streak
                     )
-                else:
-                    await ctx.send(
-                        "Sorry, you still have {} until your next daily bonus".format(
-                            humanize_timedelta(
-                                timedelta=(timedelta(days=1) - (now - last))
-                            )
-                        )
+                )
+            elif (now - last).seconds >= timedelta(days=1):
+                await bank.deposit_credits(ctx.author, free)
+                await config.day.set(now.isoformat())
+                await ctx.send(
+                    "You have been given {} {}".format(
+                        free, (await bank.get_currency_name())
                     )
+                )
+            else:
+                await ctx.send(
+                    "Sorry, you still have {} until your next daily bonus".format(
+                        humanize_timedelta(timedelta=(timedelta(days=1) - (now - last)))
+                    )
+                )
 
     @lc.weekly()
     @freecredits.command(name="weekly")
@@ -325,50 +282,43 @@ class PayDay(commands.Cog):
 
         if await bank.is_global():
             free = await self.config.week()
-            if free > 0:
-                last = datetime.fromisoformat(await self.config.user(ctx.author).week())
-                now = datetime.now().astimezone().replace(microsecond=0)
-
-                if (now - last).days >= 7:
-                    await bank.deposit_credits(ctx.author, free)
-                    await self.config.user(ctx.author).week.set(now.isoformat())
-                    await ctx.send(
-                        "You have been given {} {}".format(
-                            free, (await bank.get_currency_name())
-                        )
-                    )
-                else:
-                    await ctx.send(
-                        "Sorry, you still have {} until your next weekly bonus".format(
-                            humanize_timedelta(
-                                timedelta=(timedelta(days=7) - (now - last))
-                            )
-                        )
-                    )
+            streak = await self.config.streaks.week()
+            perc = await self.config.streaks.percent()
+            config = self.config.user(ctx.author)
         else:
             free = await self.config.guild(ctx.guild).week()
-            if free > 0:
-                last = datetime.fromisoformat(
-                    await self.config.member(ctx.author).week()
-                )
-                now = datetime.now().astimezone().replace(microsecond=0)
+            streak = await self.config.guild(ctx.guild).streaks.week()
+            perc = await self.config.guild(ctx.guild).streaks.percent()
+            config = self.config.member(ctx.author)
 
-                if (now - last).days >= 7:
-                    await bank.deposit_credits(ctx.author, free)
-                    await self.config.member(ctx.author).week.set(now.isoformat())
-                    await ctx.send(
-                        "You have been given {} {}".format(
-                            free, (await bank.get_currency_name(ctx.guild))
-                        )
+        if free > 0:
+            last = datetime.fromisoformat(await config.week())
+            now = datetime.now().astimezone().replace(microsecond=0)
+
+            if streak > 0 and (timedelta(days=14) > (now - last) >= timedelta(days=7)):
+                if perc:
+                    streak = free * streak
+                await bank.deposit_credits(ctx.author, free + streak)
+                await config.week.set(now.isoformat())
+                await ctx.send(
+                    "You have been given {} {} plus {} for maintaining a streak".format(
+                        free, (await bank.get_currency_name()), streak
                     )
-                else:
-                    await ctx.send(
-                        "Sorry, you still have {} until your next weekly bonus".format(
-                            humanize_timedelta(
-                                timedelta=(timedelta(days=7) - (now - last))
-                            )
-                        )
+                )
+            elif (now - last).seconds >= timedelta(days=7):
+                await bank.deposit_credits(ctx.author, free)
+                await config.week.set(now.isoformat())
+                await ctx.send(
+                    "You have been given {} {}".format(
+                        free, (await bank.get_currency_name())
                     )
+                )
+            else:
+                await ctx.send(
+                    "Sorry, you still have {} until your next weekly bonus".format(
+                        humanize_timedelta(timedelta=(timedelta(days=7) - (now - last)))
+                    )
+                )
 
     @lc.monthly()
     @freecredits.command(name="monthly")
@@ -377,52 +327,45 @@ class PayDay(commands.Cog):
 
         if await bank.is_global():
             free = await self.config.month()
-            if free > 0:
-                last = datetime.fromisoformat(
-                    await self.config.user(ctx.author).month()
-                )
-                now = datetime.now().astimezone().replace(microsecond=0)
-
-                if (now - last).days >= 30:
-                    await bank.deposit_credits(ctx.author, free)
-                    await self.config.user(ctx.author).month.set(now.isoformat())
-                    await ctx.send(
-                        "You have been given {} {}".format(
-                            free, (await bank.get_currency_name())
-                        )
-                    )
-                else:
-                    await ctx.send(
-                        "Sorry, you still have {} until your next monthly bonus".format(
-                            humanize_timedelta(
-                                timedelta=(timedelta(days=30) - (now - last))
-                            )
-                        )
-                    )
+            streak = await self.config.streaks.month()
+            perc = await self.config.streaks.percent()
+            config = self.config.user(ctx.author)
         else:
             free = await self.config.guild(ctx.guild).month()
-            if free > 0:
-                last = datetime.fromisoformat(
-                    await self.config.member(ctx.author).month()
-                )
-                now = datetime.now().astimezone().replace(microsecond=0)
+            streak = await self.config.guild(ctx.guild).streaks.month()
+            perc = await self.config.guild(ctx.guild).streaks.percent()
+            config = self.config.member(ctx.author)
 
-                if (now - last).days >= 30:
-                    await bank.deposit_credits(ctx.author, free)
-                    await self.config.member(ctx.author).month.set(now.isoformat())
-                    await ctx.send(
-                        "You have been given {} {}".format(
-                            free, (await bank.get_currency_name(ctx.guild))
+        if free > 0:
+            last = datetime.fromisoformat(await config.month())
+            now = datetime.now().astimezone().replace(microsecond=0)
+
+            if streak > 0 and (timedelta(days=60) > (now - last) >= timedelta(days=30)):
+                if perc:
+                    streak = free * streak
+                await bank.deposit_credits(ctx.author, free + streak)
+                await config.month.set(now.isoformat())
+                await ctx.send(
+                    "You have been given {} {} plus {} for maintaining a streak".format(
+                        free, (await bank.get_currency_name()), streak
+                    )
+                )
+            elif (now - last).seconds >= timedelta(days=30):
+                await bank.deposit_credits(ctx.author, free)
+                await config.month.set(now.isoformat())
+                await ctx.send(
+                    "You have been given {} {}".format(
+                        free, (await bank.get_currency_name())
+                    )
+                )
+            else:
+                await ctx.send(
+                    "Sorry, you still have {} until your next monthly bonus".format(
+                        humanize_timedelta(
+                            timedelta=(timedelta(days=30) - (now - last))
                         )
                     )
-                else:
-                    await ctx.send(
-                        "Sorry, you still have {} until your next monthly bonus".format(
-                            humanize_timedelta(
-                                timedelta=(timedelta(days=30) - (now - last))
-                            )
-                        )
-                    )
+                )
 
     @lc.quarterly()
     @freecredits.command(name="quarterly")
@@ -431,52 +374,47 @@ class PayDay(commands.Cog):
 
         if await bank.is_global():
             free = await self.config.quarter()
-            if free > 0:
-                last = datetime.fromisoformat(
-                    await self.config.user(ctx.author).quarter()
-                )
-                now = datetime.now().astimezone().replace(microsecond=0)
-
-                if (now - last).days >= 122:
-                    await bank.deposit_credits(ctx.author, free)
-                    await self.config.user(ctx.author).quarter.set(now.isoformat())
-                    await ctx.send(
-                        "You have been given {} {}".format(
-                            free, (await bank.get_currency_name())
-                        )
-                    )
-                else:
-                    await ctx.send(
-                        "Sorry, you still have {} until your next quarterly bonus".format(
-                            humanize_timedelta(
-                                timedelta=(timedelta(days=122) - (now - last))
-                            )
-                        )
-                    )
+            streak = await self.config.streaks.quarter()
+            perc = await self.config.streaks.percent()
+            config = self.config.user(ctx.author)
         else:
             free = await self.config.guild(ctx.guild).quarter()
-            if free > 0:
-                last = datetime.fromisoformat(
-                    await self.config.member(ctx.author).quarter()
-                )
-                now = datetime.now().astimezone().replace(microsecond=0)
+            streak = await self.config.guild(ctx.guild).streaks.quarter()
+            perc = await self.config.guild(ctx.guild).streaks.percent()
+            config = self.config.member(ctx.author)
 
-                if (now - last).days >= 122:
-                    await bank.deposit_credits(ctx.author, free)
-                    await self.config.member(ctx.author).quarter.set(now.isoformat())
-                    await ctx.send(
-                        "You have been given {} {}".format(
-                            free, (await bank.get_currency_name(ctx.guild))
+        if free > 0:
+            last = datetime.fromisoformat(await config.quarter())
+            now = datetime.now().astimezone().replace(microsecond=0)
+
+            if streak > 0 and (
+                timedelta(days=244) > (now - last) >= timedelta(days=122)
+            ):
+                if perc:
+                    streak = free * streak
+                await bank.deposit_credits(ctx.author, free + streak)
+                await config.quarter.set(now.isoformat())
+                await ctx.send(
+                    "You have been given {} {} plus {} for maintaining a streak".format(
+                        free, (await bank.get_currency_name()), streak
+                    )
+                )
+            elif (now - last).seconds >= timedelta(days=122):
+                await bank.deposit_credits(ctx.author, free)
+                await config.quarter.set(now.isoformat())
+                await ctx.send(
+                    "You have been given {} {}".format(
+                        free, (await bank.get_currency_name())
+                    )
+                )
+            else:
+                await ctx.send(
+                    "Sorry, you still have {} until your next quarterly bonus".format(
+                        humanize_timedelta(
+                            timedelta=(timedelta(days=122) - (now - last))
                         )
                     )
-                else:
-                    await ctx.send(
-                        "Sorry, you still have {} until your next quarterly bonus".format(
-                            humanize_timedelta(
-                                timedelta=(timedelta(days=122) - (now - last))
-                            )
-                        )
-                    )
+                )
 
     @lc.yearly()
     @freecredits.command(name="yearly")
@@ -485,50 +423,47 @@ class PayDay(commands.Cog):
 
         if await bank.is_global():
             free = await self.config.year()
-            if free > 0:
-                last = datetime.fromisoformat(await self.config.user(ctx.author).year())
-                now = datetime.now().astimezone().replace(microsecond=0)
-
-                if (now - last).days >= 365:
-                    await bank.deposit_credits(ctx.author, free)
-                    await self.config.user(ctx.author).year.set(now.isoformat())
-                    await ctx.send(
-                        "You have been given {} {}".format(
-                            free, (await bank.get_currency_name())
-                        )
-                    )
-                else:
-                    await ctx.send(
-                        "Sorry, you still have {} until your next yearly bonus".format(
-                            humanize_timedelta(
-                                timedelta=(timedelta(days=365) - (now - last))
-                            )
-                        )
-                    )
+            streak = await self.config.streaks.year()
+            perc = await self.config.streaks.percent()
+            config = self.config.user(ctx.author)
         else:
             free = await self.config.guild(ctx.guild).year()
-            if free > 0:
-                last = datetime.fromisoformat(
-                    await self.config.member(ctx.author).year()
-                )
-                now = datetime.now().astimezone().replace(microsecond=0)
+            streak = await self.config.guild(ctx.guild).streaks.year()
+            perc = await self.config.guild(ctx.guild).streaks.percent()
+            config = self.config.member(ctx.author)
 
-                if (now - last).days >= 365:
-                    await bank.deposit_credits(ctx.author, free)
-                    await self.config.member(ctx.author).year.set(now.isoformat())
-                    await ctx.send(
-                        "You have been given {} {}".format(
-                            free, (await bank.get_currency_name(ctx.guild))
+        if free > 0:
+            last = datetime.fromisoformat(await config.year())
+            now = datetime.now().astimezone().replace(microsecond=0)
+
+            if streak > 0 and (
+                timedelta(days=730) > (now - last) >= timedelta(days=365)
+            ):
+                if perc:
+                    streak = free * streak
+                await bank.deposit_credits(ctx.author, free + streak)
+                await config.year.set(now.isoformat())
+                await ctx.send(
+                    "You have been given {} {} plus {} for maintaining a streak".format(
+                        free, (await bank.get_currency_name()), streak
+                    )
+                )
+            elif (now - last).seconds >= timedelta(days=365):
+                await bank.deposit_credits(ctx.author, free)
+                await config.year.set(now.isoformat())
+                await ctx.send(
+                    "You have been given {} {}".format(
+                        free, (await bank.get_currency_name())
+                    )
+                )
+            else:
+                await ctx.send(
+                    "Sorry, you still have {} until your next yearly bonus".format(
+                        humanize_timedelta(
+                            timedelta=(timedelta(days=365) - (now - last))
                         )
                     )
-                else:
-                    await ctx.send(
-                        "Sorry, you still have {} until your next yearly bonus".format(
-                            humanize_timedelta(
-                                timedelta=(timedelta(days=365) - (now - last))
-                            )
-                        )
-                    )
+                )
 
     @lc.is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -536,6 +471,7 @@ class PayDay(commands.Cog):
     async def pdconfig(self, ctx):
         """
         Configure the `freecredits` options
+
         More detailed docs: <https://cogs.yamikaitou.dev/payday.html#pdconfig>
         """
 
@@ -558,17 +494,20 @@ class PayDay(commands.Cog):
     async def pdconfig_hourly(self, ctx, value: int):
         """
         Configure the `hourly` options
+
         Setting this to 0 will disable the command
         """
 
         if value < 0:
             return await ctx.send("You must provide a non-negative value or 0")
-        if await bank.is_global():
-            await self.config.hour.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
+        try:
+            if await bank.is_global():
+                await self.config.hour.set(value)
+            else:
+                await self.config.guild(ctx.guild).hour.set(value)
+        except Exception as e:
+            raise e
         else:
-            await self.config.guild(ctx.guild).hour.set(value)
             if not await ctx.tick():
                 await ctx.send("Setting saved")
 
@@ -578,16 +517,19 @@ class PayDay(commands.Cog):
     async def pdconfig_daily(self, ctx, value: int):
         """
         Configure the `daily` options
+
         Setting this to 0 will disable the command"""
 
         if value < 0:
             return await ctx.send("You must provide a non-negative value or 0")
-        if await bank.is_global():
-            await self.config.day.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
+        try:
+            if await bank.is_global():
+                await self.config.day.set(value)
+            else:
+                await self.config.guild(ctx.guild).day.set(value)
+        except Exception as e:
+            raise e
         else:
-            await self.config.guild(ctx.guild).day.set(value)
             if not await ctx.tick():
                 await ctx.send("Setting saved")
 
@@ -597,17 +539,20 @@ class PayDay(commands.Cog):
     async def pdconfig_weekly(self, ctx, value: int):
         """
         Configure the `weekly` options
+
         Setting this to 0 will disable the command
         """
 
         if value < 0:
             return await ctx.send("You must provide a non-negative value or 0")
-        if await bank.is_global():
-            await self.config.week.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
+        try:
+            if await bank.is_global():
+                await self.config.week.set(value)
+            else:
+                await self.config.guild(ctx.guild).week.set(value)
+        except Exception as e:
+            raise e
         else:
-            await self.config.guild(ctx.guild).week.set(value)
             if not await ctx.tick():
                 await ctx.send("Setting saved")
 
@@ -617,17 +562,20 @@ class PayDay(commands.Cog):
     async def pdconfig_monthly(self, ctx, value: int):
         """
         Configure the `monthly` options
+
         Setting this to 0 will disable the command
         """
 
         if value < 0:
             return await ctx.send("You must provide a non-negative value or 0")
-        if await bank.is_global():
-            await self.config.month.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
+        try:
+            if await bank.is_global():
+                await self.config.month.set(value)
+            else:
+                await self.config.guild(ctx.guild).month.set(value)
+        except Exception as e:
+            raise e
         else:
-            await self.config.guild(ctx.guild).month.set(value)
             if not await ctx.tick():
                 await ctx.send("Setting saved")
 
@@ -637,17 +585,20 @@ class PayDay(commands.Cog):
     async def pdconfig_quarterly(self, ctx, value: int):
         """
         Configure the `quarterly` options
+
         Setting this to 0 will disable the command
         """
 
         if value < 0:
             return await ctx.send("You must provide a non-negative value or 0")
-        if await bank.is_global():
-            await self.config.quarter.set(value)
-            if not await ctx.tick():
-                await ctx.send("Setting saved")
+        try:
+            if await bank.is_global():
+                await self.config.quarter.set(value)
+            else:
+                await self.config.guild(ctx.guild).quarter.set(value)
+        except Exception as e:
+            raise e
         else:
-            await self.config.guild(ctx.guild).quarter.set(value)
             if not await ctx.tick():
                 await ctx.send("Setting saved")
 
@@ -657,17 +608,185 @@ class PayDay(commands.Cog):
     async def pdconfig_yearly(self, ctx, value: int):
         """
         Configure the `yearly` options
+
         Setting this to 0 will disable the command
         """
 
         if value < 0:
             return await ctx.send("You must provide a non-negative value or 0")
-        if await bank.is_global():
-            await self.config.year.set(value)
+        try:
+            if await bank.is_global():
+                await self.config.year.set(value)
+            else:
+                await self.config.guild(ctx.guild).year.set(value)
+        except Exception as e:
+            raise e
+        else:
             if not await ctx.tick():
                 await ctx.send("Setting saved")
+
+    @lc.is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @pdconfig.group(name="streaks")
+    async def pdconfig_streaks(self, ctx):
+        """Configure the `streaks` options"""
+
+    @lc.is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @pdconfig_streaks.command(name="hourly", aliases=["hour"])
+    async def pdconfig_streaks_hourly(self, ctx, value: int):
+        """
+        Configure the `hourly` streaks value
+
+        Setting this to 0 will disable the streak bonus
+        """
+
+        if value < 0:
+            return await ctx.send("You must provide a non-negative value or 0")
+        try:
+            if await bank.is_global():
+                await self.config.streaks.hour.set(value)
+            else:
+                await self.config.guild(ctx.guild).streaks.hour.set(value)
+        except Exception as e:
+            raise e
         else:
-            await self.config.guild(ctx.guild).year.set(value)
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
+
+    @lc.is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @pdconfig_streaks.command(name="daily", aliases=["day"])
+    async def pdconfig_streaks_daily(self, ctx, value: int):
+        """
+        Configure the `daily` streaks value
+
+        Setting this to 0 will disable the streak bonus
+        """
+
+        if value < 0:
+            return await ctx.send("You must provide a non-negative value or 0")
+        try:
+            if await bank.is_global():
+                await self.config.streaks.day.set(value)
+            else:
+                await self.config.guild(ctx.guild).streaks.day.set(value)
+        except Exception as e:
+            raise e
+        else:
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
+
+    @lc.is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @pdconfig_streaks.command(name="weekly", aliases=["week"])
+    async def pdconfig_streaks_weekly(self, ctx, value: int):
+        """
+        Configure the `weekly` streaks value
+
+        Setting this to 0 will disable the streak bonus
+        """
+
+        if value < 0:
+            return await ctx.send("You must provide a non-negative value or 0")
+        try:
+            if await bank.is_global():
+                await self.config.streaks.week.set(value)
+            else:
+                await self.config.guild(ctx.guild).streaks.week.set(value)
+        except Exception as e:
+            raise e
+        else:
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
+
+    @lc.is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @pdconfig_streaks.command(name="monthly", aliases=["month"])
+    async def pdconfig_streaks_monthly(self, ctx, value: int):
+        """
+        Configure the `monthly` streaks value
+
+        Setting this to 0 will disable the streak bonus
+        """
+
+        if value < 0:
+            return await ctx.send("You must provide a non-negative value or 0")
+        try:
+            if await bank.is_global():
+                await self.config.streaks.month.set(value)
+            else:
+                await self.config.guild(ctx.guild).streaks.month.set(value)
+        except Exception as e:
+            raise e
+        else:
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
+
+    @lc.is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @pdconfig_streaks.command(name="quarterly", aliases=["quarter"])
+    async def pdconfig_streaks_quarterly(self, ctx, value: int):
+        """
+        Configure the `quarterly` streaks value
+
+        Setting this to 0 will disable the streak bonus
+        """
+
+        if value < 0:
+            return await ctx.send("You must provide a non-negative value or 0")
+        try:
+            if await bank.is_global():
+                await self.config.streaks.quarter.set(value)
+            else:
+                await self.config.guild(ctx.guild).streaks.quarter.set(value)
+        except Exception as e:
+            raise e
+        else:
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
+
+    @lc.is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @pdconfig_streaks.command(name="yearly", aliases=["year"])
+    async def pdconfig_streaks_yearly(self, ctx, value: int):
+        """
+        Configure the `yearly` streaks value
+
+        Setting this to 0 will disable the streak bonus
+        """
+
+        if value < 0:
+            return await ctx.send("You must provide a non-negative value or 0")
+        try:
+            if await bank.is_global():
+                await self.config.streaks.year.set(value)
+            else:
+                await self.config.guild(ctx.guild).streaks.year.set(value)
+        except Exception as e:
+            raise e
+        else:
+            if not await ctx.tick():
+                await ctx.send("Setting saved")
+
+    @lc.is_owner_if_bank_global()
+    @checks.guildowner_or_permissions(administrator=True)
+    @pdconfig_streaks.command(name="percent", aliases=["percentage"])
+    async def pdconfig_streaks_percentage(self, ctx, state: bool):
+        """
+        Configure streaks to be a percentage or flat amount
+
+        <state> should be any of these combinations, `on/off`, `yes/no`, `1/0`, `true/false`
+        """
+
+        try:
+            if await bank.is_global():
+                await self.config.streaks.percent.set(state)
+            else:
+                await self.config.guild(ctx.guild).streaks.percent.set(state)
+        except Exception as e:
+            raise e
+        else:
             if not await ctx.tick():
                 await ctx.send("Setting saved")
 
@@ -720,37 +839,20 @@ class PayDay(commands.Cog):
         year
         """
 
-        if await bank.is_global():
-            if "hour" in options:
-                await self.config.user(person).hour.set("2016-01-02T04:25:00-04:00")
-            if "day" in options:
-                await self.config.user(person).day.set("2016-01-02T04:25:00-04:00")
-            if "week" in options:
-                await self.config.user(person).week.set("2016-01-02T04:25:00-04:00")
-            if "month" in options:
-                await self.config.user(person).month.set("2016-01-02T04:25:00-04:00")
-            if "quarter" in options:
-                await self.config.user(person).quarter.set("2016-01-02T04:25:00-04:00")
-            if "year" in options:
-                await self.config.user(person).year.set("2016-01-02T04:25:00-04:00")
-            await ctx.send(
-                f"The provided times for {person.display_name} have been reset"
-            )
+        try:
+            if await bank.is_global():
+                for opt in options.split():
+                    await self.config.user(person).set_raw(
+                        opt, value="2016-01-02T04:25:00-04:00"
+                    )
+            else:
+                for opt in options.split():
+                    await self.config.member(person).set_raw(
+                        opt, value="2016-01-02T04:25:00-04:00"
+                    )
+        except Exception as e:
+            raise e
         else:
-            if "hour" in options:
-                await self.config.member(person).hour.set("2016-01-02T04:25:00-04:00")
-            if "day" in options:
-                await self.config.member(person).day.set("2016-01-02T04:25:00-04:00")
-            if "week" in options:
-                await self.config.member(person).week.set("2016-01-02T04:25:00-04:00")
-            if "month" in options:
-                await self.config.member(person).month.set("2016-01-02T04:25:00-04:00")
-            if "quarter" in options:
-                await self.config.member(person).quarter.set(
-                    "2016-01-02T04:25:00-04:00"
-                )
-            if "year" in options:
-                await self.config.member(person).year.set("2016-01-02T04:25:00-04:00")
             await ctx.send(
                 f"The provided times for {person.display_name} have been reset"
             )

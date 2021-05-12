@@ -1,6 +1,6 @@
 # thanks zeph
 # thanks flare
-PYTHON ?= /home/code/workspaces/yamicogs/.venv/bin/python3.8
+PYTHON ?= python3.8
 DIFF := $(shell git diff --name-only --staged "*.py" "*.pyi")
 ifeq ($(DIFF),)
 	DIFF := $(shell git ls-files "*.py" "*.pyi")

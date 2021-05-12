@@ -181,7 +181,8 @@ pdconfig
 
 **User Permissions**
 
-Bot Admin or Administrator
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
 
 **Description**
 
@@ -195,7 +196,8 @@ settings
 
 **User Permissions**
 
-Bot Admin or Administrator
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -215,7 +217,8 @@ hourly
 
 **User Permissions**
 
-Bot Admin or Administrator
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -240,7 +243,8 @@ daily
 
 **User Permissions**
 
-Bot Admin or Administrator
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -265,7 +269,8 @@ weekly
 
 **User Permissions**
 
-Bot Admin or Administrator
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -290,7 +295,8 @@ monthly
 
 **User Permissions**
 
-Bot Admin or Administrator
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -315,7 +321,8 @@ quarterly
 
 **User Permissions**
 
-Bot Admin or Administrator
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -340,7 +347,8 @@ yearly
 
 **User Permissions**
 
-Bot Admin or Administrator
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -356,3 +364,185 @@ Configure the `yearly` options
 **Arguments**
 
 <value> - The amount of credits to grant the user. Setting this to 0 will disable the command
+
+.. _payday-command-pdconfig-streaks:
+
+"""""""
+streaks
+"""""""
+
+**User Permissions**
+
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]pdconfig streaks 
+
+**Description**
+
+Configure the `streaks` options
+
+.. _payday-command-pdconfig-streaks-percent:
+
+"""""""
+percent
+"""""""
+
+**User Permissions**
+
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]pdconfig streaks percent <state>
+
+**Description**
+
+Configure streaks to be a percentage or flat amount
+
+<state> should be any of these combinations, `on/off`, `yes/no`, `1/0`, `true/false`
+
+.. _payday-command-pdconfig-streaks-hourly:
+
+""""""
+hourly
+""""""
+
+**User Permissions**
+
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]pdconfig streaks hourly <value>
+
+**Description**
+
+Configure the `hourly` streaks value
+
+Setting this to 0 will disable the streak bonus
+
+.. _payday-command-pdconfig-streaks-daily:
+
+"""""
+daily
+"""""
+
+**User Permissions**
+
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]pdconfig streaks daily <value>
+
+**Description**
+
+Configure the `daily` streaks value
+
+Setting this to 0 will disable the streak bonus
+
+.. _payday-command-pdconfig-streaks-weekly:
+
+""""""
+weekly
+""""""
+
+**User Permissions**
+
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]pdconfig streaks weekly <value>
+
+**Description**
+
+Configure the `weekly` streaks value
+
+Setting this to 0 will disable the streak bonus
+
+.. _payday-command-pdconfig-streaks-monthly:
+
+"""""""
+monthly
+"""""""
+
+**User Permissions**
+
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]pdconfig streaks monthly <value>
+
+**Description**
+
+Configure the `monthly` streaks value
+
+Setting this to 0 will disable the streak bonus
+
+.. _payday-command-pdconfig-streaks-quarterly:
+
+"""""""""
+quarterly
+"""""""""
+
+**User Permissions**
+
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]pdconfig streaks quarterly <value>
+
+**Description**
+
+Configure the `quarterly` streaks value
+
+Setting this to 0 will disable the streak bonus
+
+.. _payday-command-pdconfig-streaks-yearly:
+
+""""""
+yearly
+""""""
+
+**User Permissions**
+
+Global Bank: Bot Owner
+Local Bank: Server Owner or Administrator
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]pdconfig streaks yearly <value>
+
+**Description**
+
+Configure the `yearly` streaks value
+
+Setting this to 0 will disable the streak bonus
