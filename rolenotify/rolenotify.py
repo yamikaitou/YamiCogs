@@ -24,45 +24,46 @@ class RoleNotify(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_update(self, before, after):
-        if before.roles != after.roles and not await self.bot.cog_disabled_in_guild(
+        if before.roles == after.roles or await self.bot.cog_disabled_in_guild(
             self, before.guild
         ):
-            removal = set(before.roles) - set(after.roles)
-            addition = set(after.roles) - set(before.roles)
-            for role in addition:
-                if await self.config.role(role).add():
-                    method = await self.config.role(role).method()
-                    if method == "DM":
-                        await after.send(
-                            "You were granted the Role *{role_name}*".format(
-                                role_name=role.name
-                            )
+            return
+        removal = set(before.roles) - set(after.roles)
+        addition = set(after.roles) - set(before.roles)
+        for role in addition:
+            if await self.config.role(role).add():
+                method = await self.config.role(role).method()
+                if method == "DM":
+                    await after.send(
+                        "You were granted the Role *{role_name}*".format(
+                            role_name=role.name
                         )
-                    elif method == "Channel":
-                        await after.guild.get_channel(
-                            await self.config.guild(after.guild).channel()
-                        ).send(
-                            "{member_name} has been granted the Role {role_name}".format(
-                                member_name=after.display_name, role_name=role.name
-                            )
+                    )
+                elif method == "Channel":
+                    await after.guild.get_channel(
+                        await self.config.guild(after.guild).channel()
+                    ).send(
+                        "{member_name} has been granted the Role {role_name}".format(
+                            member_name=after.display_name, role_name=role.name
                         )
-            for role in removal:
-                if await self.config.role(role).remove():
-                    method = await self.config.role(role).method()
-                    if method == "DM":
-                        await after.send(
-                            "You lost the Role *{role_name}*".format(
-                                role_name=role.name
-                            )
+                    )
+        for role in removal:
+            if await self.config.role(role).remove():
+                method = await self.config.role(role).method()
+                if method == "DM":
+                    await after.send(
+                        "You lost the Role *{role_name}*".format(
+                            role_name=role.name
                         )
-                    elif method == "Channel":
-                        await after.guild.get_channel(
-                            await self.config.guild(after.guild).channel()
-                        ).send(
-                            "{member_name} has lost the Role {role_name}".format(
-                                member_name=after.display_name, role_name=role.name
-                            )
+                    )
+                elif method == "Channel":
+                    await after.guild.get_channel(
+                        await self.config.guild(after.guild).channel()
+                    ).send(
+                        "{member_name} has lost the Role {role_name}".format(
+                            member_name=after.display_name, role_name=role.name
                         )
+                    )
 
     @commands.guild_only()
     @commands.admin_or_permissions(manage_roles=True)
