@@ -180,3 +180,27 @@ Set if the notification should be sent on Role Remove
 
 <state> should be any of these combinations,
 `on/off`, `yes/no`, `1/0`, `true/false`
+
+.. _rolenotify-command-rolenotify-role-message:
+
+"""""""
+message
+"""""""
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]rolenotify role message <role> <option> <message>
+
+**Description**
+
+Set the notification message
+
+<option> can be either `add` or `remove`
+
+Formatting options available for <message> are
+{role_name} = Role Name
+{role_mention} = Role Mention (no pings)
+{user_name} = User's Display Name
+{user_mention} = User Mention

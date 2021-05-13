@@ -19,8 +19,20 @@ class RoleNotify(commands.Cog):
             force_registration=True,
         )
 
-        self.config.register_role(**{"method": "DM", "add": False, "remove": False})
-        self.config.register_guild(**{"channel": 0})
+        self.config.register_role(
+            **{
+                "method": "DM",
+                "add": False,
+                "remove": False,
+                "add_msg": "You were granted the Role *{role_name}*",
+                "rem_msg": "You lost the Role *{role_name}*",
+            }
+        )
+        self.config.register_guild(
+            **{
+                "channel": 0,
+            }
+        )
 
     @commands.Cog.listener()
     async def on_member_update(self, before, after):
@@ -30,39 +42,56 @@ class RoleNotify(commands.Cog):
             removal = set(before.roles) - set(after.roles)
             addition = set(after.roles) - set(before.roles)
             for role in addition:
-                if await self.config.role(role).add():
-                    method = await self.config.role(role).method()
-                    if method == "DM":
-                        await after.send(
-                            "You were granted the Role *{role_name}*".format(
-                                role_name=role.name
-                            )
-                        )
-                    elif method == "Channel":
-                        await after.guild.get_channel(
+                crole = await self.config.role(role).all()
+                if crole["add"]:
+                    if crole["method"] == "DM":
+                        dest = after
+                    elif crole["method"] == "Channel":
+                        dest = await after.guild.get_channel(
                             await self.config.guild(after.guild).channel()
-                        ).send(
-                            "{member_name} has been granted the Role {role_name}".format(
-                                member_name=after.display_name, role_name=role.name
-                            )
                         )
+                    else:
+                        dest = None
+
+                    await self._sanatize_send(
+                        dest,
+                        after,
+                        role,
+                        crole["add_msg"],
+                    )
             for role in removal:
-                if await self.config.role(role).remove():
-                    method = await self.config.role(role).method()
-                    if method == "DM":
-                        await after.send(
-                            "You lost the Role *{role_name}*".format(
-                                role_name=role.name
-                            )
-                        )
-                    elif method == "Channel":
-                        await after.guild.get_channel(
+                crole = await self.config.role(role).all()
+                if crole["remove"]:
+                    if crole["method"] == "DM":
+                        dest = after
+                    elif crole["method"] == "Channel":
+                        dest = await after.guild.get_channel(
                             await self.config.guild(after.guild).channel()
-                        ).send(
-                            "{member_name} has lost the Role {role_name}".format(
-                                member_name=after.display_name, role_name=role.name
-                            )
                         )
+                    else:
+                        dest = None
+
+                    await self._sanatize_send(
+                        dest,
+                        after,
+                        role,
+                        crole["rem_msg"],
+                    )
+
+    async def _sanatize_send(self, dest, user, role, msg):
+        """
+        {role_name}
+        {role_mention}
+        {user_name}
+        {user_mention}
+        """
+
+        await dest.send(
+            msg.replace("{role_name}", role.name)
+            .replace("{role_mention}", role.mention)
+            .replace("{user_name}", user.display_name)
+            .replace("{user_mention}", user.mention)
+        )
 
     @commands.guild_only()
     @commands.admin_or_permissions(manage_roles=True)
@@ -80,7 +109,8 @@ class RoleNotify(commands.Cog):
 
         if channel == 0:
             await self.config.guild(ctx.guild).channel.set(0)
-            await ctx.send("Channel has been cleared")
+            if not await ctx.tick():
+                await ctx.send("Channel has been cleared")
         else:
             await self.config.guild(ctx.guild).channel.set(channel.id)
             await ctx.send("Channel has been set")
@@ -118,7 +148,35 @@ class RoleNotify(commands.Cog):
         else:
             return await ctx.send("Invalid option, please use either `dm` or `channel`")
 
-        await ctx.send("Notification method has been set")
+        if not await ctx.tick():
+            await ctx.send("Notification method has been set")
+
+    @rolenotify_role.command(name="message")
+    async def rolenotify_role_mmsg(
+        self, ctx, role: discord.Role, option: str, *, message: str
+    ):
+        """
+        Set the notification message
+
+        <option> can be either `add` or `remove`
+
+        Formatting options available for <message> are
+        {role_name} = Role Name
+        {role_mention} = Role Mention (will not ping)
+        {user_name} = User's Display Name
+        {user_mention} = User Mention
+
+        """
+
+        if option.lower() == "add":
+            await self.config.role(role).add_msg.set(message)
+        elif option.lower() == "remove":
+            await self.config.role(role).rem_msg.set(message)
+        else:
+            return await ctx.send("Invalid option, please use either `add` or `remove`")
+
+        if not await ctx.tick():
+            await ctx.send("Notification Message has been set")
 
     @rolenotify_role.command(name="add")
     async def rolenotify_role_add(self, ctx, role: discord.Role, state: bool):
@@ -129,7 +187,9 @@ class RoleNotify(commands.Cog):
         """
 
         await self.config.role(role).add.set(state)
-        await ctx.send("Add Notificaiton has been set")
+
+        if not await ctx.tick():
+            await ctx.send("Add Notificaiton has been set")
 
     @rolenotify_role.command(name="remove")
     async def rolenotify_role_remove(self, ctx, role: discord.Role, state: bool):
@@ -140,7 +200,9 @@ class RoleNotify(commands.Cog):
         """
 
         await self.config.role(role).remove.set(state)
-        await ctx.send("Remove Notificaiton has been set")
+
+        if not await ctx.tick():
+            await ctx.send("Remove Notificaiton has been set")
 
     async def red_get_data_for_user(self, *, user_id: int):
         # this cog does not store any user data
