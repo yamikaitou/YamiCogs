@@ -6,6 +6,9 @@ from redbot.core.bot import Red
 from redbot.core.config import Config
 
 
+log = logging.getLogger("red.yamicogs.rolenotify")
+
+
 class RoleNotify(commands.Cog):
     """
     Notify a user when they have a Role added or removed from them

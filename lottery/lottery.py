@@ -8,17 +8,13 @@ from redbot.core.utils.menus import DEFAULT_CONTROLS, menu
 from . import checks as lc
 
 
+log = logging.getLogger("red.yamicogs.lottery")
+
+
 class Lottery(commands.Cog):
     """
     Lottery Games
     """
-
-    __version__ = "0.2.1"
-
-    def format_help_for_context(self, ctx):
-        """Thanks Sinbad."""
-        pre_processed = super().format_help_for_context(ctx)
-        return f"{pre_processed}\nCog Version: {self.__version__}"
 
     lucky3 = ["🃏", "🔬", "💰", "🚀", "🏆", "🍰", "🌹", "🦀", "👑"]
 

@@ -4,17 +4,13 @@ import discord
 from redbot.core import Config, checks, commands
 
 
+log = logging.getLogger("red.yamicogs.kill")
+
+
 class Kill(commands.Cog):
     """
     Kill people in interesting ways
     """
-
-    __version__ = "2.4"
-
-    def format_help_for_context(self, ctx):
-        """Thanks Sinbad."""
-        pre_processed = super().format_help_for_context(ctx)
-        return f"{pre_processed}\nCog Version: {self.__version__}"
 
     def __init__(self, bot):
         self.bot = bot

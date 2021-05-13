@@ -35,12 +35,6 @@ class EconomyTrickle(commands.Cog):
     Trickle credits into your Economy
     """
 
-    __version__ = "1.5"
-
-    def format_help_for_context(self, ctx):
-        """Thanks Sinbad."""
-        pre_processed = super().format_help_for_context(ctx)
-        return f"{pre_processed}\nCog Version: {self.__version__}"
 
     def __init__(self, bot: Red):
         self.bot = bot
