@@ -5,7 +5,6 @@ from redbot.core import commands
 from redbot.core.bot import Red
 from redbot.core.config import Config
 
-
 log = logging.getLogger("red.yamicogs.rolenotify")
 
 
@@ -155,9 +154,7 @@ class RoleNotify(commands.Cog):
             await ctx.send("Notification method has been set")
 
     @rolenotify_role.command(name="message")
-    async def rolenotify_role_mmsg(
-        self, ctx, role: discord.Role, option: str, *, message: str
-    ):
+    async def rolenotify_role_mmsg(self, ctx, role: discord.Role, option: str, *, message: str):
         """
         Set the notification message
 

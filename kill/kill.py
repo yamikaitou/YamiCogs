@@ -3,7 +3,6 @@ import random
 import discord
 from redbot.core import Config, checks, commands
 
-
 log = logging.getLogger("red.yamicogs.kill")
 
 
@@ -14,9 +13,7 @@ class Kill(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(
-            self, identifier=582650109, force_registration=True
-        )
+        self.config = Config.get_conf(self, identifier=582650109, force_registration=True)
         self.config.register_guild(
             **{
                 "msg": ["{killer} slays {victim}"],
@@ -92,9 +89,7 @@ class Kill(commands.Cog):
             killmsg += "`" + str(k) + ") " + msg + "`\n"
             k += 1
         if k == 0:
-            embed.add_field(
-                name="Kill Messages", value="There are no messages configured"
-            )
+            embed.add_field(name="Kill Messages", value="There are no messages configured")
         else:
             embed.add_field(name="Kill Messages", value=killmsg)
 

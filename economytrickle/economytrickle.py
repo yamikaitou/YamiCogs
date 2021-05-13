@@ -35,12 +35,9 @@ class EconomyTrickle(commands.Cog):
     Trickle credits into your Economy
     """
 
-
     def __init__(self, bot: Red):
         self.bot = bot
-        self.config = Config.get_conf(
-            self, identifier=582650109, force_registration=True
-        )
+        self.config = Config.get_conf(self, identifier=582650109, force_registration=True)
 
         default_config = {"credits": 0, "messages": 0}
 
@@ -74,9 +71,7 @@ class EconomyTrickle(commands.Cog):
                 self.msg[message.author.id] = [message.id]
         else:
             try:
-                log.debug(
-                    f"Found message from {message.author.id} in {message.guild.id}"
-                )
+                log.debug(f"Found message from {message.author.id} in {message.guild.id}")
                 self.msg[message.guild.id]
                 try:
                     self.msg[message.guild.id][message.author.id].append(message.id)
@@ -109,20 +104,14 @@ class EconomyTrickle(commands.Cog):
         else:
             msgs = self.msg
             for guild, users in msgs.items():
-                if not await self.bot.cog_disabled_in_guild(
-                    self, self.bot.get_guild(guild)
-                ):
+                if not await self.bot.cog_disabled_in_guild(self, self.bot.get_guild(guild)):
                     cache = await self.config.guild_from_id(guild).all()
                     if cache["messages"] != 0:
                         for user, msg in users.items():
                             if len(msg) >= cache["messages"]:
                                 num = math.floor(len(msg) / cache["messages"])
-                                log.debug(
-                                    f"Processing {num} messages for {user} in {guild}"
-                                )
-                                del (self.msg[guild][user])[
-                                    0 : (num * cache["messages"])
-                                ]
+                                log.debug(f"Processing {num} messages for {user} in {guild}")
+                                del (self.msg[guild][user])[0 : (num * cache["messages"])]
                                 val = await bank.deposit_credits(
                                     (
                                         await self.bot.get_or_fetch_member(
@@ -150,15 +139,11 @@ class EconomyTrickle(commands.Cog):
 
         if await bank.is_global():
             cache = await self.config.all()
-            await ctx.send(
-                f"Credits: {cache['credits']}\nMessages: {cache['messages']}"
-            )
+            await ctx.send(f"Credits: {cache['credits']}\nMessages: {cache['messages']}")
         else:
             if ctx.guild is not None:
                 cache = await self.config.guild(ctx.guild).all()
-                await ctx.send(
-                    f"Credits: {cache['credits']}\nMessages: {cache['messages']}"
-                )
+                await ctx.send(f"Credits: {cache['credits']}\nMessages: {cache['messages']}")
             else:
                 await ctx.send(
                     "Your bank is set to per-server. Please try this command in a server instead"
