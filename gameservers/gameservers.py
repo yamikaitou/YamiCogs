@@ -22,9 +22,7 @@ class GameServers(commands.Cog):
 
     def __init__(self, bot: Red):
         self.bot = bot
-        self.config = Config.get_conf(
-            self, identifier=582650109, force_registration=True
-        )
+        self.config = Config.get_conf(self, identifier=582650109, force_registration=True)
 
         self.config.register_guild(**{"servers": [], "statuschannel": 0})
 
@@ -51,9 +49,7 @@ class GameServers(commands.Cog):
         """I'll put something here later"""
 
     @gameserver.command(name="new")
-    async def gs_new(
-        self, ctx: commands.GuildContext, name: str, ip: str, port: int = 27015
-    ):
+    async def gs_new(self, ctx: commands.GuildContext, name: str, ip: str, port: int = 27015):
         """
         Add a new game server.
 
@@ -83,9 +79,7 @@ class GameServers(commands.Cog):
         )
 
     @gameserver.command(name="config")
-    async def gs_config(
-        self, ctx: commands.GuildContext, serverid: int, key: str, *, value: str
-    ):
+    async def gs_config(self, ctx: commands.GuildContext, serverid: int, key: str, *, value: str):
         """
         Configure the additional settings for game servers
 

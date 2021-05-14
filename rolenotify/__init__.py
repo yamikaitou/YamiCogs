@@ -13,6 +13,4 @@ async def setup(bot: Red) -> None:
     if bot.intents.members:
         bot.add_cog(RoleNotify(bot))
     else:
-        raise redbot.core.errors.CogLoadError(
-            "This cog requires the Members Intent to be enabled"
-        )
+        raise redbot.core.errors.CogLoadError("This cog requires the Members Intent to be enabled")
