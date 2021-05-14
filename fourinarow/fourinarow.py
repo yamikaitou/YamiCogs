@@ -20,9 +20,7 @@ class FourInARow(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(
-            self, identifier=192153481165930496, force_registration=True
-        )
+        self.config = Config.get_conf(self, identifier=192153481165930496, force_registration=True)
 
     @commands.group(name="4row")
     async def fourrow(self, ctx):

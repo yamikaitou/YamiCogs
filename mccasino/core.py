@@ -9,9 +9,7 @@ class MinecraftCasino(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(
-            self, identifier=192153481165930496, force_registration=True
-        )
+        self.config = Config.get_conf(self, identifier=192153481165930496, force_registration=True)
 
         default_guild = {
             "conversion": 100,
@@ -31,9 +29,7 @@ class MinecraftCasino(commands.Cog):
 
         settings = await self.config.guild(ctx.guild).all()
 
-        embed = discord.Embed(
-            title="Minecraft Casino Settings", color=await ctx.embed_color()
-        )
+        embed = discord.Embed(title="Minecraft Casino Settings", color=await ctx.embed_color())
         embed.add_field(
             name="General",
             value=f"Cost per Diamond: {settings['conversion']}",
