@@ -19,7 +19,7 @@ reformat:
 reformatblack:
 	$(PYTHON) -m black $(DIFF)
 update:
-	$(PYTHON) -m pip install -U pip wheel setuptools autoflake isort black flake8 Red-Discordbot[dev]
+	$(PYTHON) -m pip install -U pip wheel setuptools autoflake isort black flake8 pre-commit Red-Discordbot[dev]
 run:
 	$(PYTHON) -O -m redbot yamicogs --dev --debug
 new:

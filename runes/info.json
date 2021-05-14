@@ -1,0 +1,16 @@
+{
+    "name": "Runes of the Falrek",
+    "short": "A card collecting game",
+    "description": "This cog is a Work In Progress",
+    "end_user_data_statement": "This cog does not persistently store any data or metadata about users.",
+    "author": [
+        "YamiKaitou#8975"
+    ],
+    "required_cogs": {},
+    "requirements": [],
+    "tags": [],
+    "min_bot_version": "3.4.0",
+    "hidden": true,
+    "disabled": true,
+    "type": "COG"
+}
