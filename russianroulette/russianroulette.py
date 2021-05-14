@@ -28,9 +28,7 @@ class RussianRoulette(commands.Cog):
 
     def __init__(self, bot: Red):
         self.bot = bot
-        self.config = Config.get_conf(
-            self, identifier=582650109, force_registration=True
-        )
+        self.config = Config.get_conf(self, identifier=582650109, force_registration=True)
 
         default_guild = {"mode": True, "chamber": 6, "cost": 100, "channel": 0}
         default_channel = {"pot": 0, "players": [], "active": 0, "time": 0}
@@ -91,9 +89,7 @@ class RussianRoulette(commands.Cog):
         if action == "add":
             extra = int(extra)
             if 2 <= extra <= (await self.config.guild(ctx.guild).chamber()):
-                users = random.sample(
-                    ctx.guild.get_role(346744009458450433).members, extra
-                )
+                users = random.sample(ctx.guild.get_role(346744009458450433).members, extra)
                 await self.config.channel(ctx.channel).players.clear()
                 async with self.config.channel(ctx.channel).players() as p:
                     for m in users:
@@ -108,21 +104,15 @@ class RussianRoulette(commands.Cog):
             names = ""
             for u in users:
                 log.debug(u)
-                names += (
-                    await self.bot.get_or_fetch_member(ctx.guild, u)
-                ).display_name + "\n"
+                names += (await self.bot.get_or_fetch_member(ctx.guild, u)).display_name + "\n"
 
-            await ctx.send(
-                f"Pot: {await self.config.channel(ctx.channel).pot()}\n```{names}```"
-            )
+            await ctx.send(f"Pot: {await self.config.channel(ctx.channel).pot()}\n```{names}```")
         elif action == "play":
             await self.config.channel(ctx.channel).active.set(True)
             users = await self.config.channel(ctx.channel).players()
             names = []
             for u in users:
-                names.append(
-                    [u, (await self.bot.get_or_fetch_member(ctx.guild, u)).display_name]
-                )
+                names.append([u, (await self.bot.get_or_fetch_member(ctx.guild, u)).display_name])
 
             mode = await self.config.guild(ctx.guild).mode()
             size = await self.config.guild(ctx.guild).chamber()
@@ -134,10 +124,8 @@ class RussianRoulette(commands.Cog):
             while state:
                 embed = discord.Embed()
                 embed.title = "Russian Roulette - Round {}".format(r)
-                embed.description = (
-                    "{} loads the revolver and spins the chamber\n\n".format(
-                        ctx.guild.me.display_name
-                    )
+                embed.description = "{} loads the revolver and spins the chamber\n\n".format(
+                    ctx.guild.me.display_name
                 )
                 gun = [0] * size
                 gun[random.randrange(len(gun))] = 1
@@ -146,9 +134,7 @@ class RussianRoulette(commands.Cog):
                 dead = False
                 for n in names:
                     if gun[chamber]:
-                        embed.description += (
-                            "{} - *bang* \N{COLLISION SYMBOL} \n".format(n[1])
-                        )
+                        embed.description += "{} - *bang* \N{COLLISION SYMBOL} \n".format(n[1])
                         if not mode:  # 1 Loser
                             state = False
                         names.remove(n)
@@ -161,16 +147,12 @@ class RussianRoulette(commands.Cog):
                         embed.description += "{} - *click*\n".format(n[1])
                     chamber += 1
 
-                log.debug(
-                    f"{chamber} >= {len(gun)-1} = {chamber>=len(gun)-1} | {state}"
-                )
+                log.debug(f"{chamber} >= {len(gun)-1} = {chamber>=len(gun)-1} | {state}")
                 if chamber >= len(gun) - 1 and not dead:
                     log.debug("additional shots")
                     for n in names:
                         if gun[chamber]:
-                            embed.description += (
-                                "{} - *bang* \N{COLLISION SYMBOL} \n".format(n[1])
-                            )
+                            embed.description += "{} - *bang* \N{COLLISION SYMBOL} \n".format(n[1])
                             if not mode:  # 1 Loser
                                 state = False
                             names.remove(n)
@@ -194,9 +176,7 @@ class RussianRoulette(commands.Cog):
             users = await self.config.channel(ctx.channel).players()
             names = ""
             for u in users:
-                names += (
-                    await self.bot.get_or_fetch_member(ctx.guild, u)
-                ).display_name + "\n"
+                names += (await self.bot.get_or_fetch_member(ctx.guild, u)).display_name + "\n"
 
             await ctx.send(f"Survivors\n```{names}```")
 
@@ -227,9 +207,7 @@ class RussianRoulette(commands.Cog):
             ["Cost", c["cost"]],
             [
                 "Channel",
-                "Not Set"
-                if c["channel"] == 0
-                else ctx.guild.get_channel(c["channel"]).name,
+                "Not Set" if c["channel"] == 0 else ctx.guild.get_channel(c["channel"]).name,
             ],
         ]
 
