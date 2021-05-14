@@ -1,3 +1,4 @@
+import logging
 from typing import Union
 
 import discord
