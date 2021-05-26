@@ -199,7 +199,7 @@ class PayDay(commands.Cog):
                         free, (await bank.get_currency_name()), streak
                     )
                 )
-            elif (now - last).seconds >= timedelta(hours=1):
+            elif (now - last) >= timedelta(hours=1):
                 await bank.deposit_credits(ctx.author, free)
                 await config.hour.set(now.isoformat())
                 await ctx.send(
@@ -242,7 +242,7 @@ class PayDay(commands.Cog):
                         free, (await bank.get_currency_name()), streak
                     )
                 )
-            elif (now - last).seconds >= timedelta(days=1):
+            elif (now - last) >= timedelta(days=1):
                 await bank.deposit_credits(ctx.author, free)
                 await config.day.set(now.isoformat())
                 await ctx.send(
@@ -285,7 +285,7 @@ class PayDay(commands.Cog):
                         free, (await bank.get_currency_name()), streak
                     )
                 )
-            elif (now - last).seconds >= timedelta(days=7):
+            elif (now - last) >= timedelta(days=7):
                 await bank.deposit_credits(ctx.author, free)
                 await config.week.set(now.isoformat())
                 await ctx.send(
@@ -328,7 +328,7 @@ class PayDay(commands.Cog):
                         free, (await bank.get_currency_name()), streak
                     )
                 )
-            elif (now - last).seconds >= timedelta(days=30):
+            elif (now - last) >= timedelta(days=30):
                 await bank.deposit_credits(ctx.author, free)
                 await config.month.set(now.isoformat())
                 await ctx.send(
@@ -371,7 +371,7 @@ class PayDay(commands.Cog):
                         free, (await bank.get_currency_name()), streak
                     )
                 )
-            elif (now - last).seconds >= timedelta(days=122):
+            elif (now - last) >= timedelta(days=122):
                 await bank.deposit_credits(ctx.author, free)
                 await config.quarter.set(now.isoformat())
                 await ctx.send(
@@ -414,7 +414,7 @@ class PayDay(commands.Cog):
                         free, (await bank.get_currency_name()), streak
                     )
                 )
-            elif (now - last).seconds >= timedelta(days=365):
+            elif (now - last) >= timedelta(days=365):
                 await bank.deposit_credits(ctx.author, free)
                 await config.year.set(now.isoformat())
                 await ctx.send(
