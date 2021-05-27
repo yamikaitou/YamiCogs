@@ -187,13 +187,6 @@ class PayDay(commands.Cog):
     async def freecredits_all(self, ctx):
         """Claim all available freecredits"""
 
-        if await bank.is_global():
-            amounts = await self.config.all()
-            times = await self.config.user(ctx.author).all()
-        else:
-            amounts = await self.config.guild(ctx.guild).all()
-            times = await self.config.member(ctx.author).all()
-
         total_amount = 0
         total_streak = 0
 
