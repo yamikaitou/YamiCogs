@@ -368,8 +368,8 @@ class PayDay(commands.Cog):
             config = self.config.user(ctx.author)
         else:
             free = await self.config.guild(ctx.guild).get_raw(option)
-            streak = await self.config.streaks.guild(ctx.guild).get_raw(option)
-            perc = await self.config.streaks.guild(ctx.guild).percent()
+            streak = await self.config.guild(ctx.guild).streaks.get_raw(option)
+            perc = await self.config.guild(ctx.guild).streaks.percent()
             config = self.config.member(ctx.author)
 
         if free > 0:
