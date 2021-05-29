@@ -235,7 +235,7 @@ class PayDay(commands.Cog):
             )
         elif free != -1:
             await ctx.send(
-                "You have been given {} {}".format(free, (await bank.get_currency_name()))
+                "You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild)))
             )
         else:
             log.debug("grant_award returned no results")
@@ -257,7 +257,7 @@ class PayDay(commands.Cog):
             )
         elif free != -1:
             await ctx.send(
-                "You have been given {} {}".format(free, (await bank.get_currency_name()))
+                "You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild)))
             )
         else:
             log.debug("grant_award returned no results")
@@ -279,7 +279,7 @@ class PayDay(commands.Cog):
             )
         elif free != -1:
             await ctx.send(
-                "You have been given {} {}".format(free, (await bank.get_currency_name()))
+                "You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild)))
             )
         else:
             log.debug("grant_award returned no results")
@@ -301,7 +301,7 @@ class PayDay(commands.Cog):
             )
         elif free != -1:
             await ctx.send(
-                "You have been given {} {}".format(free, (await bank.get_currency_name()))
+                "You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild)))
             )
         else:
             log.debug("grant_award returned no results")
@@ -325,7 +325,7 @@ class PayDay(commands.Cog):
             )
         elif free != -1:
             await ctx.send(
-                "You have been given {} {}".format(free, (await bank.get_currency_name()))
+                "You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild)))
             )
         else:
             log.debug("grant_award returned no results")
@@ -347,7 +347,7 @@ class PayDay(commands.Cog):
             )
         elif free != -1:
             await ctx.send(
-                "You have been given {} {}".format(free, (await bank.get_currency_name()))
+                "You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild)))
             )
         else:
             log.debug("grant_award returned no results")
