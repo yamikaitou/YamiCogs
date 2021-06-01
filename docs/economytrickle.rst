@@ -128,6 +128,8 @@ blocklist
 **Guild Only Command**
 
 | **Permissions**
+|
+| *User* -
 | Bot Admin or Manage Guild
 
 **Syntax**
@@ -151,6 +153,8 @@ showblocks
 **Guild Only Command**
 
 | **Permissions**
+|
+| *User* -
 | Bot Admin or Manage Guild
 
 **Syntax**

@@ -4,8 +4,8 @@
 PayDay
 ======
 
-This is the cog guide for the payday cog. You will
-find detailed docs about usage and commands.
+| This is the cog guide for the payday cog.
+| You will find detailed docs about usage and commands.
 
 ``[p]`` is considered as your prefix.
 
@@ -13,11 +13,11 @@ find detailed docs about usage and commands.
 
         [p]load payday
 
-.. note:: 
+.. note::
     Setting the amount of credits for any option to 0 will disable the command.
-    
-    By default, all options are set to 0. 
-    
+
+    By default, all options are set to 0.
+
     Also, every user will be able to claim every available option on their first attempt.
 
 .. _payday-usage:
@@ -55,7 +55,7 @@ times
 
 .. code-block:: none
 
-    [p]freecredits times 
+    [p]freecredits times
 
 **Description**
 
@@ -71,7 +71,7 @@ all
 
 .. code-block:: none
 
-    [p]freecredits all 
+    [p]freecredits all
 
 **Description**
 
@@ -87,7 +87,7 @@ hourly
 
 .. code-block:: none
 
-    [p]freecredits hourly 
+    [p]freecredits hourly
 
 **Description**
 
@@ -103,7 +103,7 @@ daily
 
 .. code-block:: none
 
-    [p]freecredits daily 
+    [p]freecredits daily
 
 **Description**
 
@@ -119,7 +119,7 @@ weekly
 
 .. code-block:: none
 
-    [p]freecredits weekly 
+    [p]freecredits weekly
 
 **Description**
 
@@ -135,7 +135,7 @@ monthly
 
 .. code-block:: none
 
-    [p]freecredits monthly 
+    [p]freecredits monthly
 
 **Description**
 
@@ -151,7 +151,7 @@ quarterly
 
 .. code-block:: none
 
-    [p]freecredits quarterly 
+    [p]freecredits quarterly
 
 **Description**
 
@@ -167,7 +167,7 @@ yearly
 
 .. code-block:: none
 
-    [p]freecredits yearly 
+    [p]freecredits yearly
 
 **Description**
 
@@ -179,10 +179,10 @@ Get some free currency every year (365 days)
 pdconfig
 ^^^^^^^^
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Description**
 
@@ -194,16 +194,16 @@ Configure the `freecredits` options
 settings
 """"""""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 
 .. code-block:: none
 
-    [p]pdconfig settings 
+    [p]pdconfig settings
 
 **Description**
 
@@ -215,10 +215,10 @@ Print the `freecredits` options
 hourly
 """"""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -241,10 +241,10 @@ Configure the `hourly` options
 daily
 """""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -267,10 +267,10 @@ Configure the `daily` options
 weekly
 """"""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -293,10 +293,10 @@ Configure the `weekly` options
 monthly
 """""""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -319,10 +319,10 @@ Configure the `monthly` options
 quarterly
 """""""""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -345,10 +345,10 @@ Configure the `quarterly` options
 yearly
 """"""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -371,16 +371,16 @@ Configure the `yearly` options
 streaks
 """""""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 
 .. code-block:: none
 
-    [p]pdconfig streaks 
+    [p]pdconfig streaks
 
 **Description**
 
@@ -392,10 +392,10 @@ Configure the `streaks` options
 percent
 """""""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -415,10 +415,10 @@ Configure streaks to be a percentage or flat amount
 hourly
 """"""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -438,10 +438,10 @@ Setting this to 0 will disable the streak bonus
 daily
 """""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -461,10 +461,10 @@ Setting this to 0 will disable the streak bonus
 weekly
 """"""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -484,10 +484,10 @@ Setting this to 0 will disable the streak bonus
 monthly
 """""""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -507,10 +507,10 @@ Setting this to 0 will disable the streak bonus
 quarterly
 """""""""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 
@@ -530,10 +530,10 @@ Setting this to 0 will disable the streak bonus
 yearly
 """"""
 
-**User Permissions**
-
-Global Bank: Bot Owner
-Local Bank: Server Owner or Administrator
+| **User Permissions**
+|
+| Global Bank: Bot Owner
+| Local Bank: Server Owner or Administrator
 
 **Syntax**
 

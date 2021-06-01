@@ -4,8 +4,8 @@
 RoleNotify
 ==========
 
-This is the cog guide for the rolenotify cog. You will
-find detailed docs about usage and commands.
+| This is the cog guide for the rolenotify cog.
+| You will find detailed docs about usage and commands.
 
 ``[p]`` is considered as your prefix.
 
@@ -13,7 +13,7 @@ find detailed docs about usage and commands.
 
         [p]load rolenotify
 
-.. note:: 
+.. note::
     This cog requires the Members Intent
 
 .. _rolenotify-usage:
@@ -37,15 +37,16 @@ Commands
 rolenotify
 ^^^^^^^^^^
 
-**User Permissions**
-
-Bot Admin or Manage Roles
+| **Permissions**
+|
+| *User* -
+| Bot Admin or Manage Roles
 
 **Syntax**
 
 .. code-block:: none
 
-    [p]rolenotify 
+    [p]rolenotify
 
 **Description**
 
@@ -57,9 +58,10 @@ Configure RoleNotify
 channel
 """""""
 
-**User Permissions**
-
-Bot Admin or Manage Roles
+| **Permissions**
+|
+| *User* -
+| Bot Admin or Manage Roles
 
 **Syntax**
 
@@ -79,15 +81,16 @@ Pass 0 to clear the channel
 role
 """"
 
-**User Permissions**
-
-Bot Admin or Manage Roles
+| **Permissions**
+|
+| *User* -
+| Bot Admin or Manage Roles
 
 **Syntax**
 
 .. code-block:: none
 
-    [p]rolenotify role 
+    [p]rolenotify role
 
 **Description**
 
@@ -99,9 +102,10 @@ Configure settings for a Role
 info
 """"
 
-**User Permissions**
-
-Bot Admin or Manage Roles
+| **Permissions**
+|
+| *User* -
+| Bot Admin or Manage Roles
 
 **Syntax**
 
@@ -119,9 +123,10 @@ Display the configured settings for a Role
 method
 """"""
 
-**User Permissions**
-
-Bot Admin or Manage Roles
+| **Permissions**
+|
+| *User* -
+| Bot Admin or Manage Roles
 
 **Syntax**
 
@@ -141,9 +146,10 @@ Valid options are `dm` and `channel`
 add
 """
 
-**User Permissions**
-
-Bot Admin or Manage Roles
+| **Permissions**
+|
+| *User* -
+| Bot Admin or Manage Roles
 
 **Syntax**
 
@@ -164,9 +170,10 @@ Set if the notification should be sent on Role Add
 remove
 """"""
 
-**User Permissions**
-
-Bot Admin or Manage Roles
+| **Permissions**
+|
+| *User* -
+| Bot Admin or Manage Roles
 
 **Syntax**
 
@@ -199,8 +206,8 @@ Set the notification message
 
 <option> can be either `add` or `remove`
 
-Formatting options available for <message> are
-{role_name} = Role Name
-{role_mention} = Role Mention (no pings)
-{user_name} = User's Display Name
-{user_mention} = User Mention
+| Formatting options available for <message> are
+| {role_name} = Role Name
+| {role_mention} = Role Mention (no pings)
+| {user_name} = User's Display Name
+| {user_mention} = User Mention

@@ -6,8 +6,8 @@ Lottery
 
 This cog is currently in Beta status. Not all features have been impletemented and/or documented
 
-This is the cog guide for the lottery cog. You will
-find detailed docs about usage and commands.
+| This is the cog guide for the lottery cog.
+| You will find detailed docs about usage and commands.
 
 ``[p]`` is considered as your prefix.
 
@@ -40,7 +40,7 @@ lottery
 
 .. code-block:: none
 
-    [p]lottery 
+    [p]lottery
 
 **Description**
 
@@ -56,7 +56,7 @@ lucky3
 
 .. code-block:: none
 
-    [p]lottery lucky3 
+    [p]lottery lucky3
 
 **Description**
 
@@ -72,7 +72,7 @@ games
 
 .. code-block:: none
 
-    [p]lottery games 
+    [p]lottery games
 
 **Description**
 
@@ -88,7 +88,7 @@ lottoset
 
 .. code-block:: none
 
-    [p]lottoset 
+    [p]lottoset
 
 **Description**
 
@@ -104,7 +104,7 @@ lucky3
 
 .. code-block:: none
 
-    [p]lottoset lucky3 
+    [p]lottoset lucky3
 
 **Description**
 
@@ -202,7 +202,7 @@ info
 
 .. code-block:: none
 
-    [p]lottoset info 
+    [p]lottoset info
 
 **Description**
 

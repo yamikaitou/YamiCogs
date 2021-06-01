@@ -4,8 +4,8 @@
 Kill
 ====
 
-This is the cog guide for the kill cog. You will
-find detailed docs about usage and commands.
+| This is the cog guide for the kill cog.
+| You will find detailed docs about usage and commands.
 
 ``[p]`` is considered as your prefix.
 
@@ -55,10 +55,10 @@ Kill a user in a random way
 killset
 ^^^^^^^
 
-**Permissions**
-
-*User* -
-Bot Admin or Manage Guild
+| **Permissions**
+|
+| *User* -
+| Bot Admin or Manage Guild
 
 **Description**
 
@@ -70,19 +70,19 @@ Configure the kill messages
 list
 """"
 
-**Permissions**
-
-*User* -
-Bot Admin or Manage Guild
-
-*Bot* -
-Embed Links
+| **Permissions**
+|
+| *User* -
+| Bot Admin or Manage Guild
+|
+| *Bot* -
+| Embed Links
 
 **Syntax**
 
 .. code-block:: none
 
-    [p]killset list 
+    [p]killset list
 
 **Description**
 
@@ -94,10 +94,10 @@ List all the kill messages
 bot
 """
 
-**Permissions**
-
-*User* -
-Bot Admin or Manage Guild
+| **Permissions**
+|
+| *User* -
+| Bot Admin or Manage Guild
 
 **Syntax**
 
@@ -135,10 +135,10 @@ You can enhance your message by leaving spaces for the bot to substitute.
 self
 """"
 
-**Permissions**
-
-*User* -
-Bot Admin or Manage Guild
+| **Permissions**
+|
+| *User* -
+| Bot Admin or Manage Guild
 
 **Syntax**
 
@@ -176,10 +176,10 @@ You can enhance your message by leaving spaces for the bot to substitute.
 add
 """
 
-**Permissions**
-
-*User* -
-Bot Admin or Manage Guild
+| **Permissions**
+|
+| *User* -
+| Bot Admin or Manage Guild
 
 **Syntax**
 
@@ -217,10 +217,10 @@ You can enhance your message by leaving spaces for the bot to substitute.
 delete
 """"""
 
-**Permissions**
-
-*User* -
-Bot Admin or Manage Guild
+| **Permissions**
+|
+| *User* -
+| Bot Admin or Manage Guild
 
 **Syntax**
 
