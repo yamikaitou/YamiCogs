@@ -4,8 +4,8 @@
 EconomyTrickle
 ==============
 
-This is the cog guide for the economytrickle cog.|br|
-You will find detailed docs about usage and commands.
+| This is the cog guide for the economytrickle cog.
+| You will find detailed docs about usage and commands.
 
 ``[p]`` is considered as your prefix.
 
@@ -21,8 +21,8 @@ Usage
 
 Trickle credits into your Economy
 
-Most of the functionality of this cog happens in the background.|br|
-The following commands are only to configure various settings for the background tasks.
+| Most of the functionality of this cog happens in the background.
+| The following commands are only to configure various settings for the background tasks.
 
 
 .. _economytrickle-commands:
@@ -55,9 +55,9 @@ settings
 
 **Permissions**
 
-*User* -|br|
-Global Bank - Bot Owner|br|
-Local Bank - Bot Admin or Manage Guild
+| *User* -
+| Global Bank - Bot Owner
+| Local Bank - Bot Admin or Manage Guild
 
 **Syntax**
 
@@ -77,9 +77,9 @@ messages
 
 **Permissions**
 
-*User* -|br|
-Global Bank - Bot Owner|br|
-Local Bank - Bot Admin or Manage Guild
+| *User* -
+| Global Bank - Bot Owner
+| Local Bank - Bot Admin or Manage Guild
 
 **Syntax**
 
@@ -91,8 +91,8 @@ Local Bank - Bot Admin or Manage Guild
 
 Set the number of messages required to gain credits
 
-Set the number to 0 to disable|br|
-Max value is 100
+| Set the number to 0 to disable
+| Max value is 100
 
 .. _economytrickle-command-economytrickle-credits:
 
@@ -100,24 +100,24 @@ Max value is 100
 credits
 """""""
 
-**Permissions**
-
-*User* -|br|
-Global Bank - Bot Owner|br|
-Local Bank - Bot Admin or Manage Guild
-
-**Syntax**
-
+| **Permissions**
+|
+| *User* -
+| Global Bank - Bot Owner
+| Local Bank - Bot Admin or Manage Guild
+|
+| **Syntax**
+|
 .. code-block:: none
 
     [p]economytrickle credits <number>
-
-**Description**
-
-Set the number of credits to grant
-
-Set the number to 0 to disable|br|
-Max value is 1000
+|
+| **Description**
+|
+| Set the number of credits to grant
+|
+| Set the number to 0 to disable
+| Max value is 1000
 
 .. _economytrickle-command-economytrickle-blocklist:
 
@@ -127,8 +127,8 @@ blocklist
 
 **Guild Only Command**
 
-**Permissions**|br|
-Bot Admin or Manage Guild
+| **Permissions**
+| Bot Admin or Manage Guild
 
 **Syntax**
 
@@ -150,8 +150,8 @@ showblocks
 
 **Guild Only Command**
 
-**Permissions**|br|
-Bot Admin or Manage Guild
+| **Permissions**
+| Bot Admin or Manage Guild
 
 **Syntax**
 
