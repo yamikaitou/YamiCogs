@@ -40,33 +40,33 @@ economytrickle
 
 .. code-block:: none
 
-    [p]economytrickle 
+    [p]economytrickle
 
 **Description**
 
-Configure various settings 
+Configure various settings
 
 .. _economytrickle-command-economytrickle-info:
 
 """"
-info
+settings
 """"
 
 **Permissions**
 
-*User* -
-Global Bank - Bot Owner
+*User* -\n
+Global Bank - Bot Owner\n
 Local Bank - Bot Admin or Manage Guild
 
 **Syntax**
 
 .. code-block:: none
 
-    [p]economytrickle info <number>
+    [p]economytrickle settings <number>
 
 **Description**
 
-Show the current settings 
+Show the current settings
 
 .. _economytrickle-command-economytrickle-messages:
 
@@ -117,3 +117,47 @@ Set the number of credits to grant
 
 Set the number to 0 to disable
 Max value is 1000
+
+.. _economytrickle-command-economytrickle-blocklist:
+
+"""""""""
+blocklist
+"""""""""
+
+**Guild Only Command**
+
+**Permissions**
+Bot Admin or Manage Guild
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]economytrickle blocklist [channel]
+
+**Description**
+
+Add/Remove the current channel (or a specific channel) to the blocklist
+
+Not passing a channel will add/remove the channel you ran the command in to the blocklist
+
+.. _economytrickle-command-economytrickle-showblocks:
+
+""""""""""
+showblocks
+""""""""""
+
+**Guild Only Command**
+
+**Permissions**
+Bot Admin or Manage Guild
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]economytrickle showblocks
+
+**Description**
+
+Provide a list of channels that are on the blocklist for this server

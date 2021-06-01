@@ -1,10 +1,11 @@
 import logging
 import math
 
+import discord
 from discord.ext import tasks
 from redbot.core import Config, bank, commands
 from redbot.core.bot import Red
-from tabulate import tabulate
+from tabulate import tabulate  # pylint:disable=import-error
 
 log = logging.getLogger("red.yamicogs.economytrickle")
 
@@ -39,19 +40,20 @@ class EconomyTrickle(commands.Cog):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=582650109, force_registration=True)
 
-        default_config = {"credits": 0, "messages": 0}
+        default_config = {"credits": 0, "messages": 0, "blocklist": []}
 
         self.config.register_global(**default_config)
         self.config.register_guild(**default_config)
 
         self.msg = {}
-        self.trickle.start()
+        self.trickle.start()  # pylint:disable=no-member
 
     async def initialize(self):
         self.bank = await bank.is_global()
+        self.blocklist = await self.config.blocklist()
 
     def cog_unload(self):
-        self.trickle.cancel()
+        self.trickle.cancel()  # pylint:disable=no-member
 
     @commands.Cog.listener()
     async def on_message_without_command(self, message):
@@ -61,6 +63,11 @@ class EconomyTrickle(commands.Cog):
         if message.guild == None:
             return
         if await self.bot.cog_disabled_in_guild(self, message.guild):
+            return
+        if message.channel.id in self.blocklist:
+            log.debug(
+                f"Found message from {message.author.id} in a blocked channel {message.guild.id}-{message.channel.id}"
+            )
             return
 
         if await bank.is_global():
@@ -92,27 +99,30 @@ class EconomyTrickle(commands.Cog):
         if await bank.is_global():
             msgs = self.msg
             cache = await self.config.all()
-            for user, msg in msgs.items():
-                if len(msg) >= cache["messages"]:
-                    num = math.floor(len(msg) / cache["messages"])
-                    log.debug(f"Processing {num} messages for {user}")
-                    del (self.msg[user])[0 : (num * cache["messages"])]
-                    val = await bank.deposit_credits(
-                        (await self.bot.get_or_fetch_user(user)),
-                        num * cache["credits"],
-                    )
+
+            if cache["messages"] != 0 and cache["credits"] != 0:
+                for user, msg in msgs.items():
+                    if len(msg) >= cache["messages"]:
+                        num = math.floor(len(msg) / cache["messages"])
+                        log.debug(f"Processing {num} messages for {user}")
+                        del (self.msg[user])[0 : (num * cache["messages"])]
+                        await bank.deposit_credits(
+                            (await self.bot.get_or_fetch_user(user)),
+                            num * cache["credits"],
+                        )
         else:
             msgs = self.msg
             for guild, users in msgs.items():
                 if not await self.bot.cog_disabled_in_guild(self, self.bot.get_guild(guild)):
                     cache = await self.config.guild_from_id(guild).all()
-                    if cache["messages"] != 0:
+
+                    if cache["messages"] != 0 and cache["credits"] != 0:
                         for user, msg in users.items():
                             if len(msg) >= cache["messages"]:
                                 num = math.floor(len(msg) / cache["messages"])
                                 log.debug(f"Processing {num} messages for {user} in {guild}")
                                 del (self.msg[guild][user])[0 : (num * cache["messages"])]
-                                val = await bank.deposit_credits(
+                                await bank.deposit_credits(
                                     (
                                         await self.bot.get_or_fetch_member(
                                             self.bot.get_guild(guild), user
@@ -133,8 +143,8 @@ class EconomyTrickle(commands.Cog):
 
     @is_owner_if_bank_global()
     @commands.admin_or_permissions(manage_guild=True)
-    @economytrickle.command(name="info", aliases=["settings"])
-    async def ts_info(self, ctx):
+    @economytrickle.command(name="settings", aliases=["info", "showsettings"])
+    async def ts_settings(self, ctx):
         """Show the current settings"""
 
         if await bank.is_global():
@@ -170,13 +180,18 @@ class EconomyTrickle(commands.Cog):
                     f"You must specify a value that is not less than 0 and not more than 1000"
                 )
         else:
-            if 0 <= number <= 1000:
-                await self.config.guild(ctx.guild).credits.set(number)
-                if not await ctx.tick():
-                    await ctx.send("Setting saved")
+            if ctx.guild is not None:
+                if 0 <= number <= 1000:
+                    await self.config.guild(ctx.guild).credits.set(number)
+                    if not await ctx.tick():
+                        await ctx.send("Setting saved")
+                else:
+                    await ctx.send(
+                        f"You must specify a value that is not less than 0 and not more than 1000"
+                    )
             else:
                 await ctx.send(
-                    f"You must specify a value that is not less than 0 and not more than 1000"
+                    "Your bank is set to per-server. Please try this command in a server instead"
                 )
 
     @is_owner_if_bank_global()
@@ -200,14 +215,58 @@ class EconomyTrickle(commands.Cog):
                     f"You must specify a value that is not less than 0 and not more than 100"
                 )
         else:
-            if 0 <= number <= 100:
-                await self.config.guild(ctx.guild).messages.set(number)
-                if not await ctx.tick():
-                    await ctx.send("Setting saved")
+            if ctx.guild is not None:
+                if 0 <= number <= 100:
+                    await self.config.guild(ctx.guild).messages.set(number)
+                    if not await ctx.tick():
+                        await ctx.send("Setting saved")
+                else:
+                    await ctx.send(
+                        f"You must specify a value that is not less than 0 and not more than 100"
+                    )
             else:
                 await ctx.send(
-                    f"You must specify a value that is not less than 0 and not more than 100"
+                    "Your bank is set to per-server. Please try this command in a server instead"
                 )
+
+    @commands.guild_only()
+    @commands.admin_or_permissions(manage_guild=True)
+    @economytrickle.command(name="blocklist", aliases=["blacklist"])
+    async def ts_blocklist(self, ctx, channel: discord.TextChannel = None):
+        """
+        Add/Remove the current channel (or a specific channel) to the blocklist
+
+        Not passing a channel will add/remove the channel you ran the command in to the blocklist
+        """
+
+        if channel is None:
+            channel = ctx.channel
+
+        try:
+            self.blocklist.remove(channel.id)
+            await ctx.send("Channel removed from the blocklist")
+        except ValueError:
+            self.blocklist.append(channel.id)
+            await ctx.send("Channel added to the blocklist")
+        finally:
+            await self.config.blocklist.set(self.blocklist)
+
+    @commands.guild_only()
+    @commands.admin_or_permissions(manage_guild=True)
+    @economytrickle.command(name="showblocks", aliases=["showblock"])
+    async def ts_showblocks(self, ctx):
+        """Provide a list of channels that are on the blocklist for this server"""
+
+        blocks = ""
+        for block in self.blocklist:
+            chan = self.bot.get_channel(block)
+            if chan.guild is ctx.guild:
+                blocks += f"{chan.name}\n"
+
+        if blocks == "":
+            blocks = "No channels blocked"
+
+        await ctx.send(f"The following channels are blocked from EconomyTrickle\n{blocks}")
 
     async def red_get_data_for_user(self, *, user_id: int):
         # this cog does not store any data
