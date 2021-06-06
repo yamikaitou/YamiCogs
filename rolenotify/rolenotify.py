@@ -50,7 +50,7 @@ class RoleNotify(commands.Cog):
                     if crole["method"] == "DM":
                         dest = after
                     elif crole["method"] == "Channel":
-                        dest = await after.guild.get_channel(
+                        dest = after.guild.get_channel(
                             await self.config.guild(after.guild).channel()
                         )
                     else:
@@ -68,7 +68,7 @@ class RoleNotify(commands.Cog):
                     if crole["method"] == "DM":
                         dest = after
                     elif crole["method"] == "Channel":
-                        dest = await after.guild.get_channel(
+                        dest = after.guild.get_channel(
                             await self.config.guild(after.guild).channel()
                         )
                     else:
@@ -128,11 +128,13 @@ class RoleNotify(commands.Cog):
 
         settings = await self.config.role(role).all()
         await ctx.send(
-            """Settings for *{role}*\n----------\n**Method**: {method}\n**Addition**: {add}\n**Removal**: {rem}""".format(
+            """Settings for *{role}*\n----------\n**Method**: {method}\n**Addition**: {add}\n**Message**: {add_msg}\n**Removal**: {rem}\n**Message**: {rem_msg}""".format(
                 role=role.name,
                 method=settings["method"],
                 add=settings["add"],
+                add_msg=settings["add_msg"],
                 rem=settings["remove"],
+                rem_msg=settings["rem_msg"],
             )
         )
 
@@ -155,7 +157,7 @@ class RoleNotify(commands.Cog):
             await ctx.send("Notification method has been set")
 
     @rolenotify_role.command(name="message")
-    async def rolenotify_role_mmsg(self, ctx, role: discord.Role, option: str, *, message: str):
+    async def rolenotify_role_msg(self, ctx, role: discord.Role, option: str, *, message: str):
         """
         Set the notification message
 
