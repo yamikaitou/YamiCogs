@@ -1,0 +1,50 @@
+name: Fruits
+description: Spin some fruits and lose all your credits 😈
+cost: 10
+randomize: true
+icons:
+  1:
+    name: Cherry
+    emoji: 🍒
+  2:
+    name: Coconut
+    emoji: 🥥
+  3:
+    name: Eggplant
+    emoji: 🍆
+  4:
+    name: Peach
+    emoji: 🍑
+  5:
+    name: Lemon
+    emoji: 🍋
+  6:
+    name: Orange
+    emoji: 🍊
+  7:
+    name: Pear
+    emoji: 🍐
+  8:
+    name: Mango
+    emoji: 🥭
+  9:
+    name: Kiwi
+    emoji: 🥝
+  10:
+    name: Watermelon
+    emoji: 🍉
+prizes:
+  1:
+    name: Match 2
+    prize: 10
+  2:
+    name: Match 3
+    prize: 100
+  3:
+    name: Eggplant
+    pattern: Eggplant Eggplant Eggplant
+    prize: 1
+  4:
+    name: Peach
+    pattern: Peach Peach Peach
+    prize: 1000

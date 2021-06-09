@@ -1,0 +1,45 @@
+name: Sports
+description: Play some Sport slots
+cost: 120
+xp-lose: 10
+slots:
+  1:
+    name: American Football
+    emoji: 🏈
+    prize: 1
+    xp: 1
+  2:
+    name: Football (Soccer)
+    emoji: ⚽
+    prize: 2
+    xp: 2
+  3:
+    name: Baseball
+    emoji: ⚾
+    prize: 3
+    xp: 3
+  4:
+    name: Basketball
+    emoji: 🏀
+    prize: 4
+    xp: 4
+  5:
+    name: Volleyball
+    emoji: 🏐
+    prize: 5
+    xp: 5
+  6:
+    name: Pool
+    emoji: 🎱
+    prize: 6
+    xp: 6
+  7:
+    name: Rugby
+    emoji: 🏉
+    prize: 7
+    xp: 7
+  8:
+    name: Tennis
+    emoji: 🎾
+    prize: 8
+    xp: 8
