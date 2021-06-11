@@ -1,8 +1,9 @@
 .. _rps:
 
 ===
-Rock, Paper, Scissors
+RPS
 ===
+Rock, Paper, Scissors (Lizard, Spock)
 
 This is the cog guide for the rps cog. You will
 find detailed docs about usage and commands.
@@ -14,8 +15,8 @@ find detailed docs about usage and commands.
         [p]load rps
 
 .. note:: This cog will overwrite the original `rps` command from Red's General cog.
-Loading this cog at startup or after General will be gracefully handled.
-Loading General after this cog has already been loaded will cause an error
+    Loading this cog at startup or after General will be gracefully handled.
+    Loading General after this cog has already been loaded will cause an error
 
 .. _rps-usage:
 
