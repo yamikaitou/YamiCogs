@@ -10,6 +10,8 @@ log = logging.getLogger("red.yamicogs.kill")
 class Kill(commands.Cog):
     """
     Kill people in interesting ways
+
+    More detailed docs: <https://cogs.yamikaitou.dev/kill.html>
     """
 
     def __init__(self, bot):

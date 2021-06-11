@@ -29,6 +29,8 @@ ICONS_RPSLS = {
 class RPS(commands.Cog):
     """
     Rock, Paper, Scissors (Lizard, Spock)
+
+    More detailed docs: <https://cogs.yamikaitou.dev/rps.html>
     """
 
     def __init__(self, bot: Red) -> None:

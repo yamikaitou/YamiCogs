@@ -12,6 +12,8 @@ log = logging.getLogger("red.yamicogs.rolenotify")
 class RoleNotify(commands.Cog):
     """
     Notify a user when they have a Role added or removed from them
+
+    More detailed docs: <https://cogs.yamikaitou.dev/rolenotify.html>
     """
 
     def __init__(self, bot: Red) -> None:

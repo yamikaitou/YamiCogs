@@ -34,6 +34,8 @@ def is_owner_if_bank_global():
 class EconomyTrickle(commands.Cog):
     """
     Trickle credits into your Economy
+
+    More detailed docs: <https://cogs.yamikaitou.dev/economytrickle.html>
     """
 
     def __init__(self, bot: Red):

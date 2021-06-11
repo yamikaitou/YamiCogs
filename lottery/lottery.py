@@ -14,6 +14,8 @@ log = logging.getLogger("red.yamicogs.lottery")
 class Lottery(commands.Cog):
     """
     Lottery Games
+
+    More detailed docs: <https://cogs.yamikaitou.dev/lottery.html>
     """
 
     lucky3 = ["🃏", "🔬", "💰", "🚀", "🏆", "🍰", "🌹", "🦀", "👑"]

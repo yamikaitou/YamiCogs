@@ -76,6 +76,8 @@ def is_owner_if_bank_global():
 class PayDay(commands.Cog):
     """
     Customizable PayDay system
+
+    More detailed docs: <https://cogs.yamikaitou.dev/payday.html>
     """
 
     settings = {"day": 1, "week": 7, "month": 30, "quarter": 122, "year": 365}
