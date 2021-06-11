@@ -1,9 +1,9 @@
 {
     "name": "RPS",
-    "short": "Rock, Paper, Scissors",
-    "description": "Rock, Paper, Scissors; but with Buttons!",
+    "short": "Rock, Paper, Scissors (Lizard, Spock)",
+    "description": "Play a game of Rock, Paper, Scissors (Lizard, Spock); but with Buttons!",
     "end_user_data_statement": "This cog does not persistently store any data or metadata about users.",
-    "install_msg": "Thanks for installing the cog. I'm in the Cog Support server if you need help with anything.",
+    "install_msg": "Thanks for installing the cog. I'm in the Cog Support server if you need help with anything. This cog will gracefully handle removing the `rps` command from Red's General cog if it is loaded. Loading General after this cog will cause an error (bot startup is gracefully handled as well)",
     "author": [
         "YamiKaitou#8975"
     ],
@@ -13,7 +13,7 @@
     ],
     "tags": [],
     "min_bot_version": "3.4.0",
-    "hidden": true,
-    "disabled": true,
+    "hidden": false,
+    "disabled": false,
     "type": "COG"
 }
