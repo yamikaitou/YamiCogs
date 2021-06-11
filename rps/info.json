@@ -1,0 +1,19 @@
+{
+    "name": "RPS",
+    "short": "Rock, Paper, Scissors",
+    "description": "Rock, Paper, Scissors; but with Buttons!",
+    "end_user_data_statement": "This cog does not persistently store any data or metadata about users.",
+    "install_msg": "Thanks for installing the cog. I'm in the Cog Support server if you need help with anything.",
+    "author": [
+        "YamiKaitou#8975"
+    ],
+    "required_cogs": {},
+    "requirements": [
+        "dislash.py==1.0.13"
+    ],
+    "tags": [],
+    "min_bot_version": "3.4.0",
+    "hidden": true,
+    "disabled": true,
+    "type": "COG"
+}

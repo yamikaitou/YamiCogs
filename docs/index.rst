@@ -15,6 +15,7 @@ Welcome to YamiCogs's documentation!
    economytrickle
    lottery
    rolenotify
+   rps
 
 
 Indices and tables

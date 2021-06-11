@@ -23,7 +23,7 @@ update:
 run:
 	$(PYTHON) -O -m redbot yamicogs --dev --debug
 new:
-	$(PYTHON) -m cookiecutter yamicog
+	$(PYTHON) -m cookiecutter .utils/yamicog
 
 # Translations
 gettext:
