@@ -11,7 +11,14 @@
     "requirements": [
         "dislash.py==1.0.13"
     ],
-    "tags": [],
+    "tags": [
+        "game",
+        "fun",
+        "rps",
+        "rpsls",
+        "fun",
+        "buttons"
+    ],
     "min_bot_version": "3.4.0",
     "hidden": false,
     "disabled": false,
