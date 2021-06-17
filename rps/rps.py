@@ -3,7 +3,7 @@ import random
 from typing import Literal
 
 import discord
-from dislash import *
+from dislash import *  # pylint:disable=unused-wildcard-import
 from redbot.core import commands
 from redbot.core.bot import Red
 from redbot.core.config import Config

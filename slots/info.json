@@ -8,7 +8,9 @@
         "YamiKaitou#8975"
     ],
     "required_cogs": {},
-    "requirements": [],
+    "requirements": [
+        "dislash.py==1.0.16"
+    ],
     "tags": [],
     "min_bot_version": "3.4.0",
     "hidden": true,

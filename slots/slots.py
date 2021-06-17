@@ -1,4 +1,3 @@
-import pprint
 import asyncio
 import logging
 import random
@@ -8,6 +7,7 @@ from collections import deque
 
 import discord
 import yaml
+from dislash import *  # pylint:disable=unused-wildcard-import
 from redbot.core import commands, data_manager
 from redbot.core.bot import Red
 from redbot.core.config import Config
@@ -31,7 +31,10 @@ class Slots(commands.Cog):
             force_registration=True,
         )
 
-        self.config.register_global(**{"machines": ["local/fruits.yaml", "local/sports.yaml"]})
+        self.config.register_global(
+            **{"machines": ["local/fruits.yaml"]}
+        )  # , "local/sports.yaml"]})
+        self.config.register_user(**{"playing": False})
 
         self.slot_machines = {}
         self.bot.loop.create_task(self._load_machines())
@@ -44,9 +47,20 @@ class Slots(commands.Cog):
             location, filename = machine_str.split("/")
             if location == "local":
                 machine = yaml.safe_load(open(data_manager.bundled_data_path(self) / filename))
-                print(machine_str)
-                pprint.pprint(await self._validate_machine(machine))
-                self.slot_machines[machine["name"].lower()] = await self._load_machine(machine)
+                errors = await self._validate_machine(machine)
+                if errors == []:
+                    self.slot_machines[machine["name"].lower()] = machine
+                else:
+                    log.info(f"Failed to parse slot machine {filename}")
+                    log.debug(errors)
+            else:
+                machine = yaml.safe_load(open(data_manager.bundled_data_path(self) / filename))
+                errors = await self._validate_machine(machine)
+                if errors == []:
+                    self.slot_machines[machine["name"].lower()] = machine
+                else:
+                    log.info(f"Failed to parse slot machine {filename}")
+                    log.debug(errors)
 
     async def _validate_machine(self, machine):
         error = []
@@ -109,14 +123,25 @@ class Slots(commands.Cog):
 
         return error
 
-    async def _load_machine(self, machine):
+    async def _load_machine(self, source, filename):
 
-        return
+        if source == "local":
+            machine = yaml.safe_load(open(data_manager.bundled_data_path(self) / filename))
+        else:
+            machine = yaml.safe_load(open(data_manager.cog_data_path(self) / filename))
+        errors = await self._validate_machine(machine)
+        if errors == []:
+            self.slot_machines[machine["name"].lower()] = machine
+        else:
+            log.info(f"Failed to parse slot machine {filename}")
+            log.debug(errors)
+
+        return errors
 
     async def _play_game(self, game):
         reel = deque()
-        for slot in game["slots"].values():
-            reel.append(slot["emoji"])
+        for slot in game["icons"].values():
+            reel.append([slot["name"], slot["emoji"]])
 
         reels = []
         for k in range(3):  # pylint:disable=unused-variable
@@ -126,60 +151,261 @@ class Slots(commands.Cog):
         return reels
 
     @commands.bot_has_permissions(embed_links=True)
-    @commands.group(name="slots", invoke_without_command=True)
-    async def slots(self, ctx):
+    @commands.command(name="slots")
+    async def slots(self, ctx, bid: int = 0):
+        """
+        Play some slot games
+
+        Not providing a bid will cause you to bid at the machines default amount
+        """
         embed = discord.Embed()
         embed.title = "Slot Machine Alley"
         embed.description = (
             "Welcome to Slot Machine Alley.\n\nEnjoy your stay and watch your credits."
         )
 
+        buttons = []
         for machine in self.slot_machines.values():
+            if bid != 0:
+                machine["cost"] = bid
             embed.add_field(
                 name=machine["name"],
-                value=f"{machine['description']}\n{machine['cost']} credits per spin\n`{ctx.prefix}slots play {machine['name'].lower()}` to play",
+                value=f"{machine['description']}\n{machine['cost']} credits per spin\n",
                 inline=False,
             )
-        await ctx.send(embed=embed)
+            buttons.append(
+                Button(
+                    style=ButtonStyle.blurple,
+                    label=machine["name"],
+                    custom_id=machine["name"].lower(),
+                )
+            )
+        msg = await ctx.send(embed=embed, components=auto_rows(*buttons, max_in_row=5))
 
-    @slots.command(name="play", usage="<machine>")
-    async def slots_play(self, ctx, choice):
-        """
-        Play a slot machine
+        def check(inter):
+            return inter.author == ctx.author
 
-        See all the available games in `[p]slots`
-        """
+        inter = await msg.wait_for_button_click(check=check)
 
         try:
-            machine = self.slot_machines[choice.lower()]
+            machine = self.slot_machines[inter.clicked_button.custom_id]
+            if bid != 0:
+                machine["cost"] = bid
         except KeyError:
-            return await ctx.send(
-                f"Unknown machine, please refer to `{ctx.prefix}slots` for the available games"
+            await inter.reply(
+                f"That machine somehow doesn't exist", type=ResponseType.UpdateMessage
             )
+            await msg.edit(components=None, embed=None)
+        else:
+            await inter.reply(type=ResponseType.DeferredUpdateMessage)
+            await self._slots_play(ctx, machine, msg)
+
+    async def _slots_play(self, ctx, machine, msg):
 
         embed = discord.Embed()
         embed.title = "Slot Machine - " + machine["name"]
-        embed.description = "Lets spin those reels\n\n*click click click*"
+        embed.description = "Lets spin those reels"
         embed.color = discord.Color.blurple()
-        msg = await ctx.send(embed=embed)
+        winnings = 0
 
-        await asyncio.sleep(2)
-        slots = await self._play_game(machine)
-        embed.add_field(
-            name="Outcome",
-            value=(
-                f"⏹️ {slots[0][0]}{slots[1][0]}{slots[2][0]}\n"
-                f"▶️ {slots[0][1]}{slots[1][1]}{slots[2][1]}\n"
-                f"⏹️ {slots[0][2]}{slots[1][2]}{slots[2][2]}\n"
-            ),
-        )
-        embed.description = (
-            "Winner!!!"
-            if (slots[0][1] == slots[1][1] and slots[1][1] == slots[2][1])
-            else "Loser!!!"
-        )
-        embed.color = discord.Color.green()
-        await msg.edit(embed=embed)
+        def button_check(inter):
+            if inter.author != ctx.author:
+                self.bot.loop.create_task(
+                    inter.reply(
+                        f"Sorry, this is not your game to play, try launching your own with `{ctx.prefix}slots`",
+                        ephemeral=True,
+                    )
+                )
+                return False
+
+            if inter.clicked_button.custom_id == "dead":
+                self.bot.loop.create_task(
+                    inter.reply(
+                        f"Sorry, but clicking on the slot icons doesn't do anything",
+                        ephemeral=True,
+                    )
+                )
+                return False
+
+            if inter.clicked_button.custom_id == "coins":
+                self.bot.loop.create_task(
+                    inter.reply(
+                        f"This is the amount of credits you have gained/lost during this session",
+                        ephemeral=True,
+                    )
+                )
+                return False
+
+            return True
+
+        while True:
+            slots = await self._play_game(machine)
+
+            if len(embed.fields) == 0:
+                outcome_field = embed.insert_field_at
+            else:
+                outcome_field = embed.set_field_at
+
+            outcome = await self._check_outcome(machine, slots)
+            if outcome is False:
+                winnings -= machine["cost"]
+                outcome_field(0, name="Outcome", value="No matches, try again!")
+            else:
+                winnings += outcome[1]
+                outcome_field(
+                    0, name="Outcome", value=f"Winner!! {outcome[0]}\n+ {outcome[1]} credits"
+                )
+
+            buttons = [
+                ActionRow(
+                    Button(
+                        style=ButtonStyle.gray,
+                        disabled=False,
+                        emoji="\N{BLACK SQUARE FOR STOP}\N{VARIATION SELECTOR-16}",
+                        custom_id="dead",
+                    ),
+                    Button(
+                        style=ButtonStyle.gray,
+                        disabled=False,
+                        emoji=slots[0][0][1],
+                        custom_id="dead",
+                    ),
+                    Button(
+                        style=ButtonStyle.gray,
+                        disabled=False,
+                        emoji=slots[1][0][1],
+                        custom_id="dead",
+                    ),
+                    Button(
+                        style=ButtonStyle.gray,
+                        disabled=False,
+                        emoji=slots[2][0][1],
+                        custom_id="dead",
+                    ),
+                    Button(
+                        style=ButtonStyle.green,
+                        label="Spin",
+                        custom_id="spin",
+                    ),
+                ),
+                ActionRow(
+                    Button(
+                        style=ButtonStyle.gray,
+                        disabled=False,
+                        emoji="\N{BLACK RIGHT-POINTING TRIANGLE}\N{VARIATION SELECTOR-16}",
+                        custom_id="dead",
+                    ),
+                    Button(
+                        style=ButtonStyle.gray,
+                        disabled=False,
+                        emoji=slots[0][1][1],
+                        custom_id="dead",
+                    ),
+                    Button(
+                        style=ButtonStyle.gray,
+                        disabled=False,
+                        emoji=slots[1][1][1],
+                        custom_id="dead",
+                    ),
+                    Button(
+                        style=ButtonStyle.gray,
+                        disabled=False,
+                        emoji=slots[2][1][1],
+                        custom_id="dead",
+                    ),
+                    Button(
+                        style=ButtonStyle.red,
+                        label="Exit",
+                        custom_id="cancel",
+                    ),
+                ),
+                ActionRow(
+                    Button(
+                        style=ButtonStyle.gray,
+                        disabled=False,
+                        emoji="\N{BLACK SQUARE FOR STOP}\N{VARIATION SELECTOR-16}",
+                        custom_id="dead",
+                    ),
+                    Button(
+                        style=ButtonStyle.gray,
+                        disabled=False,
+                        emoji=slots[0][2][1],
+                        custom_id="dead",
+                    ),
+                    Button(
+                        style=ButtonStyle.gray,
+                        disabled=False,
+                        emoji=slots[1][2][1],
+                        custom_id="dead",
+                    ),
+                    Button(
+                        style=ButtonStyle.gray,
+                        disabled=False,
+                        emoji=slots[2][2][1],
+                        custom_id="dead",
+                    ),
+                    Button(
+                        style=ButtonStyle.blurple,
+                        disabled=False,
+                        emoji="\U0001fa99",
+                        label=winnings,
+                        custom_id="coins",
+                    ),
+                ),
+            ]
+
+            await msg.edit(embed=embed, components=buttons)
+
+            try:
+                inter = await msg.wait_for_button_click(check=button_check, timeout=60)
+            except asyncio.TimeoutError:
+                await msg.edit(
+                    content="Okay then, see ya later!\nYou have {} {} credits this session".format(
+                        ("lost" if winnings < 0 else "won"), abs(winnings)
+                    ),
+                    components=None,
+                    embed=None,
+                )
+                return
+
+            if inter.clicked_button.custom_id == "cancel":
+                await inter.reply(
+                    "Okay then, see ya later!\nYou have {} {} credits this session".format(
+                        ("lost" if winnings < 0 else "won"), abs(winnings)
+                    ),
+                    type=ResponseType.UpdateMessage,
+                )
+                await msg.edit(components=None, embed=None)
+                return
+
+            await inter.reply(type=ResponseType.DeferredUpdateMessage)
+
+    async def _check_outcome(self, machine, reels):
+        table = machine["prizes"]
+
+        for k in sorted(table.keys(), reverse=True):
+            try:
+                pattern = table[k]["pattern"]
+
+                if (
+                    reels[0][1][0] == pattern[0]
+                    and reels[1][1][0] == pattern[1]
+                    and reels[2][1][0] == pattern[2]
+                ):
+                    return (table[k]["name"], machine["cost"] * table[k]["prize"])
+            except KeyError:
+                if table[k]["name"] == "Match 3":
+                    if reels[0][1][0] == reels[1][1][0] == reels[2][1][0]:
+                        return (table[k]["name"], machine["cost"] * table[k]["prize"])
+                if table[k]["name"] == "Match 2":
+                    if (
+                        reels[0][1][0] == reels[1][1][0]
+                        or reels[0][1][0] == reels[2][1][0]
+                        or reels[1][1][0] == reels[2][1][0]
+                    ):
+                        return (table[k]["name"], machine["cost"] * table[k]["prize"])
+
+        return False
 
     async def red_get_data_for_user(self, *, user_id: int):
         # this cog does not store any user data

@@ -36,10 +36,10 @@ icons:
 prizes:
   1:
     name: Match 2
-    prize: 10
+    prize: 2
   2:
     name: Match 3
-    prize: 100
+    prize: 3
   3:
     name: Eggplant
     pattern: Eggplant Eggplant Eggplant
@@ -47,4 +47,4 @@ prizes:
   4:
     name: Peach
     pattern: Peach Peach Peach
-    prize: 1000
+    prize: 5
