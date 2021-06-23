@@ -80,7 +80,7 @@ class PayDay(commands.Cog):
     More detailed docs: <https://cogs.yamikaitou.dev/payday.html>
     """
 
-    settings = {"day": 1, "week": 7, "month": 30, "quarter": 122, "year": 365}
+    settings = {"day": 1, "week": 7, "month": 30, "quarter": 91, "year": 365}
     friendly = {
         "hour": "Hourly",
         "day": "Daily",
