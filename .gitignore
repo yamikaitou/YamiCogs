@@ -138,3 +138,6 @@ red/
 red.sh
 pogo/latest.json
 pogo/*
+devbot/__init__.py
+devbot/devbot.py
+devbot/info.json

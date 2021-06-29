@@ -193,7 +193,7 @@ class PayDay(commands.Cog):
         total_streak = 0
 
         for k in self.friendly:
-            free, streak, remain = await self.grant_award(ctx, k)
+            free, streak, remain = await self.grant_award(ctx, k, False)
             if remain != -1:
                 continue
             elif streak != -1:
@@ -354,7 +354,7 @@ class PayDay(commands.Cog):
         else:
             log.debug("grant_award returned no results")
 
-    async def grant_award(self, ctx, option):
+    async def grant_award(self, ctx, option, deposit=True):
 
         if await bank.is_global():
             free = await self.config.get_raw(option)
@@ -378,11 +378,13 @@ class PayDay(commands.Cog):
             ):
                 if perc:
                     streak = free * streak
-                await bank.deposit_credits(ctx.author, free + streak)
+                if deposit:
+                    await bank.deposit_credits(ctx.author, free + streak)
                 await config.set_raw(option, value=now.isoformat())
                 return (free, streak, -1)
             elif (now - last) >= timedelta(hours=self.times[option]):
-                await bank.deposit_credits(ctx.author, free)
+                if deposit:
+                    await bank.deposit_credits(ctx.author, free)
                 await config.set_raw(option, value=now.isoformat())
                 return (free, -1, -1)
             else:

@@ -21,7 +21,7 @@ reformatblack:
 update:
 	$(PYTHON) -m pip install -U pip wheel setuptools autoflake isort black flake8 pre-commit cookiecutter Red-Discordbot
 run:
-	$(PYTHON) -O -m redbot yamicogs --dev --debug
+	$(PYTHON) -O -m redbot yamicogs --dev --debug --disable-intent presences
 new:
 	$(PYTHON) -m cookiecutter .utils/yamicog
 
