@@ -1,4 +1,5 @@
 import logging
+import math
 from datetime import datetime, timedelta
 from typing import Literal, Union
 
@@ -377,7 +378,7 @@ class PayDay(commands.Cog):
                 >= timedelta(hours=self.times[option])
             ):
                 if perc:
-                    streak = free * (streak / 100)
+                    streak = free * math.floor(streak / 100)
                 if deposit:
                     await bank.deposit_credits(ctx.author, free + streak)
                 await config.set_raw(option, value=now.isoformat())
