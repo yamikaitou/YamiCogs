@@ -31,6 +31,7 @@ class RoleNotify(commands.Cog):
                 "remove": False,
                 "add_msg": "You were granted the Role *{role_name}*",
                 "rem_msg": "You lost the Role *{role_name}*",
+                "channel": 0,
             }
         )
         self.config.register_guild(
@@ -52,9 +53,12 @@ class RoleNotify(commands.Cog):
                     if crole["method"] == "DM":
                         dest = after
                     elif crole["method"] == "Channel":
-                        dest = after.guild.get_channel(
-                            await self.config.guild(after.guild).channel()
-                        )
+                        if crole["channel"] != 0:
+                            dest = after.guild.get_channel(crole["channel"])
+                        else:
+                            dest = after.guild.get_channel(
+                                await self.config.guild(after.guild).channel()
+                            )
                     else:
                         dest = None
 
@@ -70,9 +74,12 @@ class RoleNotify(commands.Cog):
                     if crole["method"] == "DM":
                         dest = after
                     elif crole["method"] == "Channel":
-                        dest = after.guild.get_channel(
-                            await self.config.guild(after.guild).channel()
-                        )
+                        if crole["channel"] != 0:
+                            dest = after.guild.get_channel(crole["channel"])
+                        else:
+                            dest = after.guild.get_channel(
+                                await self.config.guild(after.guild).channel()
+                            )
                     else:
                         dest = None
 
@@ -157,6 +164,22 @@ class RoleNotify(commands.Cog):
 
         if not await ctx.tick():
             await ctx.send("Notification method has been set")
+
+    @rolenotify_role.command(name="channel")
+    async def rolenotify_role_channel(self, ctx, role: discord.Role, channel: discord.TextChannel):
+        """
+        Set the channel to output Role Notifications to
+
+        Pass 0 to clear the channel and use the server defined channel
+        """
+
+        if channel == 0:
+            await self.config.role(role).channel.set(0)
+            if not await ctx.tick():
+                await ctx.send("Channel has been cleared")
+        else:
+            await self.config.role(role).channel.set(channel.id)
+            await ctx.send("Channel has been set")
 
     @rolenotify_role.command(name="message")
     async def rolenotify_role_msg(self, ctx, role: discord.Role, option: str, *, message: str):
