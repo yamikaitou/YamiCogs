@@ -112,14 +112,18 @@ class RoleNotify(commands.Cog):
         """Configure RoleNotify"""
 
     @rolenotify.command(name="channel")
-    async def rolenotify_channel(self, ctx, channel: Union[discord.TextChannel, int]):
+    async def rolenotify_channel(self, ctx, channel: Union[discord.TextChannel, int] = None):
         """
         Set the channel to output Role Notifications to
 
         Pass 0 to clear the channel
+        Pass nothing to see the configured channel
         """
 
-        if channel == 0:
+        if channel is None:
+            chan = await self.config.guild(ctx.guild).channel()
+            await ctx.send(f"Currently set to {self.bot.get_channel(chan).mention}")
+        elif channel == 0:
             await self.config.guild(ctx.guild).channel.set(0)
             if not await ctx.tick():
                 await ctx.send("Channel has been cleared")
@@ -137,9 +141,12 @@ class RoleNotify(commands.Cog):
 
         settings = await self.config.role(role).all()
         await ctx.send(
-            """Settings for *{role}*\n----------\n**Method**: {method}\n**Addition**: {add}\n**Message**: {add_msg}\n**Removal**: {rem}\n**Message**: {rem_msg}""".format(
+            """Settings for *{role}*\n----------\n**Method**: {method}\n{channel}**Addition**: {add}\n**Message**: {add_msg}\n**Removal**: {rem}\n**Message**: {rem_msg}""".format(
                 role=role.name,
                 method=settings["method"],
+                channel=""
+                if settings["channel"] == 0
+                else f"**Channel**: {self.bot.get_channel(settings['channel']).mention}\n",
                 add=settings["add"],
                 add_msg=settings["add_msg"],
                 rem=settings["remove"],

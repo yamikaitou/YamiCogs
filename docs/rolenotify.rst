@@ -75,6 +75,8 @@ Set the channel to output Role Notifications to
 
 Pass 0 to clear the channel
 
+Pass nothing to see the configured channel
+
 .. _rolenotify-command-rolenotify-role:
 
 """"
@@ -139,6 +141,29 @@ method
 Set the notification method
 
 Valid options are `dm` and `channel`
+
+.. _rolenotify-command-rolenotify-role-method:
+
+""""""
+method
+""""""
+
+| **Permissions**
+|
+| *User* -
+| Bot Admin or Manage Roles
+
+**Syntax**
+
+.. code-block:: none
+
+    [p]rolenotify role channel <role> <channel>
+
+**Description**
+
+Set the channel to output Role Notifications to
+
+Pass 0 to clear the channel and use the server defined channel
 
 .. _rolenotify-command-rolenotify-role-add:
 
