@@ -50,8 +50,8 @@ class RPS(commands.Cog):
         embed.color = await ctx.embed_color()
         embed.description = (
             f"A game of skill (chance).\n"
-            f"Simply select your choice and see if you can defeat he computer\n\n"
-            f"2 versions are includes, the rules are below\n"
+            f"Simply select your choice and see if you can defeat the computer\n\n"
+            f"2 versions are included, the rules are below\n"
         )
         embed.add_field(
             name="Rock, Paper, Scissors",
@@ -208,7 +208,7 @@ class RPS(commands.Cog):
             embed.color = await ctx.embed_color()
             embed.description = (
                 f"A game of skill (chance).\n"
-                f"Simply select your choice and see if you can defeat he computer\n\n\n"
+                f"Simply select your choice and see if you can defeat the computer\n\n\n"
                 f"Rock {ICONS_RPS['rock']} beats Scissors {ICONS_RPS['scissors']}\n"
                 f"Paper {ICONS_RPS['paper']} beats Rock {ICONS_RPS['rock']}\n"
                 f"Scissors {ICONS_RPS['scissors']} beats Paper {ICONS_RPS['paper']}\n"
@@ -462,7 +462,7 @@ class RPS(commands.Cog):
             embed.color = await ctx.embed_color()
             embed.description = (
                 f"A game of skill (chance).\n"
-                f"Simply select your choice and see if you can defeat he computer\n\n\n"
+                f"Simply select your choice and see if you can defeat the computer\n\n\n"
                 f"Rock {ICONS_RPSLS['rock']} beats Scissors {ICONS_RPSLS['scissors']} and Lizard {ICONS_RPSLS['lizard']}\n"
                 f"Paper {ICONS_RPSLS['paper']} beats Rock {ICONS_RPSLS['rock']} and Spock {ICONS_RPSLS['spock']}\n"
                 f"Scissors {ICONS_RPSLS['scissors']} beats Paper {ICONS_RPSLS['paper']} and Lizard {ICONS_RPSLS['lizard']}\n"
