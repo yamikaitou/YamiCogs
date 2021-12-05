@@ -385,7 +385,7 @@ class Slots(commands.Cog):
 
         for k in sorted(table.keys(), reverse=True):
             try:
-                pattern = table[k]["pattern"]
+                pattern = table[k]["pattern"].split()
 
                 if (
                     reels[0][1][0] == pattern[0]

@@ -1,4 +1,4 @@
-from .core import MinecraftCasino
+from .mccasino import MinecraftCasino
 
 
 def setup(bot):

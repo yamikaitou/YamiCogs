@@ -1,7 +1,7 @@
 {
-    "name": "Runes of the Falrek",
-    "short": "A card collecting game",
-    "description": "This cog is a Work In Progress",
+    "name": "Emoji Collection",
+    "short": "A 'card' (emoji) collecting game",
+    "description": "Collect 'cards' (emoji) to complete sets for points",
     "end_user_data_statement": "This cog does not persistently store any data or metadata about users.",
     "author": [
         "YamiKaitou#8975"
