@@ -126,11 +126,7 @@ class RPS(commands.Cog):
         on_click = msg.create_click_listener(timeout=60)
         dead = False
 
-        def is_not_author(inter):
-            # Note that this check must take only 1 arg
-            return inter.author != ctx.author
-
-        @on_click.matching_condition(is_not_author, cancel_others=True)
+        @on_click.not_from_user(ctx.author, cancel_others=True, reset_timeout=False)
         async def on_wrong_user(inter):
             # Reply with a hidden message
             await inter.reply(
@@ -144,19 +140,18 @@ class RPS(commands.Cog):
             if computer == "rock":
                 await msg.edit(
                     content=f"Well, we must be mind-readers!\n\nYou {ICONS_RPS['rock']} - {ICONS_RPS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "paper":
                 await msg.edit(
                     content=f"Look at that, I win!\n\nYou {ICONS_RPS['rock']} - {ICONS_RPS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             else:
                 await msg.edit(
                     content=f"Congrats, you win!\n\nYou {ICONS_RPS['rock']} - {ICONS_RPS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
-            global dead
             dead = True
 
         @on_click.matching_id("paper", cancel_others=True)
@@ -165,19 +160,18 @@ class RPS(commands.Cog):
             if computer == "rock":
                 await msg.edit(
                     content=f"Congrats, you win!\n\nYou {ICONS_RPS['paper']} - {ICONS_RPS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "paper":
                 await msg.edit(
                     content=f"Well, we must be mind-readers!\n\nYou {ICONS_RPS['paper']} - {ICONS_RPS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             else:
                 await msg.edit(
                     content=f"Look at that, I win!\n\nYou {ICONS_RPS['paper']} - {ICONS_RPS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
-            global dead
             dead = True
 
         @on_click.matching_id("scissors", cancel_others=True)
@@ -186,19 +180,18 @@ class RPS(commands.Cog):
             if computer == "rock":
                 await msg.edit(
                     content=f"Look at that, I win!\n\nYou {ICONS_RPS['scissors']} - {ICONS_RPS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "paper":
                 await msg.edit(
                     content=f"Congrats, you win!\n\nYou {ICONS_RPS['scissors']} - {ICONS_RPS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             else:
                 await msg.edit(
                     content=f"Well, we must be mind-readers!\n\nYou {ICONS_RPS['scissors']} - {ICONS_RPS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
-            global dead
             dead = True
 
         @on_click.matching_id("rules", cancel_others=False, reset_timeout=True)
@@ -218,13 +211,12 @@ class RPS(commands.Cog):
         @on_click.matching_id("cancel", cancel_others=False)
         async def on_cancel(inter):
             await inter.reply(type=ResponseType.DeferredUpdateMessage)
-            await msg.edit(content="Very well, maybe later", components=None)
+            await msg.edit(content="Very well, maybe later", components=[])
 
         @on_click.timeout
         async def on_timeout():
-            global dead
             if not dead:
-                await msg.edit(content="Okay then, maybe later", components=None)
+                await msg.edit(content="Okay then, maybe later", components=[])
 
     @commands.command(name="rpsls")
     async def _rpsls(self, ctx):
@@ -288,11 +280,7 @@ class RPS(commands.Cog):
         on_click = msg.create_click_listener(timeout=60)
         dead = False
 
-        def is_not_author(inter):
-            # Note that this check must take only 1 arg
-            return inter.author != ctx.author
-
-        @on_click.matching_condition(is_not_author, cancel_others=True)
+        @on_click.not_from_user(ctx.author, cancel_others=True, reset_timeout=False)
         async def on_wrong_user(inter):
             # Reply with a hidden message
             await inter.reply(
@@ -306,29 +294,28 @@ class RPS(commands.Cog):
             if computer == "rock":
                 await msg.edit(
                     content=f"Well, we must be mind-readers!\n\nYou {ICONS_RPSLS['rock']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "paper":
                 await msg.edit(
                     content=f"Look at that, I win!\n\nYou {ICONS_RPSLS['rock']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "scissors":
                 await msg.edit(
                     content=f"Congrats, you win!\n\nYou {ICONS_RPSLS['rock']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "lizard":
                 await msg.edit(
                     content=f"Congrats, you win!\n\nYou {ICONS_RPSLS['rock']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             else:  # computer == 'spock'
                 await msg.edit(
                     content=f"Look at that, I win!\n\nYou {ICONS_RPSLS['rock']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
-            global dead
             dead = True
 
         @on_click.matching_id("paper", cancel_others=True)
@@ -337,29 +324,28 @@ class RPS(commands.Cog):
             if computer == "rock":
                 await msg.edit(
                     content=f"Congrats, you win!\n\nYou {ICONS_RPSLS['paper']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "paper":
                 await msg.edit(
                     content=f"Well, we must be mind-readers!\n\nYou {ICONS_RPSLS['paper']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "scissors":
                 await msg.edit(
                     content=f"Look at that, I win!\n\nYou {ICONS_RPSLS['paper']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "lizard":
                 await msg.edit(
                     content=f"Look at that, I win!\n\nYou {ICONS_RPSLS['paper']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             else:  # computer == 'spock'
                 await msg.edit(
                     content=f"Congrats, you win!\n\nYou {ICONS_RPSLS['paper']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
-            global dead
             dead = True
 
         @on_click.matching_id("scissors", cancel_others=True)
@@ -368,29 +354,28 @@ class RPS(commands.Cog):
             if computer == "rock":
                 await msg.edit(
                     content=f"Look at that, I win!\n\nYou {ICONS_RPSLS['scissors']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "paper":
                 await msg.edit(
                     content=f"Congrats, you win!\n\nYou {ICONS_RPSLS['scissors']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "scissors":
                 await msg.edit(
                     content=f"Well, we must be mind-readers!\n\nYou {ICONS_RPSLS['scissors']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "lizard":
                 await msg.edit(
                     content=f"Congrats, you win!\n\nYou {ICONS_RPSLS['scissors']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             else:  # computer == 'spock'
                 await msg.edit(
                     content=f"Look at that, I win!\n\nYou {ICONS_RPSLS['scissors']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
-            global dead
             dead = True
 
         @on_click.matching_id("lizard", cancel_others=True)
@@ -399,29 +384,28 @@ class RPS(commands.Cog):
             if computer == "rock":
                 await msg.edit(
                     content=f"Look at that, I win!\n\nYou {ICONS_RPSLS['lizard']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "paper":
                 await msg.edit(
                     content=f"Congrats, you win!\n\nYou {ICONS_RPSLS['lizard']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "scissors":
                 await msg.edit(
                     content=f"Look at that, I win!\n\nYou {ICONS_RPSLS['lizard']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "lizard":
                 await msg.edit(
                     content=f"Well, we must be mind-readers!\n\nYou {ICONS_RPSLS['lizard']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             else:  # computer == 'spock'
                 await msg.edit(
                     content=f"Congrats, you win!\n\nYou {ICONS_RPSLS['lizard']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
-            global dead
             dead = True
 
         @on_click.matching_id("spock", cancel_others=True)
@@ -430,29 +414,28 @@ class RPS(commands.Cog):
             if computer == "rock":
                 await msg.edit(
                     content=f"Congrats, you win!\n\nYou {ICONS_RPSLS['spock']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "paper":
                 await msg.edit(
                     content=f"Look at that, I win!\n\nYou {ICONS_RPSLS['spock']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "scissors":
                 await msg.edit(
                     content=f"Congrats, you win!\n\nYou {ICONS_RPSLS['spock']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             elif computer == "lizard":
                 await msg.edit(
                     content=f"Look at that, I win!\n\nYou {ICONS_RPSLS['spock']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
             else:  # computer == 'spock'
                 await msg.edit(
                     content=f"Well, we must be mind-readers!\n\nYou {ICONS_RPSLS['spock']} - {ICONS_RPSLS[computer]} Me",
-                    components=None,
+                    components=[],
                 )
-            global dead
             dead = True
 
         @on_click.matching_id("rules", cancel_others=False, reset_timeout=True)
@@ -474,13 +457,12 @@ class RPS(commands.Cog):
         @on_click.matching_id("cancel", cancel_others=False)
         async def on_cancel(inter):
             await inter.reply(type=ResponseType.DeferredUpdateMessage)
-            await msg.edit(content="Very well, maybe later", components=None)
+            await msg.edit(content="Very well, maybe later", components=[])
 
         @on_click.timeout
         async def on_timeout():
-            global dead
             if not dead:
-                await msg.edit(content="Okay then, maybe later", components=None)
+                await msg.edit(content="Okay then, maybe later", components=[])
 
     async def red_delete_data_for_user(self, *, requester: RequestType, user_id: int) -> None:
         # this cog does not store any user data

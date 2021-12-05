@@ -2,7 +2,7 @@ import json
 from asyncio import create_task
 from pathlib import Path
 
-from dislash.slash_commands import SlashClient
+from dislash import InteractionClient
 
 from .rps import RPS
 
@@ -29,7 +29,7 @@ async def setup_after_ready(bot):
 
     bot.add_cog(cog)
     if not hasattr(bot, "slash"):
-        bot.slash = SlashClient(bot)
+        bot.slash = InteractionClient(bot)
 
 
 def teardown(bot):

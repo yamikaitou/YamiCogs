@@ -9,7 +9,7 @@
     ],
     "required_cogs": {},
     "requirements": [
-        "dislash.py>=1.0.17"
+        "dislash.py>=1.4.9"
     ],
     "tags": [
         "game",
