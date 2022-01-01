@@ -95,7 +95,7 @@ class PayDay(commands.Cog):
         "day": 24,
         "week": 168,
         "month": 720,
-        "quarter": 2928,
+        "quarter": 2184,
         "year": 8760,
     }
 
