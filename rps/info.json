@@ -20,6 +20,7 @@
         "buttons"
     ],
     "min_bot_version": "3.4.0",
+    "max_bot_version": "3.4.26",
     "hidden": false,
     "disabled": false,
     "type": "COG"
