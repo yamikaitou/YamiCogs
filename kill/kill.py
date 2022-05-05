@@ -151,6 +151,19 @@ class Kill(commands.Cog):
             .replace("{victim2}", "*" + user.display_name + "*")
         )
 
+    @commands.command()
+    async def suicide(self, ctx):
+        """
+        Commit suicide
+        """
+
+        msg = await self.config.guild(ctx.guild).selfkill()
+        await ctx.send(
+            msg.replace("{killer}", ctx.author.mention).replace(
+                "{killer2}", "*" + ctx.author.display_name + "*"
+            )
+        )
+
     async def red_get_data_for_user(self, *, user_id: int):
         # this cog does not store any data
         return {}
