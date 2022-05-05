@@ -10,6 +10,7 @@
         "tabulate"
     ],
     "min_bot_version": "3.4.0",
+    "max_bot_version": "3.4.26",
     "end_user_data_statement": "This cog does not persistently store data or metadata about users.",
     "hidden": true,
     "disabled": true,

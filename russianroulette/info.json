@@ -8,6 +8,7 @@
         "game"
     ],
     "min_bot_version": "3.4.0",
+    "max_bot_version": "3.4.26",
     "end_user_data_statement": "This cog does not persistently store end user data. This cog does store Discord UserIDs as needed for operation.",
     "install_msg": "This cog intentionally conflicts with RedJumpman's russianroulette cog. This cog largely implements the functions of his cog and adds another game mode to it",
     "hidden": true,
