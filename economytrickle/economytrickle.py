@@ -1,5 +1,6 @@
 import logging
 import math
+from typing import Union
 
 import discord
 from discord.ext import tasks
@@ -42,12 +43,13 @@ class EconomyTrickle(commands.Cog):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=582650109, force_registration=True)
 
-        default_config = {"credits": 0, "messages": 0, "blocklist": []}
+        default_config = {"credits": 0, "messages": 0, "voice": 0, "blocklist": []}
 
         self.config.register_global(**default_config)
         self.config.register_guild(**default_config)
 
-        self.msg = {}
+        self.message = {}
+        self.voice = {}
         self.trickle.start()  # pylint:disable=no-member
 
     async def initialize(self):
@@ -75,19 +77,85 @@ class EconomyTrickle(commands.Cog):
         if await bank.is_global():
             try:
                 log.debug(f"Found message from {message.author.id}")
-                self.msg[message.author.id].append(message.id)
+                self.message[message.author.id].append(message.id)
             except KeyError:
-                self.msg[message.author.id] = [message.id]
+                self.message[message.author.id] = [message.id]
         else:
             try:
                 log.debug(f"Found message from {message.author.id} in {message.guild.id}")
-                self.msg[message.guild.id]
+                self.message[message.guild.id]
                 try:
-                    self.msg[message.guild.id][message.author.id].append(message.id)
+                    self.message[message.guild.id][message.author.id].append(message.id)
                 except KeyError:
-                    self.msg[message.guild.id][message.author.id] = [message.id]
+                    self.message[message.guild.id][message.author.id] = [message.id]
             except KeyError:
-                self.msg[message.guild.id] = {message.author.id: [message.id]}
+                self.message[message.guild.id] = {message.author.id: [message.id]}
+
+    @commands.Cog.listener()
+    async def on_voice_state_update(self, member, before, after):
+
+        if member.bot:
+            return
+        if await self.bot.cog_disabled_in_guild(self, member.guild):
+            return
+
+        if before.channel is None and after.channel is not None:
+            if after.channel.id in self.blocklist:
+                log.debug(
+                    f"Found voice state join from {member.id} in a blocked channel {member.guild.id}-{after.channel.id}"
+                )
+                return
+
+            if await bank.is_global():
+                log.debug(f"Found voice join from {member.id}")
+                self.voice[member.id] = 1
+            else:
+                try:
+                    log.debug(f"Found voice join from {member.id} in {member.guild.id}")
+                    self.voice[member.guild.id][member.id] = 1
+                except KeyError:
+                    self.voice[member.guild.id] = {member.id: 1}
+
+        elif after.channel is None and before.channel is not None:
+            if before.channel.id in self.blocklist:
+                log.debug(
+                    f"Found voice state leave from {member.id} in a blocked channel {member.guild.id}-{after.channel.id}"
+                )
+                return
+
+            if await bank.is_global():
+                log.debug(f"Found voice leave from {member.id}")
+                self.voice[member.id] = 0
+            else:
+                try:
+                    log.debug(f"Found voice leave from {member.id} in {member.guild.id}")
+                    self.voice[member.guild.id][member.id] = 0
+                except KeyError:
+                    self.voice[member.guild.id] = {member.id: 0}
+
+        elif before.channel is not after.channel:
+            if after.channel.id in self.blocklist:
+                log.debug(
+                    f"Found voice state change from {member.id} in a blocked channel {member.guild.id}-{after.channel.id}"
+                )
+                if await bank.is_global():
+                    self.voice[member.id] = 0
+                else:
+                    try:
+                        self.voice[member.guild.id][member.id] = 0
+                    except KeyError:
+                        self.voice[member.guild.id] = {member.id: 0}
+                return
+            elif before.channel.id in self.blocklist:
+                if await bank.is_global():
+                    log.debug(f"Found voice change from {member.id}")
+                    self.voice[member.id] = 1
+                else:
+                    try:
+                        log.debug(f"Found voice change from {member.id} in {member.guild.id}")
+                        self.voice[member.guild.id][member.id] = 1
+                    except KeyError:
+                        self.voice[member.guild.id] = {member.id: 1}
 
     @tasks.loop(minutes=1)
     async def trickle(self):
@@ -99,7 +167,7 @@ class EconomyTrickle(commands.Cog):
             self.bank = await bank.is_global()
 
         if await bank.is_global():
-            msgs = self.msg
+            msgs = self.message
             cache = await self.config.all()
 
             if cache["messages"] != 0 and cache["credits"] != 0:
@@ -107,13 +175,24 @@ class EconomyTrickle(commands.Cog):
                     if len(msg) >= cache["messages"]:
                         num = math.floor(len(msg) / cache["messages"])
                         log.debug(f"Processing {num} messages for {user}")
-                        del (self.msg[user])[0 : (num * cache["messages"])]
+                        del (self.message[user])[0 : (num * cache["messages"])]
                         await bank.deposit_credits(
                             (await self.bot.get_or_fetch_user(user)),
                             num * cache["credits"],
                         )
+
+            voice = self.voice
+            if cache["voice"] != 0:
+                for user, yes in voice.items():
+                    if yes:
+                        log.debug(f"Processing voice for {user}")
+                        await bank.deposit_credits(
+                            (await self.bot.get_or_fetch_user(user)),
+                            cache["voice"],
+                        )
+
         else:
-            msgs = self.msg
+            msgs = self.message
             for guild, users in msgs.items():
                 if not await self.bot.cog_disabled_in_guild(self, self.bot.get_guild(guild)):
                     cache = await self.config.guild_from_id(guild).all()
@@ -123,7 +202,7 @@ class EconomyTrickle(commands.Cog):
                             if len(msg) >= cache["messages"]:
                                 num = math.floor(len(msg) / cache["messages"])
                                 log.debug(f"Processing {num} messages for {user} in {guild}")
-                                del (self.msg[guild][user])[0 : (num * cache["messages"])]
+                                del (self.message[guild][user])[0 : (num * cache["messages"])]
                                 await bank.deposit_credits(
                                     (
                                         await self.bot.get_or_fetch_member(
@@ -131,6 +210,23 @@ class EconomyTrickle(commands.Cog):
                                         )
                                     ),
                                     num * cache["credits"],
+                                )
+
+            voice = self.voice
+            for guild, users in voice.items():
+                if not await self.bot.cog_disabled_in_guild(self, self.bot.get_guild(guild)):
+                    cache = await self.config.guild_from_id(guild).all()
+                    if cache["voice"] != 0:
+                        for user, yes in users.items():
+                            if yes:
+                                log.debug(f"Processing voice for {user} in {guild}")
+                                await bank.deposit_credits(
+                                    (
+                                        await self.bot.get_or_fetch_member(
+                                            self.bot.get_guild(guild), user
+                                        )
+                                    ),
+                                    cache["voice"],
                                 )
 
     @trickle.before_loop
@@ -151,11 +247,15 @@ class EconomyTrickle(commands.Cog):
 
         if await bank.is_global():
             cache = await self.config.all()
-            await ctx.send(f"Credits: {cache['credits']}\nMessages: {cache['messages']}")
+            await ctx.send(
+                f"Message Credits: {cache['credits']}\nMessage Count: {cache['messages']}\nVoice Credits: {cache['voice']}"
+            )
         else:
             if ctx.guild is not None:
                 cache = await self.config.guild(ctx.guild).all()
-                await ctx.send(f"Credits: {cache['credits']}\nMessages: {cache['messages']}")
+                await ctx.send(
+                    f"Message Credits: {cache['credits']}\nMessage Count: {cache['messages']}\nVoice Credits: {cache['voice']}"
+                )
             else:
                 await ctx.send(
                     "Your bank is set to per-server. Please try this command in a server instead"
@@ -231,10 +331,47 @@ class EconomyTrickle(commands.Cog):
                     "Your bank is set to per-server. Please try this command in a server instead"
                 )
 
+    @is_owner_if_bank_global()
+    @commands.admin_or_permissions(manage_guild=True)
+    @economytrickle.command(name="voice")
+    async def ts_voice(self, ctx, number: int):
+        """
+        Set the number of credits to grant every minute
+
+        Set the number to 0 to disable
+        Max value is 1000
+        """
+
+        if await bank.is_global():
+            if 0 <= number <= 1000:
+                await self.config.voice.set(number)
+                if not await ctx.tick():
+                    await ctx.send("Setting saved")
+            else:
+                await ctx.send(
+                    f"You must specify a value that is not less than 0 and not more than 1000"
+                )
+        else:
+            if ctx.guild is not None:
+                if 0 <= number <= 1000:
+                    await self.config.guild(ctx.guild).voice.set(number)
+                    if not await ctx.tick():
+                        await ctx.send("Setting saved")
+                else:
+                    await ctx.send(
+                        f"You must specify a value that is not less than 0 and not more than 1000"
+                    )
+            else:
+                await ctx.send(
+                    "Your bank is set to per-server. Please try this command in a server instead"
+                )
+
     @commands.guild_only()
     @commands.admin_or_permissions(manage_guild=True)
     @economytrickle.command(name="blocklist", aliases=["blacklist"])
-    async def ts_blocklist(self, ctx, channel: discord.TextChannel = None):
+    async def ts_blocklist(
+        self, ctx, channel: Union[discord.TextChannel, discord.VoiceChannel] = None
+    ):
         """
         Add/Remove the current channel (or a specific channel) to the blocklist
 

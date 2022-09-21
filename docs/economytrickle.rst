@@ -119,6 +119,32 @@ credits
 | Set the number to 0 to disable
 | Max value is 1000
 
+.. _economytrickle-command-economytrickle-voice:
+
+"""""""
+voice
+"""""""
+
+| **Permissions**
+|
+| *User* -
+| Global Bank - Bot Owner
+| Local Bank - Bot Admin or Manage Guild
+|
+| **Syntax**
+|
+.. code-block:: none
+
+    [p]economytrickle voice <number>
+|
+| **Description**
+|
+| Set the number of credits to grant every minute if the user is connected to a voice channel
+| Note, a user must change their voice state in order to be tracked
+|
+| Set the number to 0 to disable
+| Max value is 1000
+
 .. _economytrickle-command-economytrickle-blocklist:
 
 """""""""
