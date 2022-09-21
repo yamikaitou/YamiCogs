@@ -29,7 +29,7 @@ async def setup_after_ready(bot):
 
     bot.add_cog(cog)
     if not hasattr(bot, "slash"):
-        bot.slash = InteractionClient(bot)
+        bot.slash = InteractionClient(bot, sync_commands=False)
 
 
 def teardown(bot):
