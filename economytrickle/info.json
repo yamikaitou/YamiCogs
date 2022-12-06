@@ -1,5 +1,7 @@
 {
-    "author": ["YamiKaitou#8975"],
+    "author": [
+        "YamiKaitou#8975"
+    ],
     "name": "EconomyTrickle",
     "short": "Trickle credits into your economy",
     "description": "Automatically trickle some credits into your bot's economy",
@@ -7,8 +9,7 @@
         "economy",
         "trickle"
     ],
-    "min_bot_version": "3.4.0",
-    "max_bot_version": "3.4.26",
+    "min_bot_version": "3.5.0.dev276",
     "end_user_data_statement": "This cog does not persistently store end user data.",
     "hidden": false,
     "disabled": false,
