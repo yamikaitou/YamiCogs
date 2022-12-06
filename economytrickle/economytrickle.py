@@ -50,13 +50,14 @@ class EconomyTrickle(commands.Cog):
 
         self.message = {}
         self.voice = {}
-        self.trickle.start()  # pylint:disable=no-member
 
-    async def initialize(self):
+    async def cog_load(self):
         self.bank = await bank.is_global()
         self.blocklist = await self.config.blocklist()
+        
+        self.trickle.start()  # pylint:disable=no-member
 
-    def cog_unload(self):
+    async def cog_unload(self):
         self.trickle.cancel()  # pylint:disable=no-member
 
     @commands.Cog.listener()
