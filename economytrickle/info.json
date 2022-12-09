@@ -9,7 +9,8 @@
         "economy",
         "trickle"
     ],
-    "min_bot_version": "3.5.0.dev276",
+    "min_bot_version": "3.4.0",
+    "max_bot_version": "3.4.26",
     "end_user_data_statement": "This cog does not persistently store end user data.",
     "hidden": false,
     "disabled": false,
