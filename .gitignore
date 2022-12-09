@@ -141,3 +141,4 @@ pogo/*
 devbot/__init__.py
 devbot/devbot.py
 devbot/info.json
+.devcontainer/devcontainer.json

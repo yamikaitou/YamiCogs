@@ -1,6 +1,6 @@
 # thanks zeph
 # thanks flare
-PYTHON ?= .venv/bin/python3.8
+PYTHON ?= python3.9
 DIFF := $(shell git diff --name-only --staged "*.py" "*.pyi")
 ifeq ($(DIFF),)
 	DIFF := $(shell git ls-files "*.py" "*.pyi")
@@ -19,7 +19,7 @@ reformat:
 reformatblack:
 	$(PYTHON) -m black $(DIFF)
 update:
-	$(PYTHON) -m pip install -U pip wheel setuptools autoflake isort black flake8 pre-commit cookiecutter Red-Discordbot
+	$(PYTHON) -m pip install -U pip wheel setuptools autoflake isort black flake8 pre-commit cookiecutter git+https://github.com/Cog-Creators/Red-DiscordBot@V3/develop#egg=Red-DiscordBot
 run:
 	$(PYTHON) -O -m redbot yamicogs --dev --debug --disable-intent presences
 new:
