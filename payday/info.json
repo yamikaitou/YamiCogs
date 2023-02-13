@@ -7,7 +7,8 @@
         "utility",
         "economy",
         "daily",
-        "payday"
+        "payday",
+        "freecredits"
     ],
     "requirements": [
         "tabulate"
