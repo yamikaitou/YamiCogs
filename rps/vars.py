@@ -6,10 +6,12 @@ class Result(str, Enum):
     WIN = "Congrats, you win!"
     TIE = "Well, we must be mind-readers!"
 
+
 class RPSChoice(Enum):
     ROCK = 1
     PAPER = 2
     SCISSORS = 3
+
 
 class RPSLSChoice(Enum):
     ROCK = 1
@@ -18,14 +20,16 @@ class RPSLSChoice(Enum):
     LIZARD = 4
     SPOCK = 5
 
+
 class RPSIcon(str, Enum):
     ROCK = "\U0001faa8"
-    PAPER = "\N{NEWSPAPER}",
+    PAPER = ("\N{NEWSPAPER}",)
     SCISSORS = "\N{BLACK SCISSORS}\N{VARIATION SELECTOR-16}"
+
 
 class RPSLSIcon(str, Enum):
     ROCK = "\U0001faa8"
-    PAPER = "\N{NEWSPAPER}",
+    PAPER = ("\N{NEWSPAPER}",)
     SCISSORS = "\N{BLACK SCISSORS}\N{VARIATION SELECTOR-16}"
     LIZARD = "\N{LIZARD}"
     SPOCK = "\N{RAISED HAND WITH PART BETWEEN MIDDLE AND RING FINGERS}"

@@ -1,5 +1,7 @@
-import discord
 import random
+
+import discord
+
 from .vars import Result, RPSChoice, RPSIcon
 
 
@@ -10,7 +12,7 @@ class RPSView(discord.ui.View):
         self.user = user
         self.value = None
         self.computer = random.choice(list(RPSChoice))
-    
+
     @discord.ui.button(
         label="Rock",
         style=discord.ButtonStyle.blurple,
@@ -20,7 +22,11 @@ class RPSView(discord.ui.View):
     )
     async def rpsrock(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(content=f"{self._check(RPSChoice.ROCK)}\n\nYou {RPSIcon.ROCK} - {RPSIcon[self.computer.name]} Me", embed=None, view=None)
+        await interaction.message.edit(
+            content=f"{self._check(RPSChoice.ROCK)}\n\nYou {RPSIcon.ROCK} - {RPSIcon[self.computer.name]} Me",
+            embed=None,
+            view=None,
+        )
         self.value = True
 
     @discord.ui.button(
@@ -32,7 +38,11 @@ class RPSView(discord.ui.View):
     )
     async def rpspaper(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(content=f"{self._check(RPSChoice.PAPER)}\n\nYou {RPSIcon.PAPER} - {RPSIcon[self.computer.name]} Me", embed=None, view=None)
+        await interaction.message.edit(
+            content=f"{self._check(RPSChoice.PAPER)}\n\nYou {RPSIcon.PAPER} - {RPSIcon[self.computer.name]} Me",
+            embed=None,
+            view=None,
+        )
         self.value = True
 
     @discord.ui.button(
@@ -44,7 +54,11 @@ class RPSView(discord.ui.View):
     )
     async def rpsscissors(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(content=f"{self._check(RPSChoice.SCISSORS)}\n\nYou {RPSIcon.SCISSORS} - {RPSIcon[self.computer.name]} Me", embed=None, view=None)
+        await interaction.message.edit(
+            content=f"{self._check(RPSChoice.SCISSORS)}\n\nYou {RPSIcon.SCISSORS} - {RPSIcon[self.computer.name]} Me",
+            embed=None,
+            view=None,
+        )
         self.value = True
 
     @discord.ui.button(
@@ -82,7 +96,7 @@ class RPSView(discord.ui.View):
 
     async def interaction_check(self, interaction: discord.Interaction, /) -> bool:
         return self.user == interaction.user.id
-    
+
     def _check(self, choice) -> str:
         if self.computer == choice:
             return Result.TIE
@@ -101,4 +115,3 @@ class RPSView(discord.ui.View):
                 return Result.LOSE
             else:
                 return Result.WIN
-        

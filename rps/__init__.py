@@ -12,9 +12,9 @@ old_rps = None
 # Thanks flare
 
 
-
 async def setup(bot):
     create_task(setup_after_ready(bot))
+
 
 async def setup_after_ready(bot):
     global old_rps

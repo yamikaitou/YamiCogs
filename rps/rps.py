@@ -1,10 +1,11 @@
 import logging
+
 import discord
 from redbot.core import commands
 from redbot.core.bot import Red
 
-from .rpsview import RPSView
 from .rpslsview import RPSLSView
+from .rpsview import RPSView
 
 log = logging.getLogger("red.yamicogs.rps")
 
@@ -59,7 +60,7 @@ class RPS(commands.Cog):
     @commands.command(name="rps")
     async def _rps(self, ctx):
         """Play a game of Rock, Paper, Scissors"""
-        
+
         view = RPSView(self, ctx.author.id)
         await ctx.send(view=view)
 
@@ -70,7 +71,7 @@ class RPS(commands.Cog):
     @commands.command(name="rpsls")
     async def _rpsls(self, ctx):
         """Play a game of Rock, Paper, Scissors, Lizard, Spock"""
-        
+
         view = RPSLSView(self, ctx.author.id)
         await ctx.send(view=view)
 

@@ -1,5 +1,7 @@
-import discord
 import random
+
+import discord
+
 from .vars import Result, RPSLSChoice, RPSLSIcon
 
 
@@ -10,7 +12,7 @@ class RPSLSView(discord.ui.View):
         self.user = user
         self.value = None
         self.computer = random.choice(list(RPSLSChoice))
-    
+
     @discord.ui.button(
         label="Rock",
         style=discord.ButtonStyle.blurple,
@@ -20,7 +22,11 @@ class RPSLSView(discord.ui.View):
     )
     async def rpslsrock(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(content=f"{self._check(RPSLSChoice.ROCK)}\n\nYou {RPSLSIcon.ROCK} - {RPSLSIcon[self.computer.name]} Me", embed=None, view=None)
+        await interaction.message.edit(
+            content=f"{self._check(RPSLSChoice.ROCK)}\n\nYou {RPSLSIcon.ROCK} - {RPSLSIcon[self.computer.name]} Me",
+            embed=None,
+            view=None,
+        )
         self.value = True
 
     @discord.ui.button(
@@ -32,7 +38,11 @@ class RPSLSView(discord.ui.View):
     )
     async def rpslspaper(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(content=f"{self._check(RPSLSChoice.PAPER)}\n\nYou {RPSLSIcon.PAPER} - {RPSLSIcon[self.computer.name]} Me", embed=None, view=None)
+        await interaction.message.edit(
+            content=f"{self._check(RPSLSChoice.PAPER)}\n\nYou {RPSLSIcon.PAPER} - {RPSLSIcon[self.computer.name]} Me",
+            embed=None,
+            view=None,
+        )
         self.value = True
 
     @discord.ui.button(
@@ -44,7 +54,11 @@ class RPSLSView(discord.ui.View):
     )
     async def rpslsscissors(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(content=f"{self._check(RPSLSChoice.SCISSORS)}\n\nYou {RPSLSIcon.SCISSORS} - {RPSLSIcon[self.computer.name]} Me", embed=None, view=None)
+        await interaction.message.edit(
+            content=f"{self._check(RPSLSChoice.SCISSORS)}\n\nYou {RPSLSIcon.SCISSORS} - {RPSLSIcon[self.computer.name]} Me",
+            embed=None,
+            view=None,
+        )
         self.value = True
 
     @discord.ui.button(
@@ -56,7 +70,11 @@ class RPSLSView(discord.ui.View):
     )
     async def rpslslizard(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(content=f"{self._check(RPSLSChoice.LIZARD)}\n\nYou {RPSLSIcon.LIZARD} - {RPSLSIcon[self.computer.name]} Me", embed=None, view=None)
+        await interaction.message.edit(
+            content=f"{self._check(RPSLSChoice.LIZARD)}\n\nYou {RPSLSIcon.LIZARD} - {RPSLSIcon[self.computer.name]} Me",
+            embed=None,
+            view=None,
+        )
         self.value = True
 
     @discord.ui.button(
@@ -68,7 +86,11 @@ class RPSLSView(discord.ui.View):
     )
     async def rpslsspock(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(content=f"{self._check(RPSLSChoice.SPOCK)}\n\nYou {RPSLSIcon.SPOCK} - {RPSLSIcon[self.computer.name]} Me", embed=None, view=None)
+        await interaction.message.edit(
+            content=f"{self._check(RPSLSChoice.SPOCK)}\n\nYou {RPSLSIcon.SPOCK} - {RPSLSIcon[self.computer.name]} Me",
+            embed=None,
+            view=None,
+        )
         self.value = True
 
     @discord.ui.button(
@@ -98,17 +120,17 @@ class RPSLSView(discord.ui.View):
         embed.description = (
             f"A game of skill (chance).\n"
             f"Simply select your choice and see if you can defeat the computer\n\n\n"
-                f"Rock {RPSLSIcon.ROCK} beats Scissors {RPSLSIcon.SCISSORS} and Lizard {RPSLSIcon.LIZARD}\n"
-                f"Paper {RPSLSIcon.PAPER} beats Rock {RPSLSIcon.ROCK} and Spock {RPSLSIcon.SPOCK}\n"
-                f"Scissors {RPSLSIcon.SCISSORS} beats Paper {RPSLSIcon.PAPER} and Lizard {RPSLSIcon.LIZARD}\n"
-                f"Lizard {RPSLSIcon.LIZARD} beats Paper {RPSLSIcon.PAPER} and Spock {RPSLSIcon.SPOCK}\n"
-                f"Spock {RPSLSIcon.SPOCK} beats Rock {RPSLSIcon.ROCK} and Scissors {RPSLSIcon.SCISSORS}\n"
+            f"Rock {RPSLSIcon.ROCK} beats Scissors {RPSLSIcon.SCISSORS} and Lizard {RPSLSIcon.LIZARD}\n"
+            f"Paper {RPSLSIcon.PAPER} beats Rock {RPSLSIcon.ROCK} and Spock {RPSLSIcon.SPOCK}\n"
+            f"Scissors {RPSLSIcon.SCISSORS} beats Paper {RPSLSIcon.PAPER} and Lizard {RPSLSIcon.LIZARD}\n"
+            f"Lizard {RPSLSIcon.LIZARD} beats Paper {RPSLSIcon.PAPER} and Spock {RPSLSIcon.SPOCK}\n"
+            f"Spock {RPSLSIcon.SPOCK} beats Rock {RPSLSIcon.ROCK} and Scissors {RPSLSIcon.SCISSORS}\n"
         )
         await interaction.followup.send(embed=embed, ephemeral=True)
 
     async def interaction_check(self, interaction: discord.Interaction, /) -> bool:
         return self.user == interaction.user.id
-    
+
     def _check(self, choice) -> str:
         if self.computer == choice:
             return Result.TIE
@@ -137,4 +159,3 @@ class RPSLSView(discord.ui.View):
                 return Result.LOSE
             else:
                 return Result.WIN
-        
