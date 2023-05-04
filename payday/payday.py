@@ -356,7 +356,6 @@ class PayDay(commands.Cog):
             log.debug("grant_award returned no results")
 
     async def grant_award(self, ctx, option, deposit=True):
-
         if await bank.is_global():
             free = await self.config.get_raw(option)
             streak = await self.config.streaks.get_raw(option)

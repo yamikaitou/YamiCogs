@@ -10,6 +10,7 @@ from tabulate import tabulate  # pylint:disable=import-error
 
 log = logging.getLogger("red.yamicogs.economytrickle")
 
+
 # taken from Red-Discordbot bank.py
 def is_owner_if_bank_global():
     """
@@ -50,18 +51,18 @@ class EconomyTrickle(commands.Cog):
 
         self.message = {}
         self.voice = {}
-        self.trickle.start()  # pylint:disable=no-member
 
-    async def initialize(self):
+    async def cog_load(self):
         self.bank = await bank.is_global()
         self.blocklist = await self.config.blocklist()
 
-    def cog_unload(self):
+        self.trickle.start()  # pylint:disable=no-member
+
+    async def cog_unload(self):
         self.trickle.cancel()  # pylint:disable=no-member
 
     @commands.Cog.listener()
     async def on_message_without_command(self, message):
-
         if message.author.bot:
             return
         if message.guild == None:
@@ -93,7 +94,6 @@ class EconomyTrickle(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-
         if member.bot:
             return
         if await self.bot.cog_disabled_in_guild(self, member.guild):

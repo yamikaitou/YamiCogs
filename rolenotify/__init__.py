@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from redbot.core.bot import Red
+from redbot.core.errors import CogLoadError
 
 from .rolenotify import RoleNotify
 
@@ -11,6 +12,6 @@ with open(Path(__file__).parent / "info.json") as fp:
 
 async def setup(bot: Red) -> None:
     if bot.intents.members:
-        bot.add_cog(RoleNotify(bot))
+        await bot.add_cog(RoleNotify(bot))
     else:
-        raise redbot.core.errors.CogLoadError("This cog requires the Members Intent to be enabled")
+        raise CogLoadError("This cog requires the Members Intent to be enabled")
