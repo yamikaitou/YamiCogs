@@ -12,7 +12,7 @@
     "requirements": [
         "tabulate"
     ],
-    "min_bot_version": "3.5.0.dev276",
+    "min_bot_version": "3.5.0",
     "end_user_data_statement": "This cog does not persistently store end user data.",
     "hidden": false,
     "disabled": false,

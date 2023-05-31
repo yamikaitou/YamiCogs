@@ -16,7 +16,7 @@
         "fun",
         "buttons"
     ],
-    "min_bot_version": "3.5.0.dev276",
+    "min_bot_version": "3.5.0",
     "hidden": false,
     "disabled": false,
     "type": "COG"

@@ -109,7 +109,6 @@ class Slots(commands.Cog):
             error.append(errors.MachineMissingReels("Required Option is missing (icons)"))
         else:
             for k, v in machine["icons"].items():
-
                 if "name" not in v:
                     error.append(errors.ReelSlotMissingName(f"Icon is missing a name ({k})"))
 
@@ -124,7 +123,6 @@ class Slots(commands.Cog):
         return error
 
     async def _load_machine(self, source, filename):
-
         if source == "local":
             machine = yaml.safe_load(open(data_manager.bundled_data_path(self) / filename))
         else:
@@ -201,7 +199,6 @@ class Slots(commands.Cog):
             await self._slots_play(ctx, machine, msg)
 
     async def _slots_play(self, ctx, machine, msg):
-
         embed = discord.Embed()
         embed.title = "Slot Machine - " + machine["name"]
         embed.description = "Lets spin those reels"
