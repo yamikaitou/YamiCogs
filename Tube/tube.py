@@ -163,7 +163,7 @@ class Tube(commands.Cog):
         for i, sub in enumerate(subs):
             if sub["id"] == channelYouTube:
                 found = True
-                subs[i]["mention"] = rolemention.id
+                subs[i]["mention"] = rolemention.id if rolemention is not None else rolemention
         if not found:
             await ctx.send("Subscription not found")
             return
