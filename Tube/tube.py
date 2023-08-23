@@ -11,9 +11,12 @@ import discord
 import feedparser
 from discord.ext import tasks
 from redbot.core import Config, bot, checks, commands
+from redbot.core.data_manager import cog_data_path
 from redbot.core.utils.chat_formatting import pagify
+from redbot.logging import RotatingFileHandler
 
 log = logging.getLogger("red.cbd-cogs.tube")
+debugger = logging.getLogger("red.yamicogs.tube.debugger")
 
 __all__ = ["UNIQUE_ID", "Tube"]
 
@@ -38,8 +41,24 @@ class Tube(commands.Cog):
         self.bot = bot
         self.conf = Config.get_conf(self, identifier=UNIQUE_ID, force_registration=True)
         self.conf.register_guild(subscriptions=[], cache=[])
-        self.conf.register_global(interval=300, cache_size=500)
+        self.conf.register_global(interval=300, cache_size=500, debugger=False)
         self.background_get_new_videos.start()
+
+        # Thanks Laggron and AAA3A
+        formatter = logging.Formatter(
+            "[{asctime}] [{levelname}]: {message}", datefmt="%Y-%m-%d %H:%M:%S", style="{"
+        )
+        file_handler = RotatingFileHandler(
+            stem="tube",
+            directory=cog_data_path(self),
+            maxBytes=1_000_000,
+            backupCount=8,
+            encoding="utf-8",
+        )
+        file_handler.setLevel(logging.DEBUG)
+        file_handler.setFormatter(formatter)
+        debugger.addHandler(file_handler)
+        self.debug = False
 
     @commands.group()
     async def tube(self, ctx: commands.Context):
@@ -97,6 +116,7 @@ class Tube(commands.Cog):
         subs.append(newSub)
         await self.conf.guild(ctx.guild).subscriptions.set(subs)
         await ctx.send(f"Subscription added: {newSub}")
+        self.debug_info(f"Subscription added: {newSub}")
 
     @checks.admin_or_permissions(manage_guild=True)
     @commands.guild_only()
@@ -126,6 +146,7 @@ class Tube(commands.Cog):
             return
         await self.conf.guild(ctx.guild).subscriptions.set(subs)
         await ctx.send(f"Subscription(s) removed: {unsubbed}")
+        self.debug_info(f"Subscription(s) removed: {unsubbed}")
 
     @checks.admin_or_permissions(manage_guild=True)
     @commands.guild_only()
@@ -279,18 +300,23 @@ class Tube(commands.Cog):
             publish = sub.get("publish", False)
             channel_id = sub["channel"]["id"]
             channel = self.bot.get_channel(int(channel_id))
+            self.debug_info(
+                f"Processing {sub['name']} ({sub['id']}) for {sub['channel']['name']} ({sub['channel']['id']})"
+            )
             if not channel:
                 if not self.has_warned_about_invalid_channels:
-                    log.warn(f"Invalid channel in subscription: {channel_id}")
+                    self.log_warn(f"Invalid channel in subscription: {channel_id}")
                 continue
             if not channel.permissions_for(guild.me).send_messages:
-                log.warn(f"Not allowed to post subscription to: {channel_id}")
+                self.log_warn(f"Not allowed to post subscription to: {channel_id}")
                 continue
             if not sub["id"] in cache.keys():
                 try:
                     cache[sub["id"]] = feedparser.parse(await self.get_feed(sub["id"]))
                 except Exception as e:
-                    log.exception(f"Error parsing feed for {sub.get('name', '')} ({sub['id']})")
+                    self.log_exception(
+                        f"Error parsing feed for {sub.get('name', '')} ({sub['id']})"
+                    )
                     continue
             last_video_time = datetime.datetime.fromtimestamp(
                 time.mktime(
@@ -299,6 +325,7 @@ class Tube(commands.Cog):
                     )
                 )
             )
+            self.debug_debug("Last Video: " + last_video_time.strftime("%Y-%m-%d %H:%M:%S"))
             for entry in cache[sub["id"]]["entries"][::-1]:
                 published = datetime.datetime.fromtimestamp(
                     time.mktime(entry.get("published_parsed", TIME_TUPLE))
@@ -309,6 +336,20 @@ class Tube(commands.Cog):
                 if (published > last_video_time and not entry["yt_videoid"] in history) or (
                     demo and published > last_video_time - datetime.timedelta(seconds=1)
                 ):
+                    logmsg = f"Eligible Video Found {entry['yt_videoid']}"
+                    logmsg = logmsg + "\npublished: " + entry.get("published")
+                    logmsg = (
+                        logmsg + "\npublished_parsed: " + published.strftime("%Y-%m-%d %H:%M:%S")
+                    )
+                    logmsg = logmsg + "\nupdated: " + entry.get("published")
+                    logmsg = (
+                        logmsg
+                        + "\nupdated_parsed: "
+                        + datetime.datetime.fromtimestamp(
+                            time.mktime(entry.get("updated_parsed", TIME_TUPLE))
+                        ).strftime("%Y-%m-%d %H:%M:%S")
+                    )
+                    logmsg = logmsg + "\nConfig previous:" + subs[i]["previous"]
                     altered = True
                     subs[i]["previous"] = entry["published"]
                     new_history.append(entry["yt_videoid"])
@@ -341,6 +382,7 @@ class Tube(commands.Cog):
                     else:
                         mentions = discord.AllowedMentions()
 
+                    self.debug_debug(logmsg)
                     message = await channel.send(content=description, allowed_mentions=mentions)
                     if publish:
                         await message.publish()
@@ -378,7 +420,7 @@ class Tube(commands.Cog):
             async with session.get(url) as response:
                 return await response.read()
         except aiohttp.client_exceptions.ClientConnectionError as e:
-            log.exception(f"Fetch failed for url {url}: ", exc_info=e)
+            await log_exception(f"Fetch failed for url {url}: ", exc_info=e)
             return None
 
     async def get_feed(self, channel):
@@ -396,6 +438,7 @@ class Tube(commands.Cog):
     async def background_get_new_videos(self):
         fetched = {}
         cache_size = await self.conf.cache_size()
+        self.debug_info("Fetching new videos")
         for guild in self.bot.guilds:
             update = await self._get_new_videos(guild, fetched)
             if not update:
@@ -410,3 +453,95 @@ class Tube(commands.Cog):
         await self.bot.wait_until_red_ready()
         interval = await self.conf.interval()
         self.background_get_new_videos.change_interval(seconds=interval)
+
+    @tube.command(name="debugger", hidden=True)
+    @commands.is_owner()
+    async def _tube_debugger(self, ctx, value: bool = None):
+        """Enable the feed debugger"""
+        current = await self.conf.debugger()
+        if value is None:
+            await ctx.send(f"Current Setting: {current}\nLogging to {(cog_data_path(self))}")
+        else:
+            await self.conf.debugger.set(value)
+            await ctx.send(f"Debugger has been {'enabled' if value else 'disabled'}")
+            self.debug = value
+            if value:
+                await self.cog_load()
+
+    async def cog_load(self):
+        if await self.conf.debugger():
+            text = ""
+
+            from redbot.core._debuginfo import DebugInfo
+
+            os_stuff = DebugInfo(self.bot)._get_os_variables_section()
+            text = text + "\n" + "".join(os_stuff.section_parts)
+
+            cog = discord.utils.get(
+                await self.bot.get_cog("Downloader").installed_cogs(), name="Tube"
+            )
+            if cog is None:
+                text = text + "\n" + "Cog installed without Downloader"
+            else:
+                text = text + "\n" + f"{cog.repo.url} | {cog.commit}"
+
+            text = (
+                text
+                + "\n"
+                + f"Interval: {await self.conf.interval()} | Cache: {await self.conf.cache_size()}"
+            )
+
+            debugger.info(text)
+            self.debug = True
+
+    def log_info(self, msg):
+        log.info(msg)
+        if self.debug:
+            debugger.propagate = False
+            debugger.info(msg)
+            debugger.propagate = True
+
+    def log_warn(self, msg):
+        log.warn(msg)
+        if self.debug:
+            debugger.propagate = False
+            debugger.warn(msg)
+            debugger.propagate = True
+
+    def log_debug(self, msg):
+        log.debug(msg)
+        if self.debug:
+            debugger.propagate = False
+            debugger.debug(msg)
+            debugger.propagate = True
+
+    def log_exception(self, msg):
+        log.exception(msg)
+        if self.debug:
+            debugger.propagate = False
+            debugger.exception(msg)
+            debugger.propagate = True
+
+    def debug_info(self, msg):
+        if self.debug:
+            debugger.propagate = False
+            debugger.info(msg)
+            debugger.propagate = True
+
+    def debug_warn(self, msg):
+        if self.debug:
+            debugger.propagate = False
+            debugger.warn(msg)
+            debugger.propagate = True
+
+    def debug_debug(self, msg):
+        if self.debug:
+            debugger.propagate = False
+            debugger.debug(msg)
+            debugger.propagate = True
+
+    def debug_exception(self, msg):
+        if self.debug:
+            debugger.propagate = False
+            debugger.exception(msg)
+            debugger.propagate = True
