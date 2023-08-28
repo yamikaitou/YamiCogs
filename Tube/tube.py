@@ -51,7 +51,7 @@ class Tube(commands.Cog):
         file_handler = RotatingFileHandler(
             stem="tube",
             directory=cog_data_path(self),
-            maxBytes=1_000_000,
+            maxBytes=10_000_000,
             backupCount=8,
             encoding="utf-8",
         )
