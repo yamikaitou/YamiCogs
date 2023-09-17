@@ -420,7 +420,7 @@ class Tube(commands.Cog):
             async with session.get(url) as response:
                 return await response.read()
         except aiohttp.client_exceptions.ClientConnectionError as e:
-            await log_exception(f"Fetch failed for url {url}: ", exc_info=e)
+            await self.log_exception(f"Fetch failed for url {url}: ", exc_info=e)
             return None
 
     async def get_feed(self, channel):
