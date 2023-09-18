@@ -46,7 +46,7 @@ class Tube(commands.Cog):
 
         # Thanks Laggron and AAA3A
         formatter = logging.Formatter(
-            "[{asctime}] [{levelname}]: {message}", datefmt="%Y-%m-%d %H:%M:%S", style="{"
+            "[{asctime}] {message}", datefmt="%Y-%m-%d %H:%M:%S", style="{"
         )
         file_handler = RotatingFileHandler(
             stem="tube",
@@ -525,23 +525,23 @@ class Tube(commands.Cog):
     def debug_info(self, msg):
         if self.debug:
             debugger.propagate = False
-            debugger.info(msg)
+            debugger.info(f"[INFO]: {msg}")
             debugger.propagate = True
 
     def debug_warn(self, msg):
         if self.debug:
             debugger.propagate = False
-            debugger.warn(msg)
+            debugger.info(f"[WARN]: {msg}")
             debugger.propagate = True
 
     def debug_debug(self, msg):
         if self.debug:
             debugger.propagate = False
-            debugger.debug(msg)
+            debugger.info(f"[DEBUG]: {msg}")
             debugger.propagate = True
 
     def debug_exception(self, msg):
         if self.debug:
             debugger.propagate = False
-            debugger.exception(msg)
+            debugger.info(f"[EXCEPTION]: {msg}")
             debugger.propagate = True
