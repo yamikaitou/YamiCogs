@@ -458,32 +458,12 @@ class Tube(commands.Cog):
             await ctx.send(f"Debugger has been {'enabled' if value else 'disabled'}")
             self.debug = value
             if value:
-                await self.cog_load()
+                self.debug = True
+            else:
+                self.debug = False
 
     async def cog_load(self):
         if await self.conf.debugger():
-            text = ""
-
-            from redbot.core._debuginfo import DebugInfo
-
-            os_stuff = DebugInfo(self.bot)._get_os_variables_section()
-            text = text + "\n" + "".join(os_stuff.section_parts)
-
-            cog = discord.utils.get(
-                await self.bot.get_cog("Downloader").installed_cogs(), name="Tube"
-            )
-            if cog is None:
-                text = text + "\n" + "Cog installed without Downloader"
-            else:
-                text = text + "\n" + f"{cog.repo.url} | {cog.commit}"
-
-            text = (
-                text
-                + "\n"
-                + f"Interval: {await self.conf.interval()} | Cache: {await self.conf.cache_size()}"
-            )
-
-            debugger.info(text)
             self.debug = True
 
     def log_info(self, msg):
