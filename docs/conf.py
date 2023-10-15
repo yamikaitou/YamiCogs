@@ -18,8 +18,8 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = "YamiCogs"
-copyright = "2020-2021, YamiKaitou"
-author = "YamiKaitou#8975"
+copyright = "2020-2023, YamiKaitou"
+author = "yamikaitou"
 
 
 # -- General configuration ---------------------------------------------------

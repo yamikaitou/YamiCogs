@@ -18,3 +18,5 @@ I'm in the Cog Support server, give me a ping in #support_othercogs
 | PayDay | <details><summary>More PayDay options</summary>Give bonus credits for daily and other times</details>
 | RoleNotify | <details><summary>Notifications for Role Adds and Removals</summary>Send a user a DM or post in a channel when they have a Role added or removed from them</details>
 | RPS | <details><summary>Rock, Paper, Scissors!</summary>Play a game of Rock, Paper, Scissors (Lizard, Spock); but with Buttons!</details>
+| Tube | <details><summary>Subscribe to channels on the 'tube</summary>Posts in a channel every time a new video is added to a YouTube channel.</details>
+| Talk | <details><summary>Talk as the bot</summary></details>

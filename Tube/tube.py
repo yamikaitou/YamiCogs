@@ -104,7 +104,9 @@ class Tube(commands.Cog):
         feed = feedparser.parse(await self.get_feed(newSub["id"]))
         last_video = {}
         for entry in feed["entries"]:
-            if not last_video or datetime.datetime.fromisoformat(entry["published"]) > datetime.datetime.fromisoformat(last_video["published"]):
+            if not last_video or datetime.datetime.fromisoformat(
+                entry["published"]
+            ) > datetime.datetime.fromisoformat(last_video["published"]):
                 last_video = entry
         if last_video and last_video.get("published"):
             newSub["previous"] = last_video["published"]
@@ -318,7 +320,9 @@ class Tube(commands.Cog):
                         f"Error parsing feed for {sub.get('name', '')} ({sub['id']})"
                     )
                     continue
-            last_video_time = datetime.datetime.fromisoformat(sub.get("previous", "1970-01-01T00:00:00+00:00"))
+            last_video_time = datetime.datetime.fromisoformat(
+                sub.get("previous", "1970-01-01T00:00:00+00:00")
+            )
             self.debug_debug("Last Video: " + last_video_time.strftime("%Y-%m-%d %H:%M:%S"))
             for entry in cache[sub["id"]]["entries"][::-1]:
                 published = datetime.datetime.fromisoformat(entry.get("published"))
