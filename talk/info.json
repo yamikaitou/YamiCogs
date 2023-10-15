@@ -7,7 +7,7 @@
     "author": ["YamiKaitou"],
     "required_cogs": {},
     "requirements": [],
-    "tags": [],
+    "tags": ["say"],
     "min_bot_version": "3.5.0",
     "hidden": false,
     "disabled": false,
