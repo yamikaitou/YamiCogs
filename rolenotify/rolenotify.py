@@ -1,5 +1,6 @@
 import logging
 from typing import Union
+from contextlib import suppress
 
 import discord
 from redbot.core import commands
@@ -98,12 +99,13 @@ class RoleNotify(commands.Cog):
         {user_mention}
         """
 
-        await dest.send(
-            msg.replace("{role_name}", role.name)
-            .replace("{role_mention}", role.mention)
-            .replace("{user_name}", user.display_name)
-            .replace("{user_mention}", user.mention)
-        )
+        with suppress(discord.Forbidden):
+            await dest.send(
+                msg.replace("{role_name}", role.name)
+                .replace("{role_mention}", role.mention)
+                .replace("{user_name}", user.display_name)
+                .replace("{user_mention}", user.mention)
+            )
 
     @commands.guild_only()
     @commands.admin_or_permissions(manage_roles=True)
