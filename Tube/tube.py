@@ -345,7 +345,7 @@ class Tube(commands.Cog):
                             time.mktime(entry.get("updated_parsed", TIME_TUPLE))
                         ).strftime("%Y-%m-%d %H:%M:%S")
                     )
-                    logmsg = logmsg + "\nConfig previous:" + subs[i]["previous"]
+                    logmsg = logmsg + "\nConfig previous:" + subs[i].get("previous", "None")
                     altered = True
                     subs[i]["previous"] = entry["published"]
                     new_history.append(entry["yt_videoid"])
@@ -470,29 +470,29 @@ class Tube(commands.Cog):
         if await self.conf.debugger():
             self.debug = True
 
-    def log_info(self, msg):
-        log.info(msg)
+    def log_info(self, msg, **kwargs):
+        log.info(msg, **kwargs)
         if self.debug:
             debugger.propagate = False
             debugger.info(msg)
             debugger.propagate = True
 
-    def log_warn(self, msg):
-        log.warn(msg)
+    def log_warn(self, msg, **kwargs):
+        log.warning(msg, **kwargs)
         if self.debug:
             debugger.propagate = False
-            debugger.warn(msg)
+            debugger.warning(msg)
             debugger.propagate = True
 
-    def log_debug(self, msg):
-        log.debug(msg)
+    def log_debug(self, msg, **kwargs):
+        log.debug(msg, **kwargs)
         if self.debug:
             debugger.propagate = False
             debugger.debug(msg)
             debugger.propagate = True
 
-    def log_exception(self, msg):
-        log.exception(msg)
+    def log_exception(self, msg, **kwargs):
+        log.exception(msg, **kwargs)
         if self.debug:
             debugger.propagate = False
             debugger.exception(msg)
