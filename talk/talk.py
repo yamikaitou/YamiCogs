@@ -96,7 +96,7 @@ class Talk(commands.Cog):
             await interaction.response.send_message(message, allowed_mentions=mention)
 
     @commands.group(name="talkset")
-    @commands.admin_or_permissions(manage_server=True)
+    @commands.admin_or_permissions(manage_guild=True)
     async def t_set(self, ctx):
         """Configure settings"""
 
