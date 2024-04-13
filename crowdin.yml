@@ -1,7 +1,7 @@
 base_path: .
-preserve_hierarchy: true
+preserve_hierarchy: 1
 files:
-  - source: ./**/messages.pot
+  - source: /**/messages.pot
     translation: /%original_path%/%locale%.po
   - source: ./**/messages.pot
     translation: /%original_path%/%locale%.po
