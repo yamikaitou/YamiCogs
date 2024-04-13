@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: yamicogs\n"
-"POT-Creation-Date: 2024-04-13 19:14+0000\n"
-"PO-Revision-Date: 2024-04-13 19:46\n"
+"POT-Creation-Date: 2024-04-13 20:33+0000\n"
+"PO-Revision-Date: 2024-04-13 20:50\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -17,33 +17,56 @@ msgstr ""
 "X-Crowdin-File-ID: 50\n"
 "Language: tr_TR\n"
 
-#: talk/talk.py:31 talk/talk.py:83
+#: talk/talk.py:16
+#, docstring
+msgid "\n"
+"    Talk as the bot\n"
+"    "
+msgstr ""
+
+#: talk/talk.py:32 talk/talk.py:84
 #, docstring
 msgid "Send a message as the bot"
 msgstr ""
 
-#: talk/talk.py:38
+#: talk/talk.py:39
 #, docstring
 msgid "Send a message as the bot, with mentions enabled"
 msgstr ""
 
-#: talk/talk.py:50
+#: talk/talk.py:51
 #, docstring
 msgid "Send a message as the bot, but delete the command message"
 msgstr ""
 
-#: talk/talk.py:58
+#: talk/talk.py:59
 #, docstring
 msgid "Send a message as the bot, with mentions enabled and delete the command message"
 msgstr ""
 
-#: talk/talk.py:101
+#: talk/talk.py:102
 #, docstring
 msgid "Configure settings"
 msgstr ""
 
-#: talk/talk.py:105
+#: talk/talk.py:106
 #, docstring
 msgid "Set the ability to mass mention using `everyone` or `here`"
+msgstr ""
+
+#: talk/talk.py:110
+msgid "Current setting: {enabled_or_disabled}"
+msgstr ""
+
+#: talk/talk.py:110 talk/talk.py:113
+msgid "Enabled"
+msgstr ""
+
+#: talk/talk.py:110 talk/talk.py:113
+msgid "Disabled"
+msgstr ""
+
+#: talk/talk.py:113
+msgid "Setting changed to {enabled_or_disabled}"
 msgstr ""
 
