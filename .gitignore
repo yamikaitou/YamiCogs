@@ -53,7 +53,6 @@ coverage.xml
 
 # Translations
 *.mo
-*.pot
 
 # Django stuff:
 *.log
@@ -131,14 +130,17 @@ dmypy.json
 
 
 .vscode/
-backend-scripts/mccasino/server.jar
-backend-scripts/mccasino/assets/minecraft/lang/en_us.json
 .utils/
-red/
-red.sh
-pogo/latest.json
-pogo/*
-devbot/__init__.py
-devbot/devbot.py
-devbot/info.json
 .devcontainer/devcontainer.json
+
+# Do not translate
+locales/messages.pot
+docs/locales/messages.pot
+lottery/locales/messages.pot
+collectcards/locales/messages.pot
+collector/components/locales/messages.pot
+falrek/components/cards/locales/messages.pot
+mcpoker/locales/messages.pot
+slots/locales/messages.pot
+survey/locales/messages.pot
+ytnotify/locales/messages.pot

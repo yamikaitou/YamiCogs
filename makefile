@@ -1,6 +1,6 @@
 # thanks zeph
 # thanks flare
-PYTHON ?= python3.9
+PYTHON ?= python3.11
 DIFF := $(shell git diff --name-only --staged "*.py" "*.pyi")
 ifeq ($(DIFF),)
 	DIFF := $(shell git ls-files "*.py" "*.pyi")
@@ -19,7 +19,7 @@ reformat:
 reformatblack:
 	$(PYTHON) -m black $(DIFF)
 update:
-	$(PYTHON) -m pip install -U pip wheel setuptools autoflake isort black flake8 pre-commit cookiecutter Red-DiscordBot
+	$(PYTHON) -m pip install -U pip wheel setuptools autoflake isort black flake8 pre-commit cookiecutter Red-DiscordBot redgettext==3.4.2
 run:
 	$(PYTHON) -O -m redbot yamicogs --dev --debug --disable-intent presences
 new:
@@ -27,4 +27,4 @@ new:
 
 # Translations
 gettext:
-	$(PYTHON) -m redgettext --command-docstrings --verbose --recursive redbot --exclude-files "redbot/pytest/**/*"
+	$(PYTHON) -m redgettext --command-docstrings --verbose --recursive .
