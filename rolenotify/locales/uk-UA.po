@@ -1,0 +1,88 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: yamicogs\n"
+"POT-Creation-Date: 2024-04-13 19:14+0000\n"
+"PO-Revision-Date: 2024-04-13 19:45\n"
+"Last-Translator: \n"
+"Language-Team: Ukrainian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: redgettext 3.4.2\n"
+"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
+"X-Crowdin-Project: yamicogs\n"
+"X-Crowdin-Project-ID: 436902\n"
+"X-Crowdin-Language: uk\n"
+"X-Crowdin-File: /master/rolenotify/locales/messages.pot\n"
+"X-Crowdin-File-ID: 46\n"
+"Language: uk_UA\n"
+
+#: rolenotify/rolenotify.py:114
+#, docstring
+msgid "Configure RoleNotify"
+msgstr ""
+
+#: rolenotify/rolenotify.py:118
+#, docstring
+msgid "\n"
+"        Set the channel to output Role Notifications to\n\n"
+"        Pass 0 to clear the channel\n"
+"        Pass nothing to see the configured channel\n"
+"        "
+msgstr ""
+
+#: rolenotify/rolenotify.py:138
+#, docstring
+msgid "Configure settings for a Role"
+msgstr ""
+
+#: rolenotify/rolenotify.py:142
+#, docstring
+msgid "Display the configured settings for a Role"
+msgstr ""
+
+#: rolenotify/rolenotify.py:161
+#, docstring
+msgid "\n"
+"        Set the notification method\n\n"
+"        Valid options are `dm` and `channel`\n"
+"        "
+msgstr ""
+
+#: rolenotify/rolenotify.py:179
+#, docstring
+msgid "\n"
+"        Set the channel to output Role Notifications to\n\n"
+"        Pass 0 to clear the channel and use the server defined channel\n"
+"        "
+msgstr ""
+
+#: rolenotify/rolenotify.py:195
+#, docstring
+msgid "\n"
+"        Set the notification message\n\n"
+"        <option> can be either `add` or `remove`\n\n"
+"        Formatting options available for <message> are\n"
+"        {role_name} = Role Name\n"
+"        {role_mention} = Role Mention (will not ping)\n"
+"        {user_name} = User's Display Name\n"
+"        {user_mention} = User Mention\n\n"
+"        "
+msgstr ""
+
+#: rolenotify/rolenotify.py:220
+#, docstring
+msgid "\n"
+"        Set if the notification should be sent on Role Add\n\n"
+"        <state> should be any of these combinations, `on/off`, `yes/no`, `1/0`, `true/false`\n"
+"        "
+msgstr ""
+
+#: rolenotify/rolenotify.py:233
+#, docstring
+msgid "\n"
+"        Set if the notification should be sent on Role Remove\n\n"
+"        <state> should be any of these combinations, `on/off`, `yes/no`, `1/0`, `true/false`\n"
+"        "
+msgstr ""
+
