@@ -1,0 +1,49 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: yamicogs\n"
+"POT-Creation-Date: 2024-04-13 19:14+0000\n"
+"PO-Revision-Date: 2024-04-13 19:46\n"
+"Last-Translator: \n"
+"Language-Team: Danish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: redgettext 3.4.2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: yamicogs\n"
+"X-Crowdin-Project-ID: 436902\n"
+"X-Crowdin-Language: da\n"
+"X-Crowdin-File: /master/talk/locales/messages.pot\n"
+"X-Crowdin-File-ID: 50\n"
+"Language: da_DK\n"
+
+#: talk/talk.py:31 talk/talk.py:83
+#, docstring
+msgid "Send a message as the bot"
+msgstr ""
+
+#: talk/talk.py:38
+#, docstring
+msgid "Send a message as the bot, with mentions enabled"
+msgstr ""
+
+#: talk/talk.py:50
+#, docstring
+msgid "Send a message as the bot, but delete the command message"
+msgstr ""
+
+#: talk/talk.py:58
+#, docstring
+msgid "Send a message as the bot, with mentions enabled and delete the command message"
+msgstr ""
+
+#: talk/talk.py:101
+#, docstring
+msgid "Configure settings"
+msgstr ""
+
+#: talk/talk.py:105
+#, docstring
+msgid "Set the ability to mass mention using `everyone` or `here`"
+msgstr ""
+
