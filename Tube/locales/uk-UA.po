@@ -1,0 +1,103 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: yamicogs\n"
+"POT-Creation-Date: 2024-04-13 19:14+0000\n"
+"PO-Revision-Date: 2024-04-13 19:43\n"
+"Last-Translator: \n"
+"Language-Team: Ukrainian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: redgettext 3.4.2\n"
+"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
+"X-Crowdin-Project: yamicogs\n"
+"X-Crowdin-Project-ID: 436902\n"
+"X-Crowdin-Language: uk\n"
+"X-Crowdin-File: /master/Tube/locales/messages.pot\n"
+"X-Crowdin-File-ID: 36\n"
+"Language: uk_UA\n"
+
+#: Tube/tube.py:65
+#, docstring
+msgid "Post when new videos are added to a YouTube channel"
+msgstr ""
+
+#: Tube/tube.py:77
+#, docstring
+msgid "Subscribe a Discord channel to a YouTube channel\n\n"
+"        If no discord channel is specified, the current channel will be subscribed\n\n"
+"        Adding channels by name is not supported at this time. The YouTube channel ID for this can be found in channel links on videos.\n\n"
+"        For example, to subscribe to the channel Ctrl Shift Face, you would search YouTube for the name, then on one of the videos in the results copy the channel link. It should look like this:\n"
+"        https://www.youtube.com/channel/UCKpH0CKltc73e4wh0_pgL3g\n\n"
+"        Now take the last part of the link as the channel ID:\n"
+"        `[p]tube subscribe UCKpH0CKltc73e4wh0_pgL3g`\n\n"
+"        Setting the `publish` flag will cause new videos to be published to the specified channel. Using this on non-announcement channels may result in errors.\n"
+"        "
+msgstr ""
+
+#: Tube/tube.py:132
+#, docstring
+msgid "Unsubscribe a Discord channel from a YouTube channel\n\n"
+"        If no Discord channel is specified and the asAnnouncement flag not set to True, the subscription will be removed from all channels\n"
+"        "
+msgstr ""
+
+#: Tube/tube.py:157
+#, docstring
+msgid "Add a custom message to videos from a YouTube channel\n\n"
+"        You can use any keys available in the RSS object in your custom message\n"
+"        by surrounding the key in perecent signs, e.g.:\n"
+"        [p]tube customize UCKpH0CKltc73e4wh0_pgL3g \"It's ya boi %author% wish a fresh vid: %title%\\nWatch, like, subscribe, give monies, etc.\n\n"
+"        You can also remove customization by not specifying any message.\n"
+"        "
+msgstr ""
+
+#: Tube/tube.py:183
+#, docstring
+msgid "Adds a role mention in front of the message"
+msgstr ""
+
+#: Tube/tube.py:199
+#, docstring
+msgid "List current subscriptions"
+msgstr ""
+
+#: Tube/tube.py:248
+#, docstring
+msgid "List current subscriptions for all guilds"
+msgstr ""
+
+#: Tube/tube.py:264
+#, docstring
+msgid "Update feeds and post new videos"
+msgstr ""
+
+#: Tube/tube.py:272
+#, docstring
+msgid "Post the latest video from all subscriptions"
+msgstr ""
+
+#: Tube/tube.py:278
+#, docstring
+msgid "Update feeds and post new videos for all guilds"
+msgstr ""
+
+#: Tube/tube.py:394
+#, docstring
+msgid "Set the interval in seconds at which to check for updates\n\n"
+"        Very low values will probably get you rate limited\n\n"
+"        Default is 300 seconds (5 minutes)"
+msgstr ""
+
+#: Tube/tube.py:406
+#, docstring
+msgid "Set the number of video IDs to cache\n\n"
+"        Very low values may result in reposting of videos\n\n"
+"        Default is 500"
+msgstr ""
+
+#: Tube/tube.py:456
+#, docstring
+msgid "Enable the feed debugger"
+msgstr ""
+
