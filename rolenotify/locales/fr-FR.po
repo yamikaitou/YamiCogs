@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: yamicogs\n"
-"POT-Creation-Date: 2024-04-13 19:14+0000\n"
-"PO-Revision-Date: 2024-04-13 19:45\n"
+"POT-Creation-Date: 2024-04-13 20:33+0000\n"
+"PO-Revision-Date: 2024-04-13 20:49\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -17,12 +17,20 @@ msgstr ""
 "X-Crowdin-File-ID: 46\n"
 "Language: fr_FR\n"
 
-#: rolenotify/rolenotify.py:114
+#: rolenotify/rolenotify.py:16
+#, docstring
+msgid "\n"
+"    Notify a user when they have a Role added or removed from them\n\n"
+"    More detailed docs: <https://cogs.yamikaitou.dev/rolenotify.html>\n"
+"    "
+msgstr ""
+
+#: rolenotify/rolenotify.py:116
 #, docstring
 msgid "Configure RoleNotify"
 msgstr ""
 
-#: rolenotify/rolenotify.py:118
+#: rolenotify/rolenotify.py:120
 #, docstring
 msgid "\n"
 "        Set the channel to output Role Notifications to\n\n"
@@ -31,17 +39,43 @@ msgid "\n"
 "        "
 msgstr ""
 
-#: rolenotify/rolenotify.py:138
+#: rolenotify/rolenotify.py:129
+msgid "Currently set to {channel_mention}"
+msgstr ""
+
+#: rolenotify/rolenotify.py:133 rolenotify/rolenotify.py:190
+msgid "Channel has been cleared"
+msgstr ""
+
+#: rolenotify/rolenotify.py:136 rolenotify/rolenotify.py:193
+msgid "Channel has been set"
+msgstr ""
+
+#: rolenotify/rolenotify.py:140
 #, docstring
 msgid "Configure settings for a Role"
 msgstr ""
 
-#: rolenotify/rolenotify.py:142
+#: rolenotify/rolenotify.py:144
 #, docstring
 msgid "Display the configured settings for a Role"
 msgstr ""
 
-#: rolenotify/rolenotify.py:161
+#: rolenotify/rolenotify.py:147
+msgid "Settings for *{role}*\n"
+"----------\n"
+"**Method**: {method}\n"
+"{channel}**Addition**: {add}\n"
+"**Message**: {add_msg}\n"
+"**Removal**: {rem}\n"
+"**Message**: {rem_msg}"
+msgstr ""
+
+#: rolenotify/rolenotify.py:153
+msgid "**Channel**: {channel_mention}\n"
+msgstr ""
+
+#: rolenotify/rolenotify.py:163
 #, docstring
 msgid "\n"
 "        Set the notification method\n\n"
@@ -49,7 +83,15 @@ msgid "\n"
 "        "
 msgstr ""
 
-#: rolenotify/rolenotify.py:179
+#: rolenotify/rolenotify.py:174
+msgid "Invalid option, please use either `dm` or `channel`"
+msgstr ""
+
+#: rolenotify/rolenotify.py:177
+msgid "Notification method has been set"
+msgstr ""
+
+#: rolenotify/rolenotify.py:181
 #, docstring
 msgid "\n"
 "        Set the channel to output Role Notifications to\n\n"
@@ -57,7 +99,7 @@ msgid "\n"
 "        "
 msgstr ""
 
-#: rolenotify/rolenotify.py:195
+#: rolenotify/rolenotify.py:197
 #, docstring
 msgid "\n"
 "        Set the notification message\n\n"
@@ -70,7 +112,15 @@ msgid "\n"
 "        "
 msgstr ""
 
-#: rolenotify/rolenotify.py:220
+#: rolenotify/rolenotify.py:215
+msgid "Invalid option, please use either `add` or `remove`"
+msgstr ""
+
+#: rolenotify/rolenotify.py:218
+msgid "Notification Message has been set"
+msgstr ""
+
+#: rolenotify/rolenotify.py:222
 #, docstring
 msgid "\n"
 "        Set if the notification should be sent on Role Add\n\n"
@@ -78,11 +128,19 @@ msgid "\n"
 "        "
 msgstr ""
 
-#: rolenotify/rolenotify.py:233
+#: rolenotify/rolenotify.py:231
+msgid "Add Notificaiton has been set"
+msgstr ""
+
+#: rolenotify/rolenotify.py:235
 #, docstring
 msgid "\n"
 "        Set if the notification should be sent on Role Remove\n\n"
 "        <state> should be any of these combinations, `on/off`, `yes/no`, `1/0`, `true/false`\n"
 "        "
+msgstr ""
+
+#: rolenotify/rolenotify.py:244
+msgid "Remove Notificaiton has been set"
 msgstr ""
 
