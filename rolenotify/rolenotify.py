@@ -6,10 +6,12 @@ import discord
 from redbot.core import commands
 from redbot.core.bot import Red
 from redbot.core.config import Config
+from redbot.core.i18n import Translator, cog_i18n
 
 log = logging.getLogger("red.yamicogs.rolenotify")
+_ = Translator("RoleNotify", __file__)
 
-
+@cog_i18n(_)
 class RoleNotify(commands.Cog):
     """
     Notify a user when they have a Role added or removed from them
@@ -124,14 +126,14 @@ class RoleNotify(commands.Cog):
 
         if channel is None:
             chan = await self.config.guild(ctx.guild).channel()
-            await ctx.send(f"Currently set to {self.bot.get_channel(chan).mention}")
+            await ctx.send(_("Currently set to {channel_mention}").format(channel_mention=self.bot.get_channel(chan).mention))
         elif channel == 0:
             await self.config.guild(ctx.guild).channel.set(0)
             if not await ctx.tick():
-                await ctx.send("Channel has been cleared")
+                await ctx.send(_("Channel has been cleared"))
         else:
             await self.config.guild(ctx.guild).channel.set(channel.id)
-            await ctx.send("Channel has been set")
+            await ctx.send(_("Channel has been set"))
 
     @rolenotify.group(name="role")
     async def rolenotify_role(self, ctx):
@@ -142,13 +144,13 @@ class RoleNotify(commands.Cog):
         """Display the configured settings for a Role"""
 
         settings = await self.config.role(role).all()
-        await ctx.send(
-            """Settings for *{role}*\n----------\n**Method**: {method}\n{channel}**Addition**: {add}\n**Message**: {add_msg}\n**Removal**: {rem}\n**Message**: {rem_msg}""".format(
+        await ctx.send(_(
+            """Settings for *{role}*\n----------\n**Method**: {method}\n{channel}**Addition**: {add}\n**Message**: {add_msg}\n**Removal**: {rem}\n**Message**: {rem_msg}""").format(
                 role=role.name,
                 method=settings["method"],
                 channel=""
                 if settings["channel"] == 0
-                else f"**Channel**: {self.bot.get_channel(settings['channel']).mention}\n",
+                else _("**Channel**: {channel_mention}\n").format(channel_mention=self.bot.get_channel(settings['channel']).mention),
                 add=settings["add"],
                 add_msg=settings["add_msg"],
                 rem=settings["remove"],
@@ -169,10 +171,10 @@ class RoleNotify(commands.Cog):
         elif method.lower() == "channel":
             await self.config.role(role).method.set("Channel")
         else:
-            return await ctx.send("Invalid option, please use either `dm` or `channel`")
+            return await ctx.send(_("Invalid option, please use either `dm` or `channel`"))
 
         if not await ctx.tick():
-            await ctx.send("Notification method has been set")
+            await ctx.send(_("Notification method has been set"))
 
     @rolenotify_role.command(name="channel")
     async def rolenotify_role_channel(self, ctx, role: discord.Role, channel: discord.TextChannel):
@@ -185,10 +187,10 @@ class RoleNotify(commands.Cog):
         if channel == 0:
             await self.config.role(role).channel.set(0)
             if not await ctx.tick():
-                await ctx.send("Channel has been cleared")
+                await ctx.send(_("Channel has been cleared"))
         else:
             await self.config.role(role).channel.set(channel.id)
-            await ctx.send("Channel has been set")
+            await ctx.send(_("Channel has been set"))
 
     @rolenotify_role.command(name="message")
     async def rolenotify_role_msg(self, ctx, role: discord.Role, option: str, *, message: str):
@@ -210,10 +212,10 @@ class RoleNotify(commands.Cog):
         elif option.lower() == "remove":
             await self.config.role(role).rem_msg.set(message)
         else:
-            return await ctx.send("Invalid option, please use either `add` or `remove`")
+            return await ctx.send(_("Invalid option, please use either `add` or `remove`"))
 
         if not await ctx.tick():
-            await ctx.send("Notification Message has been set")
+            await ctx.send(_("Notification Message has been set"))
 
     @rolenotify_role.command(name="add")
     async def rolenotify_role_add(self, ctx, role: discord.Role, state: bool):
@@ -226,7 +228,7 @@ class RoleNotify(commands.Cog):
         await self.config.role(role).add.set(state)
 
         if not await ctx.tick():
-            await ctx.send("Add Notificaiton has been set")
+            await ctx.send(_("Add Notificaiton has been set"))
 
     @rolenotify_role.command(name="remove")
     async def rolenotify_role_remove(self, ctx, role: discord.Role, state: bool):
@@ -239,7 +241,7 @@ class RoleNotify(commands.Cog):
         await self.config.role(role).remove.set(state)
 
         if not await ctx.tick():
-            await ctx.send("Remove Notificaiton has been set")
+            await ctx.send(_("Remove Notificaiton has been set"))
 
     async def red_get_data_for_user(self, *, user_id: int):
         # this cog does not store any user data
