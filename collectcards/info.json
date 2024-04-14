@@ -2,15 +2,17 @@
     "name": "Emoji Collection",
     "short": "A 'card' (emoji) collecting game",
     "description": "Collect 'cards' (emoji) to complete sets for points",
-    "end_user_data_statement": "This cog does not persistently store any data or metadata about users.",
+    "install_msg": "Data for this cog is stored in an SQLite database, not within Red's Config DB.",
+    "end_user_data_statement": "This cog stores the UserID and GuildID combination.",
     "author": [
         "YamiKaitou#8975"
     ],
     "required_cogs": {},
-    "requirements": [],
+    "requirements": [
+        "databases[aiosqlite]"
+    ],
     "tags": [],
-    "min_bot_version": "3.4.0",
-    "max_bot_version": "3.4.26",
+    "min_bot_version": "3.5.0.dev276",
     "hidden": true,
     "disabled": true,
     "type": "COG"
