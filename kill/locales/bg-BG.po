@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: yamicogs\n"
-"POT-Creation-Date: 2024-04-13 19:14+0000\n"
-"PO-Revision-Date: 2024-04-14 04:16\n"
+"POT-Creation-Date: 2024-04-14 18:44+0000\n"
+"PO-Revision-Date: 2024-04-14 18:49\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,15 @@ msgstr ""
 "X-Crowdin-File-ID: 164\n"
 "Language: bg_BG\n"
 
-#: kill/kill.py:31
+#: kill/kill.py:14
+#, docstring
+msgid "\n"
+"    Kill people in interesting ways\n\n"
+"    More detailed docs: <https://cogs.yamikaitou.dev/kill.html>\n"
+"    "
+msgstr ""
+
+#: kill/kill.py:34
 #, docstring
 msgid "\n"
 "        Configure the kill messages\n\n"
@@ -25,7 +33,7 @@ msgid "\n"
 "        "
 msgstr ""
 
-#: kill/kill.py:39
+#: kill/kill.py:42
 #, docstring
 msgid "\n"
 "        Add a new kill message.\n\n"
@@ -34,21 +42,58 @@ msgid "\n"
 "        "
 msgstr ""
 
-#: kill/kill.py:54
+#: kill/kill.py:53
+msgid "Message added"
+msgstr ""
+
+#: kill/kill.py:57
 #, docstring
 msgid "\n"
 "        Removes a kill message. Use `[p]killset list` to for the numbers\n"
 "        "
 msgstr ""
 
+#: kill/kill.py:62
+msgid "Negative numbers are not supported"
+msgstr ""
+
+#: kill/kill.py:66
+msgid "Sorry, but you don't have a kill message with that number. Please use `[p]killset list` to get the number of the message you wish to delete"
+msgstr ""
+
 #: kill/kill.py:75
+msgid "Message removed"
+msgstr ""
+
+#: kill/kill.py:80
 #, docstring
 msgid "\n"
 "        List all the kill messages\n"
 "        "
 msgstr ""
 
-#: kill/kill.py:103
+#: kill/kill.py:86
+msgid "{killer} and {victim} will be replaced with a users mention\n"
+"{killer2} and {victim2} will be replaced with a users name in italics"
+msgstr ""
+
+#: kill/kill.py:92
+msgid "Bot Kill"
+msgstr ""
+
+#: kill/kill.py:94
+msgid "Self Kill"
+msgstr ""
+
+#: kill/kill.py:102 kill/kill.py:104
+msgid "Kill Messages"
+msgstr ""
+
+#: kill/kill.py:102
+msgid "There are no messages configured"
+msgstr ""
+
+#: kill/kill.py:110
 #, docstring
 msgid "\n"
 "        Sets the message for killing the bot\n\n"
@@ -57,7 +102,11 @@ msgid "\n"
 "        "
 msgstr ""
 
-#: kill/kill.py:117
+#: kill/kill.py:120 kill/kill.py:134
+msgid "Message saved"
+msgstr ""
+
+#: kill/kill.py:124
 #, docstring
 msgid "\n"
 "        Sets the message for killing yourself\n\n"
@@ -66,14 +115,18 @@ msgid "\n"
 "        "
 msgstr ""
 
-#: kill/kill.py:131
+#: kill/kill.py:138
 #, docstring
 msgid "\n"
 "        Kill a user in a random way\n"
 "        "
 msgstr ""
 
-#: kill/kill.py:156
+#: kill/kill.py:150
+msgid "Your life has been spared this time as I do not have any kill methods configured"
+msgstr ""
+
+#: kill/kill.py:165
 #, docstring
 msgid "\n"
 "        Commit suicide\n"
