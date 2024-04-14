@@ -1,6 +1,6 @@
 {
     "author" : ["YamiKaitou#8975"],
-    "install_msg" : "Thank you for installing my repo. If you need support, ping me in the Cog Support server. You can find docs for my cogs at <https://cogs.yamikaitou.dev>",
+    "install_msg" : "Thank you for installing my repo. If you need support, ping me in the Cog Support server. You can find docs for my cogs at <https://cogs.yamikaitou.dev>. You can translate my cogs at <https://crowdin.yamikaitou.dev>",
     "name" : "YamiCogs",
     "short" : "A random group of cogs",
     "description" : "Just some random cogs that I wrote/ported/modified and want to share back to the public",
