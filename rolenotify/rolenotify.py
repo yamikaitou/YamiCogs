@@ -1,6 +1,6 @@
 import logging
-from typing import Union
 from contextlib import suppress
+from typing import Union
 
 import discord
 from redbot.core import commands
@@ -10,6 +10,7 @@ from redbot.core.i18n import Translator, cog_i18n
 
 log = logging.getLogger("red.yamicogs.rolenotify")
 _ = Translator("RoleNotify", __file__)
+
 
 @cog_i18n(_)
 class RoleNotify(commands.Cog):
@@ -126,7 +127,11 @@ class RoleNotify(commands.Cog):
 
         if channel is None:
             chan = await self.config.guild(ctx.guild).channel()
-            await ctx.send(_("Currently set to {channel_mention}").format(channel_mention=self.bot.get_channel(chan).mention))
+            await ctx.send(
+                _("Currently set to {channel_mention}").format(
+                    channel_mention=self.bot.get_channel(chan).mention
+                )
+            )
         elif channel == 0:
             await self.config.guild(ctx.guild).channel.set(0)
             if not await ctx.tick():
@@ -144,13 +149,19 @@ class RoleNotify(commands.Cog):
         """Display the configured settings for a Role"""
 
         settings = await self.config.role(role).all()
-        await ctx.send(_(
-            """Settings for *{role}*\n----------\n**Method**: {method}\n{channel}**Addition**: {add}\n**Message**: {add_msg}\n**Removal**: {rem}\n**Message**: {rem_msg}""").format(
+        await ctx.send(
+            _(
+                """Settings for *{role}*\n----------\n**Method**: {method}\n{channel}**Addition**: {add}\n**Message**: {add_msg}\n**Removal**: {rem}\n**Message**: {rem_msg}"""
+            ).format(
                 role=role.name,
                 method=settings["method"],
-                channel=""
-                if settings["channel"] == 0
-                else _("**Channel**: {channel_mention}\n").format(channel_mention=self.bot.get_channel(settings['channel']).mention),
+                channel=(
+                    ""
+                    if settings["channel"] == 0
+                    else _("**Channel**: {channel_mention}\n").format(
+                        channel_mention=self.bot.get_channel(settings["channel"]).mention
+                    )
+                ),
                 add=settings["add"],
                 add_msg=settings["add_msg"],
                 rem=settings["remove"],

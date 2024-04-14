@@ -8,9 +8,12 @@ from redbot.core import Config, bank, checks, commands
 from redbot.core.bot import Red
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import box, humanize_timedelta
+from redbot.core.i18n import Translator, cog_i18n
 from tabulate import tabulate
 
 log = logging.getLogger("red.yamicogs.payday")
+
+_ = Translator("Talk", __file__)
 
 
 def cmd_check(option):
@@ -73,7 +76,7 @@ def is_owner_if_bank_global():
 
     return commands.check(pred)
 
-
+@cog_i18n(_)
 class PayDay(commands.Cog):
     """
     Customizable PayDay system
@@ -162,7 +165,7 @@ class PayDay(commands.Cog):
                 + (
                     humanize_timedelta(timedelta=(timedelta(hours=1) - td))
                     if td.seconds < 3600
-                    else "Available Now!"
+                    else _("Available Now!")
                 )
                 + "\n"
             )
@@ -176,12 +179,12 @@ class PayDay(commands.Cog):
                     + (
                         humanize_timedelta(timedelta=(timedelta(days=v) - td))
                         if td.days < v
-                        else "Available Now!"
+                        else _("Available Now!")
                     )
                     + "\n"
                 )
         if strings == "":
-            await ctx.send("No freecredit options have been configured yet")
+            await ctx.send(_("No freecredit options have been configured yet"))
         else:
             await ctx.send(strings)
 
@@ -207,19 +210,19 @@ class PayDay(commands.Cog):
         if total_streak > 0:
             await bank.deposit_credits(ctx.author, total_amount + total_streak)
             await ctx.send(
-                "You have claimed all available {} from the `freecredits` program! +{} {}\nPlus an additional {} for maintaining your streaks".format(
-                    bankname, total_amount, bankname, total_streak
+                _("You have claimed all available {bankname} from the `freecredits` program! +{total_amount} {bankname}\nPlus an additional {total_streak} for maintaining your streaks").format(
+                    bankname=bankname, total_amount=total_amount, total_streak=total_streak
                 )
             )
         elif total_amount > 0:
             await bank.deposit_credits(ctx.author, total_amount)
             await ctx.send(
-                "You have claimed all available {} from the `freecredits` program! +{} {}".format(
-                    bankname, total_amount, bankname
+                _("You have claimed all available {bankname} from the `freecredits` program! +{total_amount} {bankname}").format(
+                    bankname=bankname, total_amount=total_amount
                 )
             )
         else:
-            await ctx.send("You have no available {} for claiming.".format(bankname))
+            await ctx.send(_("You have no available {bankname} for claiming.").format(bankname=bankname))
 
     @cmd_check("hour")
     @freecredits.command(name="hourly")
@@ -229,16 +232,16 @@ class PayDay(commands.Cog):
         free, streak, remain = await self.grant_award(ctx, "hour")
 
         if remain != -1:
-            await ctx.send("Sorry, you still have {} until your next hourly bonus".format(remain))
+            await ctx.send(_("Sorry, you still have {remain} until your next hourly bonus").format(remain=remain))
         elif streak != -1:
             await ctx.send(
-                "You have been given {} {} plus {} for maintaining a streak".format(
-                    free, (await bank.get_currency_name(ctx.guild)), streak
+                _("You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak").format(
+                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)), streak_bonus=streak
                 )
             )
         elif free != -1:
             await ctx.send(
-                "You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild)))
+                _("You have been given {free_credits} {bankname}").format(free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)))
             )
         else:
             log.debug("grant_award returned no results")
@@ -251,16 +254,16 @@ class PayDay(commands.Cog):
         free, streak, remain = await self.grant_award(ctx, "day")
 
         if remain != -1:
-            await ctx.send("Sorry, you still have {} until your next daily bonus".format(remain))
+            await ctx.send(_("Sorry, you still have {remain} until your next dailya bonus").format(remain=remain))
         elif streak != -1:
             await ctx.send(
-                "You have been given {} {} plus {} for maintaining a streak".format(
-                    free, (await bank.get_currency_name(ctx.guild)), streak
+                _("You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak").format(
+                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)), streak_bonus=streak
                 )
             )
         elif free != -1:
             await ctx.send(
-                "You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild)))
+                _("You have been given {free_credits} {bankname}").format(free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)))
             )
         else:
             log.debug("grant_award returned no results")
@@ -273,16 +276,16 @@ class PayDay(commands.Cog):
         free, streak, remain = await self.grant_award(ctx, "week")
 
         if remain != -1:
-            await ctx.send("Sorry, you still have {} until your next weekly bonus".format(remain))
+            await ctx.send(_("Sorry, you still have {remain} until your next weekly bonus").format(remain=remain))
         elif streak != -1:
             await ctx.send(
-                "You have been given {} {} plus {} for maintaining a streak".format(
-                    free, (await bank.get_currency_name(ctx.guild)), streak
+                _("You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak").format(
+                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)), streak_bonus=streak
                 )
             )
         elif free != -1:
             await ctx.send(
-                "You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild)))
+                _("You have been given {free_credits} {bankname}").format(free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)))
             )
         else:
             log.debug("grant_award returned no results")
@@ -295,16 +298,16 @@ class PayDay(commands.Cog):
         free, streak, remain = await self.grant_award(ctx, "month")
 
         if remain != -1:
-            await ctx.send("Sorry, you still have {} until your next monthly bonus".format(remain))
+            await ctx.send(_("Sorry, you still have {remain} until your next monthly bonus").format(remain=remain))
         elif streak != -1:
             await ctx.send(
-                "You have been given {} {} plus {} for maintaining a streak".format(
-                    free, (await bank.get_currency_name(ctx.guild)), streak
+                _("You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak").format(
+                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)), streak_bonus=streak
                 )
             )
         elif free != -1:
             await ctx.send(
-                "You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild)))
+                _("You have been given {free_credits} {bankname}").format(free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)))
             )
         else:
             log.debug("grant_award returned no results")
@@ -317,18 +320,16 @@ class PayDay(commands.Cog):
         free, streak, remain = await self.grant_award(ctx, "quarter")
 
         if remain != -1:
-            await ctx.send(
-                "Sorry, you still have {} until your next quarterly bonus".format(remain)
-            )
+            await ctx.send(_("Sorry, you still have {remain} until your next quarterly bonus").format(remain=remain))
         elif streak != -1:
             await ctx.send(
-                "You have been given {} {} plus {} for maintaining a streak".format(
-                    free, (await bank.get_currency_name(ctx.guild)), streak
+                _("You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak").format(
+                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)), streak_bonus=streak
                 )
             )
         elif free != -1:
             await ctx.send(
-                "You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild)))
+                _("You have been given {free_credits} {bankname}").format(free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)))
             )
         else:
             log.debug("grant_award returned no results")
@@ -341,16 +342,16 @@ class PayDay(commands.Cog):
         free, streak, remain = await self.grant_award(ctx, "year")
 
         if remain != -1:
-            await ctx.send("Sorry, you still have {} until your next yearly bonus".format(remain))
+            await ctx.send(_("Sorry, you still have {remain} until your next yearly bonus").format(remain=remain))
         elif streak != -1:
             await ctx.send(
-                "You have been given {} {} plus {} for maintaining a streak".format(
-                    free, (await bank.get_currency_name(ctx.guild)), streak
+                _("You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak").format(
+                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)), streak_bonus=streak
                 )
             )
         elif free != -1:
             await ctx.send(
-                "You have been given {} {}".format(free, (await bank.get_currency_name(ctx.guild)))
+                _("You have been given {free_credits} {bankname}").format(free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)))
             )
         else:
             log.debug("grant_award returned no results")
@@ -432,7 +433,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            return await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send(_("You must provide a non-negative value or 0"))
         try:
             if await bank.is_global():
                 await self.config.hour.set(value)
@@ -442,7 +443,7 @@ class PayDay(commands.Cog):
             raise e
         else:
             if not await ctx.tick():
-                await ctx.send("Setting saved")
+                await ctx.send(_("Setting saved"))
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -454,7 +455,7 @@ class PayDay(commands.Cog):
         Setting this to 0 will disable the command"""
 
         if value < 0:
-            return await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send(_("You must provide a non-negative value or 0"))
         try:
             if await bank.is_global():
                 await self.config.day.set(value)
@@ -464,7 +465,7 @@ class PayDay(commands.Cog):
             raise e
         else:
             if not await ctx.tick():
-                await ctx.send("Setting saved")
+                await ctx.send(_("Setting saved"))
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -477,7 +478,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            return await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send(_("You must provide a non-negative value or 0"))
         try:
             if await bank.is_global():
                 await self.config.week.set(value)
@@ -487,7 +488,7 @@ class PayDay(commands.Cog):
             raise e
         else:
             if not await ctx.tick():
-                await ctx.send("Setting saved")
+                await ctx.send(_("Setting saved"))
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -500,7 +501,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            return await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send(_("You must provide a non-negative value or 0"))
         try:
             if await bank.is_global():
                 await self.config.month.set(value)
@@ -510,7 +511,7 @@ class PayDay(commands.Cog):
             raise e
         else:
             if not await ctx.tick():
-                await ctx.send("Setting saved")
+                await ctx.send(_("Setting saved"))
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -523,7 +524,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            return await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send(_("You must provide a non-negative value or 0"))
         try:
             if await bank.is_global():
                 await self.config.quarter.set(value)
@@ -533,7 +534,7 @@ class PayDay(commands.Cog):
             raise e
         else:
             if not await ctx.tick():
-                await ctx.send("Setting saved")
+                await ctx.send(_("Setting saved"))
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -546,7 +547,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            return await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send(_("You must provide a non-negative value or 0"))
         try:
             if await bank.is_global():
                 await self.config.year.set(value)
@@ -556,7 +557,7 @@ class PayDay(commands.Cog):
             raise e
         else:
             if not await ctx.tick():
-                await ctx.send("Setting saved")
+                await ctx.send(_("Setting saved"))
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -575,7 +576,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            return await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send(_("You must provide a non-negative value or 0"))
         try:
             if await bank.is_global():
                 await self.config.streaks.hour.set(value)
@@ -585,7 +586,7 @@ class PayDay(commands.Cog):
             raise e
         else:
             if not await ctx.tick():
-                await ctx.send("Setting saved")
+                await ctx.send(_("Setting saved"))
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -598,7 +599,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            return await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send(_("You must provide a non-negative value or 0"))
         try:
             if await bank.is_global():
                 await self.config.streaks.day.set(value)
@@ -608,7 +609,7 @@ class PayDay(commands.Cog):
             raise e
         else:
             if not await ctx.tick():
-                await ctx.send("Setting saved")
+                await ctx.send(_("Setting saved"))
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -621,7 +622,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            return await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send(_("You must provide a non-negative value or 0"))
         try:
             if await bank.is_global():
                 await self.config.streaks.week.set(value)
@@ -631,7 +632,7 @@ class PayDay(commands.Cog):
             raise e
         else:
             if not await ctx.tick():
-                await ctx.send("Setting saved")
+                await ctx.send(_("Setting saved"))
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -644,7 +645,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            return await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send(_("You must provide a non-negative value or 0"))
         try:
             if await bank.is_global():
                 await self.config.streaks.month.set(value)
@@ -654,7 +655,7 @@ class PayDay(commands.Cog):
             raise e
         else:
             if not await ctx.tick():
-                await ctx.send("Setting saved")
+                await ctx.send(_("Setting saved"))
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -667,7 +668,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            return await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send(_("You must provide a non-negative value or 0"))
         try:
             if await bank.is_global():
                 await self.config.streaks.quarter.set(value)
@@ -677,7 +678,7 @@ class PayDay(commands.Cog):
             raise e
         else:
             if not await ctx.tick():
-                await ctx.send("Setting saved")
+                await ctx.send(_("Setting saved"))
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -690,7 +691,7 @@ class PayDay(commands.Cog):
         """
 
         if value < 0:
-            return await ctx.send("You must provide a non-negative value or 0")
+            return await ctx.send(_("You must provide a non-negative value or 0"))
         try:
             if await bank.is_global():
                 await self.config.streaks.year.set(value)
@@ -700,7 +701,7 @@ class PayDay(commands.Cog):
             raise e
         else:
             if not await ctx.tick():
-                await ctx.send("Setting saved")
+                await ctx.send(_("Setting saved"))
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -721,7 +722,7 @@ class PayDay(commands.Cog):
             raise e
         else:
             if not await ctx.tick():
-                await ctx.send("Setting saved")
+                await ctx.send(_("Setting saved"))
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -733,26 +734,22 @@ class PayDay(commands.Cog):
             amounts = await self.config.all()
             times = await self.config.user(person).all()
 
-            await ctx.send(
-                "```"
-                "Global Settings\n"
-                f"{tabulate(amounts.items())}\n\n"
-                f"User Settings for {person.id}\n"
-                f"{tabulate(times.items())}"
-                "```"
-            )
+            await ctx.send("```{global_label}\n{global_items}\n\n{user_label}\n{user_items}```".format(
+                global_label=_("Global Settings"),
+                global_items=tabulate(amounts.items()),
+                user_label=_("User Settings for {person}").format(person=person.id),
+                user_items=tabulate(times.items())
+            ))
         else:
             amounts = await self.config.guild(ctx.guild).all()
             times = await self.config.member(person).all()
 
-            await ctx.send(
-                "```"
-                "Guild Settings\n"
-                f"{tabulate(amounts.items())}\n\n"
-                f"Member Settings for {person.id}\n"
-                f"{tabulate(times.items())}"
-                "```"
-            )
+            await ctx.send("```{global_label}\n{global_items}\n\n{user_label}\n{user_items}```".format(
+                global_label=_("Global Settings"),
+                global_items=tabulate(amounts.items()),
+                user_label=_("Member Settings for {person}").format(person=person.id),
+                user_items=tabulate(times.items())
+            ))
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -784,7 +781,7 @@ class PayDay(commands.Cog):
         except Exception as e:
             raise e
         else:
-            await ctx.send(f"The provided times for {person.display_name} have been reset")
+            await ctx.send(_("The provided times for {person} have been reset").format(person=person.display_name))
 
     async def red_delete_data_for_user(
         self,

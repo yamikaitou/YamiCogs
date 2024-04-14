@@ -11,6 +11,7 @@ log = logging.getLogger("red.yamicogs.talk")
 RequestType = Literal["discord_deleted_user", "owner", "user", "user_strict"]
 _ = Translator("Talk", __file__)
 
+
 @cog_i18n(_)
 class Talk(commands.Cog):
     """
@@ -107,10 +108,18 @@ class Talk(commands.Cog):
 
         if value is None:
             value = await self.config.guild(ctx.guild).everyone()
-            await ctx.send(_("Current setting: {enabled_or_disabled}").format(enabled_or_disabled=_("Enabled") if value else _("Disabled")))
+            await ctx.send(
+                _("Current setting: {enabled_or_disabled}").format(
+                    enabled_or_disabled=_("Enabled") if value else _("Disabled")
+                )
+            )
         else:
             await self.config.guild(ctx.guild).everyone.set(value)
-            await ctx.send(_("Setting changed to {enabled_or_disabled}").format(enabled_or_disabled=_("Enabled") if value else _("Disabled")))
+            await ctx.send(
+                _("Setting changed to {enabled_or_disabled}").format(
+                    enabled_or_disabled=_("Enabled") if value else _("Disabled")
+                )
+            )
 
     async def red_delete_data_for_user(self, *, requester: RequestType, user_id: int) -> None:
         # this cog does not store any user data

@@ -6,9 +6,11 @@ import discord
 from discord.ext import tasks
 from redbot.core import Config, bank, commands
 from redbot.core.bot import Red
+from redbot.core.i18n import Translator, cog_i18n
 from tabulate import tabulate  # pylint:disable=import-error
 
 log = logging.getLogger("red.yamicogs.economytrickle")
+_ = Translator("EconomyTrickle", __file__)
 
 
 # taken from Red-Discordbot bank.py
@@ -33,6 +35,7 @@ def is_owner_if_bank_global():
     return commands.check(pred)
 
 
+@cog_i18n(_)
 class EconomyTrickle(commands.Cog):
     """
     Trickle credits into your Economy
@@ -248,17 +251,27 @@ class EconomyTrickle(commands.Cog):
         if await bank.is_global():
             cache = await self.config.all()
             await ctx.send(
-                f"Message Credits: {cache['credits']}\nMessage Count: {cache['messages']}\nVoice Credits: {cache['voice']}"
+                _(
+                    "Message Credits: {credits}\nMessage Count: {messages}\nVoice Credits: {voice}"
+                ).format(
+                    credits=cache["credits"], messages=cache["messages"], voice=cache["voice"]
+                )
             )
         else:
             if ctx.guild is not None:
                 cache = await self.config.guild(ctx.guild).all()
                 await ctx.send(
-                    f"Message Credits: {cache['credits']}\nMessage Count: {cache['messages']}\nVoice Credits: {cache['voice']}"
+                    _(
+                        "Message Credits: {credits}\nMessage Count: {messages}\nVoice Credits: {voice}"
+                    ).format(
+                        credits=cache["credits"], messages=cache["messages"], voice=cache["voice"]
+                    )
                 )
             else:
                 await ctx.send(
-                    "Your bank is set to per-server. Please try this command in a server instead"
+                    _(
+                        "Your bank is set to per-server. Please try this command in a server instead"
+                    )
                 )
 
     @is_owner_if_bank_global()
@@ -276,24 +289,28 @@ class EconomyTrickle(commands.Cog):
             if 0 <= number <= 1000:
                 await self.config.credits.set(number)
                 if not await ctx.tick():
-                    await ctx.send("Setting saved")
+                    await ctx.send(_("Setting saved"))
             else:
                 await ctx.send(
-                    f"You must specify a value that is not less than 0 and not more than 1000"
+                    _("You must specify a value that is not less than 0 and not more than 1000")
                 )
         else:
             if ctx.guild is not None:
                 if 0 <= number <= 1000:
                     await self.config.guild(ctx.guild).credits.set(number)
                     if not await ctx.tick():
-                        await ctx.send("Setting saved")
+                        await ctx.send(_("Setting saved"))
                 else:
                     await ctx.send(
-                        f"You must specify a value that is not less than 0 and not more than 1000"
+                        _(
+                            "You must specify a value that is not less than 0 and not more than 1000"
+                        )
                     )
             else:
                 await ctx.send(
-                    "Your bank is set to per-server. Please try this command in a server instead"
+                    _(
+                        "Your bank is set to per-server. Please try this command in a server instead"
+                    )
                 )
 
     @is_owner_if_bank_global()
@@ -311,24 +328,26 @@ class EconomyTrickle(commands.Cog):
             if 0 <= number <= 100:
                 await self.config.messages.set(number)
                 if not await ctx.tick():
-                    await ctx.send("Setting saved")
+                    await ctx.send(_("Setting saved"))
             else:
                 await ctx.send(
-                    f"You must specify a value that is not less than 0 and not more than 100"
+                    _("You must specify a value that is not less than 0 and not more than 100")
                 )
         else:
             if ctx.guild is not None:
                 if 0 <= number <= 100:
                     await self.config.guild(ctx.guild).messages.set(number)
                     if not await ctx.tick():
-                        await ctx.send("Setting saved")
+                        await ctx.send(_("Setting saved"))
                 else:
                     await ctx.send(
-                        f"You must specify a value that is not less than 0 and not more than 100"
+                        _("You must specify a value that is not less than 0 and not more than 100")
                     )
             else:
                 await ctx.send(
-                    "Your bank is set to per-server. Please try this command in a server instead"
+                    _(
+                        "Your bank is set to per-server. Please try this command in a server instead"
+                    )
                 )
 
     @is_owner_if_bank_global()
@@ -346,24 +365,28 @@ class EconomyTrickle(commands.Cog):
             if 0 <= number <= 1000:
                 await self.config.voice.set(number)
                 if not await ctx.tick():
-                    await ctx.send("Setting saved")
+                    await ctx.send(_("Setting saved"))
             else:
                 await ctx.send(
-                    f"You must specify a value that is not less than 0 and not more than 1000"
+                    _("You must specify a value that is not less than 0 and not more than 1000")
                 )
         else:
             if ctx.guild is not None:
                 if 0 <= number <= 1000:
                     await self.config.guild(ctx.guild).voice.set(number)
                     if not await ctx.tick():
-                        await ctx.send("Setting saved")
+                        await ctx.send(_("Setting saved"))
                 else:
                     await ctx.send(
-                        f"You must specify a value that is not less than 0 and not more than 1000"
+                        _(
+                            "You must specify a value that is not less than 0 and not more than 1000"
+                        )
                     )
             else:
                 await ctx.send(
-                    "Your bank is set to per-server. Please try this command in a server instead"
+                    _(
+                        "Your bank is set to per-server. Please try this command in a server instead"
+                    )
                 )
 
     @commands.guild_only()
@@ -383,10 +406,10 @@ class EconomyTrickle(commands.Cog):
 
         try:
             self.blocklist.remove(channel.id)
-            await ctx.send("Channel removed from the blocklist")
+            await ctx.send(_("Channel removed from the blocklist"))
         except ValueError:
             self.blocklist.append(channel.id)
-            await ctx.send("Channel added to the blocklist")
+            await ctx.send(_("Channel added to the blocklist"))
         finally:
             await self.config.blocklist.set(self.blocklist)
 
@@ -403,9 +426,13 @@ class EconomyTrickle(commands.Cog):
                 blocks += f"{chan.name}\n"
 
         if blocks == "":
-            blocks = "No channels blocked"
+            blocks = _("No channels blocked")
 
-        await ctx.send(f"The following channels are blocked from EconomyTrickle\n{blocks}")
+        await ctx.send(
+            _("The following channels are blocked from EconomyTrickle\n{blocked_channels}").format(
+                blocked_channels=blocks
+            )
+        )
 
     async def red_get_data_for_user(self, *, user_id: int):
         # this cog does not store any data

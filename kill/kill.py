@@ -3,10 +3,13 @@ import random
 
 import discord
 from redbot.core import Config, checks, commands
+from redbot.core.i18n import Translator, cog_i18n
 
 log = logging.getLogger("red.yamicogs.kill")
+_ = Translator("Kill", __file__)
 
 
+@cog_i18n(_)
 class Kill(commands.Cog):
     """
     Kill people in interesting ways
@@ -47,7 +50,7 @@ class Kill(commands.Cog):
             kill.append(msg)
 
         if not await ctx.tick():
-            await ctx.send("Message added")
+            await ctx.send(_("Message added"))
 
     @killset.command(name="delete")
     async def _delete(self, ctx, num: int):
@@ -56,18 +59,20 @@ class Kill(commands.Cog):
         """
 
         if num < 0:
-            return await ctx.send("Negative numbers are not supported")
+            return await ctx.send(_("Negative numbers are not supported"))
         async with self.config.guild(ctx.guild).msg() as kill:
             if num >= len(kill):
                 return await ctx.send(
-                    "Sorry, but you don't have a kill message with that number. "
-                    "Please use `[p]killset list` to get the number of the message you wish to delete"
+                    _(
+                        "Sorry, but you don't have a kill message with that number. "
+                        "Please use `[p]killset list` to get the number of the message you wish to delete"
+                    )
                 )
 
             kill.pop(num)
 
         if not await ctx.tick():
-            await ctx.send("Message removed")
+            await ctx.send(_("Message removed"))
 
     @killset.command(name="list")
     @checks.bot_has_permissions(embed_links=True)
@@ -78,13 +83,15 @@ class Kill(commands.Cog):
 
         embed = discord.Embed(
             colour=discord.Colour(0x636BD6),
-            description="{killer} and {victim} will be replaced with a users mention\n"
-            "{killer2} and {victim2} will be replaced with a users name in italics",
+            description=_(
+                "{killer} and {victim} will be replaced with a users mention\n"
+                "{killer2} and {victim2} will be replaced with a users name in italics"
+            ),
         )
         botkill = await self.config.guild(ctx.guild).botkill()
-        embed.add_field(name="Bot Kill", value=botkill)
+        embed.add_field(name=_("Bot Kill"), value=botkill)
         selfkill = await self.config.guild(ctx.guild).selfkill()
-        embed.add_field(name="Self Kill", value=selfkill)
+        embed.add_field(name=_("Self Kill"), value=selfkill)
         killmsgs = await self.config.guild(ctx.guild).msg()
         k = 0
         killmsg = ""
@@ -92,9 +99,9 @@ class Kill(commands.Cog):
             killmsg += "`" + str(k) + ") " + msg + "`\n"
             k += 1
         if k == 0:
-            embed.add_field(name="Kill Messages", value="There are no messages configured")
+            embed.add_field(name=_("Kill Messages"), value=_("There are no messages configured"))
         else:
-            embed.add_field(name="Kill Messages", value=killmsg)
+            embed.add_field(name=_("Kill Messages"), value=killmsg)
 
         await ctx.send(embed=embed)
 
@@ -110,7 +117,7 @@ class Kill(commands.Cog):
         await self.config.guild(ctx.guild).botkill.set(msg)
 
         if not await ctx.tick():
-            await ctx.send("Message saved")
+            await ctx.send(_("Message saved"))
 
     @killset.command(name="self")
     async def _self(self, ctx, *, msg):
@@ -124,7 +131,7 @@ class Kill(commands.Cog):
         await self.config.guild(ctx.guild).selfkill.set(msg)
 
         if not await ctx.tick():
-            await ctx.send("Message saved")
+            await ctx.send(_("Message saved"))
 
     @commands.command()
     async def kill(self, ctx, *, user: discord.Member):
@@ -140,7 +147,9 @@ class Kill(commands.Cog):
             kills = await self.config.guild(ctx.guild).msg()
             if len(kills) == 0:
                 return await ctx.send(
-                    "Your life has been spared this time as I do not have any kill methods configured"
+                    _(
+                        "Your life has been spared this time as I do not have any kill methods configured"
+                    )
                 )
             msg = kills[random.randint(0, len(kills) - 1)]
 

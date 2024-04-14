@@ -138,9 +138,13 @@ locales/messages.pot
 docs/locales/messages.pot
 lottery/locales/messages.pot
 collectcards/locales/messages.pot
-collector/components/locales/messages.pot
-falrek/components/cards/locales/messages.pot
-mcpoker/locales/messages.pot
-slots/locales/messages.pot
-survey/locales/messages.pot
-ytnotify/locales/messages.pot
+
+
+# Not Public
+collector/
+falrek/
+mcpoker/
+slots/
+survey/
+ytnotify/
+collectcards/
