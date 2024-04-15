@@ -4,9 +4,9 @@ from redbot.core.i18n import Translator
 _ = Translator("RPS", __file__)
 
 class Result(str, Enum):
-    LOSE = _("Look at that, I win!")
-    WIN = _("Congrats, you win!")
-    TIE = _("Well, we must be mind-readers!")
+    LOSE = "lose"
+    WIN = "win"
+    TIE = "tie"
 
     def __str__(self) -> str:
         return self.value
@@ -43,7 +43,7 @@ class RPSLSChoice(Enum):
 
 class RPSIcon(str, Enum):
     ROCK = "\U0001faa8"
-    PAPER = ("\N{NEWSPAPER}",)
+    PAPER = "\N{NEWSPAPER}"
     SCISSORS = "\N{BLACK SCISSORS}\N{VARIATION SELECTOR-16}"
 
     def __str__(self) -> str:
@@ -55,7 +55,7 @@ class RPSIcon(str, Enum):
 
 class RPSLSIcon(str, Enum):
     ROCK = "\U0001faa8"
-    PAPER = ("\N{NEWSPAPER}",)
+    PAPER = "\N{NEWSPAPER}"
     SCISSORS = "\N{BLACK SCISSORS}\N{VARIATION SELECTOR-16}"
     LIZARD = "\N{LIZARD}"
     SPOCK = "\N{RAISED HAND WITH PART BETWEEN MIDDLE AND RING FINGERS}"

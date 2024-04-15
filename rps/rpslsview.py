@@ -24,11 +24,7 @@ class RPSLSView(discord.ui.View):
     )
     async def rpslsrock(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(
-            content=f"{self._check(RPSLSChoice.ROCK)}\n\n{_('You')} {RPSLSIcon.ROCK} - {RPSLSIcon[self.computer.name]} {_('Me')}",
-            embed=None,
-            view=None,
-        )
+        await self.cog._outcome(interaction, self._check(RPSLSChoice.ROCK), RPSLSIcon.ROCK, RPSLSIcon[self.computer.name])
         self.value = True
 
     @discord.ui.button(
@@ -40,11 +36,7 @@ class RPSLSView(discord.ui.View):
     )
     async def rpslspaper(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(
-            content=f"{self._check(RPSLSChoice.PAPER)}\n\n{_('You')} {RPSLSIcon.PAPER} - {RPSLSIcon[self.computer.name]} {_('Me')}",
-            embed=None,
-            view=None,
-        )
+        await self.cog._outcome(interaction, self._check(RPSLSChoice.PAPER), RPSLSIcon.PAPER, RPSLSIcon[self.computer.name])
         self.value = True
 
     @discord.ui.button(
@@ -56,11 +48,7 @@ class RPSLSView(discord.ui.View):
     )
     async def rpslsscissors(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(
-            content=f"{self._check(RPSLSChoice.SCISSORS)}\n\n{_('You')} {RPSLSIcon.SCISSORS} - {RPSLSIcon[self.computer.name]} {_('Me')}",
-            embed=None,
-            view=None,
-        )
+        await self.cog._outcome(interaction, self._check(RPSLSChoice.SCISSORS), RPSLSIcon.SCISSORS, RPSLSIcon[self.computer.name])
         self.value = True
 
     @discord.ui.button(
@@ -72,11 +60,7 @@ class RPSLSView(discord.ui.View):
     )
     async def rpslslizard(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(
-            content=f"{self._check(RPSLSChoice.LIZARD)}\n\n{_('You')} {RPSLSIcon.LIZARD} - {RPSLSIcon[self.computer.name]} {_('Me')}",
-            embed=None,
-            view=None,
-        )
+        await self.cog._outcome(interaction, self._check(RPSLSChoice.LIZARD), RPSLSIcon.LIZARD, RPSLSIcon[self.computer.name])
         self.value = True
 
     @discord.ui.button(
@@ -88,11 +72,7 @@ class RPSLSView(discord.ui.View):
     )
     async def rpslsspock(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(
-            content=f"{self._check(RPSLSChoice.SPOCK)}\n\n{_('You')} {RPSLSIcon.SPOCK} - {RPSLSIcon[self.computer.name]} {_('Me')}",
-            embed=None,
-            view=None,
-        )
+        await self.cog._outcome(interaction, self._check(RPSLSChoice.SPOCK), RPSLSIcon.SPOCK, RPSLSIcon[self.computer.name])
         self.value = True
 
     @discord.ui.button(

@@ -24,11 +24,7 @@ class RPSView(discord.ui.View):
     )
     async def rpsrock(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(
-            content=f"{self._check(RPSChoice.ROCK)}\n\n{_('You')} {RPSIcon.ROCK} - {RPSIcon[self.computer.name]} {_('Me')}",
-            embed=None,
-            view=None,
-        )
+        await self.cog._outcome(interaction, self._check(RPSChoice.ROCK), RPSIcon.ROCK, RPSIcon[self.computer.name])
         self.value = True
 
     @discord.ui.button(
@@ -40,11 +36,7 @@ class RPSView(discord.ui.View):
     )
     async def rpspaper(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(
-            content=f"{self._check(RPSChoice.PAPER)}\n\n{_('You')} {RPSIcon.PAPER} - {RPSIcon[self.computer.name]} {_('Me')}",
-            embed=None,
-            view=None,
-        )
+        await self.cog._outcome(interaction, self._check(RPSChoice.PAPER), RPSIcon.PAPER, RPSIcon[self.computer.name])
         self.value = True
 
     @discord.ui.button(
@@ -56,11 +48,7 @@ class RPSView(discord.ui.View):
     )
     async def rpsscissors(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(
-            content=f"{self._check(RPSChoice.SCISSORS)}\n\n{_('You')} {RPSIcon.SCISSORS} - {RPSIcon[self.computer.name]} {_('Me')}",
-            embed=None,
-            view=None,
-        )
+        await self.cog._outcome(interaction, self._check(RPSChoice.SCISSORS), RPSIcon.SCISSORS, RPSIcon[self.computer.name])
         self.value = True
 
     @discord.ui.button(

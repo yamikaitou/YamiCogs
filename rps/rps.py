@@ -86,3 +86,30 @@ class RPS(commands.Cog):
         await view.wait()
         if view.value is None:
             await ctx.message.edit(content=_("Very well, maybe later"), embed=None, view=None)
+    
+    async def _outcome(self, interaction: discord.Interaction, outcome, player, computer):
+        if outcome == "win":
+            await interaction.message.edit(
+                content=_("Congrats, you win!\n\nYou {player_icon} - {computer_icon} Me").format(player_icon=player, computer_icon=computer),
+                embed=None,
+                view=None,
+            )
+        elif outcome == "lose":
+            await interaction.message.edit(
+                content=_("Look at that, I win!\n\nYou {player_icon} - {computer_icon} Me").format(player_icon=player, computer_icon=computer),
+                embed=None,
+                view=None,
+            )
+        elif outcome == "tie":
+            await interaction.message.edit(
+                content=_("Well, we must be mind-readers!\n\nYou {player_icon} - {computer_icon} Me").format(player_icon=player, computer_icon=computer),
+                embed=None,
+                view=None,
+            )
+        else:
+            await interaction.message.edit(
+                content=_("Well, this is embarrassing. No idea what happens now"),
+                embed=None,
+                view=None,
+            )
+
