@@ -1,0 +1,120 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: yamicogs\n"
+"POT-Creation-Date: 2024-04-14 18:44+0000\n"
+"PO-Revision-Date: 2024-04-14 18:49\n"
+"Last-Translator: \n"
+"Language-Team: Turkish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: redgettext 3.4.2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: yamicogs\n"
+"X-Crowdin-Project-ID: 436902\n"
+"X-Crowdin-Language: tr\n"
+"X-Crowdin-File: /master/economytrickle/locales/messages.pot\n"
+"X-Crowdin-File-ID: 160\n"
+"Language: tr_TR\n"
+
+#: economytrickle/economytrickle.py:40
+#, docstring
+msgid "\n"
+"    Trickle credits into your Economy\n\n"
+"    More detailed docs: <https://cogs.yamikaitou.dev/economytrickle.html>\n"
+"    "
+msgstr ""
+
+#: economytrickle/economytrickle.py:243
+#, docstring
+msgid "Configure various settings"
+msgstr ""
+
+#: economytrickle/economytrickle.py:249
+#, docstring
+msgid "Show the current settings"
+msgstr ""
+
+#: economytrickle/economytrickle.py:254 economytrickle/economytrickle.py:264
+msgid "Message Credits: {credits}\n"
+"Message Count: {messages}\n"
+"Voice Credits: {voice}"
+msgstr ""
+
+#: economytrickle/economytrickle.py:272 economytrickle/economytrickle.py:311
+#: economytrickle/economytrickle.py:348 economytrickle/economytrickle.py:387
+msgid "Your bank is set to per-server. Please try this command in a server instead"
+msgstr ""
+
+#: economytrickle/economytrickle.py:281
+#, docstring
+msgid "\n"
+"        Set the number of credits to grant\n\n"
+"        Set the number to 0 to disable\n"
+"        Max value is 1000\n"
+"        "
+msgstr ""
+
+#: economytrickle/economytrickle.py:292 economytrickle/economytrickle.py:302
+#: economytrickle/economytrickle.py:331 economytrickle/economytrickle.py:341
+#: economytrickle/economytrickle.py:368 economytrickle/economytrickle.py:378
+msgid "Setting saved"
+msgstr ""
+
+#: economytrickle/economytrickle.py:295 economytrickle/economytrickle.py:305
+#: economytrickle/economytrickle.py:371 economytrickle/economytrickle.py:381
+msgid "You must specify a value that is not less than 0 and not more than 1000"
+msgstr ""
+
+#: economytrickle/economytrickle.py:320
+#, docstring
+msgid "\n"
+"        Set the number of messages required to gain credits\n\n"
+"        Set the number to 0 to disable\n"
+"        Max value is 100\n"
+"        "
+msgstr ""
+
+#: economytrickle/economytrickle.py:334 economytrickle/economytrickle.py:344
+msgid "You must specify a value that is not less than 0 and not more than 100"
+msgstr ""
+
+#: economytrickle/economytrickle.py:357
+#, docstring
+msgid "\n"
+"        Set the number of credits to grant every minute\n\n"
+"        Set the number to 0 to disable\n"
+"        Max value is 1000\n"
+"        "
+msgstr ""
+
+#: economytrickle/economytrickle.py:398
+#, docstring
+msgid "\n"
+"        Add/Remove the current channel (or a specific channel) to the blocklist\n\n"
+"        Not passing a channel will add/remove the channel you ran the command in to the blocklist\n"
+"        "
+msgstr ""
+
+#: economytrickle/economytrickle.py:409
+msgid "Channel removed from the blocklist"
+msgstr ""
+
+#: economytrickle/economytrickle.py:412
+msgid "Channel added to the blocklist"
+msgstr ""
+
+#: economytrickle/economytrickle.py:420
+#, docstring
+msgid "Provide a list of channels that are on the blocklist for this server"
+msgstr ""
+
+#: economytrickle/economytrickle.py:429
+msgid "No channels blocked"
+msgstr ""
+
+#: economytrickle/economytrickle.py:432
+msgid "The following channels are blocked from EconomyTrickle\n"
+"{blocked_channels}"
+msgstr ""
+

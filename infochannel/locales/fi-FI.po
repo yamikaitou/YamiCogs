@@ -1,0 +1,91 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: yamicogs\n"
+"POT-Creation-Date: 2024-04-13 19:14+0000\n"
+"PO-Revision-Date: 2024-04-14 04:16\n"
+"Last-Translator: \n"
+"Language-Team: Finnish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: redgettext 3.4.2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: yamicogs\n"
+"X-Crowdin-Project-ID: 436902\n"
+"X-Crowdin-Language: fi\n"
+"X-Crowdin-File: /master/infochannel/locales/messages.pot\n"
+"X-Crowdin-File-ID: 162\n"
+"Language: fi_FI\n"
+
+#: infochannel/infochannel.py:121
+#, docstring
+msgid "\n"
+"        Toggle info channel for this server\n"
+"        "
+msgstr ""
+
+#: infochannel/infochannel.py:171
+#, docstring
+msgid "\n"
+"        Toggle different types of infochannels\n"
+"        "
+msgstr ""
+
+#: infochannel/infochannel.py:179
+#, docstring
+msgid "Toggles the infochannel for the specified channel type.\n\n"
+"        Valid Types are:\n"
+"        - `members`: Total members on the server\n"
+"        - `humans`: Total members that aren't bots\n"
+"        - `boosters`: Total amount of boosters\n"
+"        - `bots`: Total bots\n"
+"        - `roles`: Total number of roles\n"
+"        - `channels`: Total number of channels excluding infochannels,\n"
+"        - `online`: Total online members,\n"
+"        - `offline`: Total offline members,\n"
+"        "
+msgstr ""
+
+#: infochannel/infochannel.py:211
+#, docstring
+msgid "Toggle an infochannel that shows the count of users with the specified role"
+msgstr ""
+
+#: infochannel/infochannel.py:226
+#, docstring
+msgid "\n"
+"        Change the name of the infochannel for the specified channel type.\n\n"
+"        {count} must be used to display number of total members in the server.\n"
+"        Leave blank to set back to default.\n\n"
+"        Examples:\n"
+"        - `[p]infochannelset name members Cool Cats: {count}`\n"
+"        - `[p]infochannelset name bots {count} Robot Overlords`\n\n"
+"        Valid Types are:\n"
+"        - `members`: Total members on the server\n"
+"        - `humans`: Total members that aren't bots\n"
+"        - `boosters`: Total amount of boosters\n"
+"        - `bots`: Total bots\n"
+"        - `roles`: Total number of roles\n"
+"        - `channels`: Total number of channels excluding infochannels\n"
+"        - `online`: Total online members\n"
+"        - `offline`: Total offline members\n\n"
+"        Warning: This command counts against the channel update rate limit and may be queued.\n"
+"        "
+msgstr ""
+
+#: infochannel/infochannel.py:273
+#, docstring
+msgid "\n"
+"        Change the name of the infochannel for specific roles.\n\n"
+"        {count} must be used to display number members with the given role.\n"
+"        {role} can be used for the roles name.\n"
+"        Leave blank to set back to default.\n\n"
+"        Default is set to: `{role}: {count}`\n\n"
+"        Examples:\n"
+"        - `[p]infochannelset rolename @Patrons {role}: {count}`\n"
+"        - `[p]infochannelset rolename Elite {count} members with {role} role`\n"
+"        - `[p]infochannelset rolename \"Space Role\" Total boosters: {count}`\n\n"
+"        Warning: This command counts against the channel update rate limit and may be queued.\n"
+"        "
+msgstr ""
+

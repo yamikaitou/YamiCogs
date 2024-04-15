@@ -1,0 +1,298 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: yamicogs\n"
+"POT-Creation-Date: 2024-04-14 18:44+0000\n"
+"PO-Revision-Date: 2024-04-14 18:50\n"
+"Last-Translator: \n"
+"Language-Team: Portuguese, Brazilian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: redgettext 3.4.2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: yamicogs\n"
+"X-Crowdin-Project-ID: 436902\n"
+"X-Crowdin-Language: pt-BR\n"
+"X-Crowdin-File: /master/payday/locales/messages.pot\n"
+"X-Crowdin-File-ID: 166\n"
+"Language: pt_BR\n"
+
+#: payday/payday.py:81
+#, docstring
+msgid "\n"
+"    Customizable PayDay system\n\n"
+"    More detailed docs: <https://cogs.yamikaitou.dev/payday.html>\n"
+"    "
+msgstr ""
+
+#: payday/payday.py:143
+#, docstring
+msgid "More options to get free credits"
+msgstr ""
+
+#: payday/payday.py:148
+#, docstring
+msgid "Display remaining time for all options"
+msgstr ""
+
+#: payday/payday.py:168 payday/payday.py:182
+msgid "Available Now!"
+msgstr ""
+
+#: payday/payday.py:187
+msgid "No freecredit options have been configured yet"
+msgstr ""
+
+#: payday/payday.py:194
+#, docstring
+msgid "Claim all available freecredits"
+msgstr ""
+
+#: payday/payday.py:213
+msgid "You have claimed all available {bankname} from the `freecredits` program! +{total_amount} {bankname}\n"
+"Plus an additional {total_streak} for maintaining your streaks"
+msgstr ""
+
+#: payday/payday.py:220
+msgid "You have claimed all available {bankname} from the `freecredits` program! +{total_amount} {bankname}"
+msgstr ""
+
+#: payday/payday.py:225
+msgid "You have no available {bankname} for claiming."
+msgstr ""
+
+#: payday/payday.py:230
+#, docstring
+msgid "Get some free currency every hour"
+msgstr ""
+
+#: payday/payday.py:235
+msgid "Sorry, you still have {remain} until your next hourly bonus"
+msgstr ""
+
+#: payday/payday.py:238 payday/payday.py:260 payday/payday.py:282
+#: payday/payday.py:304 payday/payday.py:326 payday/payday.py:348
+msgid "You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak"
+msgstr ""
+
+#: payday/payday.py:244 payday/payday.py:266 payday/payday.py:288
+#: payday/payday.py:310 payday/payday.py:332 payday/payday.py:354
+msgid "You have been given {free_credits} {bankname}"
+msgstr ""
+
+#: payday/payday.py:252
+#, docstring
+msgid "Get some free currency every day"
+msgstr ""
+
+#: payday/payday.py:257
+msgid "Sorry, you still have {remain} until your next dailya bonus"
+msgstr ""
+
+#: payday/payday.py:274
+#, docstring
+msgid "Get some free currency every week (7 days)"
+msgstr ""
+
+#: payday/payday.py:279
+msgid "Sorry, you still have {remain} until your next weekly bonus"
+msgstr ""
+
+#: payday/payday.py:296
+#, docstring
+msgid "Get some free currency every month (30 days)"
+msgstr ""
+
+#: payday/payday.py:301
+msgid "Sorry, you still have {remain} until your next monthly bonus"
+msgstr ""
+
+#: payday/payday.py:318
+#, docstring
+msgid "Get some free currency every quarter (122 days)"
+msgstr ""
+
+#: payday/payday.py:323
+msgid "Sorry, you still have {remain} until your next quarterly bonus"
+msgstr ""
+
+#: payday/payday.py:340
+#, docstring
+msgid "Get some free currency every year (365 days)"
+msgstr ""
+
+#: payday/payday.py:345
+msgid "Sorry, you still have {remain} until your next yearly bonus"
+msgstr ""
+
+#: payday/payday.py:406
+#, docstring
+msgid "\n"
+"        Configure the `freecredits` options\n\n"
+"        More detailed docs: <https://cogs.yamikaitou.dev/payday.html#pdconfig>\n"
+"        "
+msgstr ""
+
+#: payday/payday.py:416
+#, docstring
+msgid "Print the `freecredits` options"
+msgstr ""
+
+#: payday/payday.py:429
+#, docstring
+msgid "\n"
+"        Configure the `hourly` options\n\n"
+"        Setting this to 0 will disable the command\n"
+"        "
+msgstr ""
+
+#: payday/payday.py:436 payday/payday.py:458 payday/payday.py:481
+#: payday/payday.py:504 payday/payday.py:527 payday/payday.py:550
+#: payday/payday.py:579 payday/payday.py:602 payday/payday.py:625
+#: payday/payday.py:648 payday/payday.py:671 payday/payday.py:694
+msgid "You must provide a non-negative value or 0"
+msgstr ""
+
+#: payday/payday.py:446 payday/payday.py:468 payday/payday.py:491
+#: payday/payday.py:514 payday/payday.py:537 payday/payday.py:560
+#: payday/payday.py:589 payday/payday.py:612 payday/payday.py:635
+#: payday/payday.py:658 payday/payday.py:681 payday/payday.py:704
+#: payday/payday.py:725
+msgid "Setting saved"
+msgstr ""
+
+#: payday/payday.py:452
+#, docstring
+msgid "\n"
+"        Configure the `daily` options\n\n"
+"        Setting this to 0 will disable the command"
+msgstr ""
+
+#: payday/payday.py:474
+#, docstring
+msgid "\n"
+"        Configure the `weekly` options\n\n"
+"        Setting this to 0 will disable the command\n"
+"        "
+msgstr ""
+
+#: payday/payday.py:497
+#, docstring
+msgid "\n"
+"        Configure the `monthly` options\n\n"
+"        Setting this to 0 will disable the command\n"
+"        "
+msgstr ""
+
+#: payday/payday.py:520
+#, docstring
+msgid "\n"
+"        Configure the `quarterly` options\n\n"
+"        Setting this to 0 will disable the command\n"
+"        "
+msgstr ""
+
+#: payday/payday.py:543
+#, docstring
+msgid "\n"
+"        Configure the `yearly` options\n\n"
+"        Setting this to 0 will disable the command\n"
+"        "
+msgstr ""
+
+#: payday/payday.py:566
+#, docstring
+msgid "Configure the `streaks` options"
+msgstr ""
+
+#: payday/payday.py:572
+#, docstring
+msgid "\n"
+"        Configure the `hourly` streaks value\n\n"
+"        Setting this to 0 will disable the streak bonus\n"
+"        "
+msgstr ""
+
+#: payday/payday.py:595
+#, docstring
+msgid "\n"
+"        Configure the `daily` streaks value\n\n"
+"        Setting this to 0 will disable the streak bonus\n"
+"        "
+msgstr ""
+
+#: payday/payday.py:618
+#, docstring
+msgid "\n"
+"        Configure the `weekly` streaks value\n\n"
+"        Setting this to 0 will disable the streak bonus\n"
+"        "
+msgstr ""
+
+#: payday/payday.py:641
+#, docstring
+msgid "\n"
+"        Configure the `monthly` streaks value\n\n"
+"        Setting this to 0 will disable the streak bonus\n"
+"        "
+msgstr ""
+
+#: payday/payday.py:664
+#, docstring
+msgid "\n"
+"        Configure the `quarterly` streaks value\n\n"
+"        Setting this to 0 will disable the streak bonus\n"
+"        "
+msgstr ""
+
+#: payday/payday.py:687
+#, docstring
+msgid "\n"
+"        Configure the `yearly` streaks value\n\n"
+"        Setting this to 0 will disable the streak bonus\n"
+"        "
+msgstr ""
+
+#: payday/payday.py:710
+#, docstring
+msgid "\n"
+"        Configure streaks to be a percentage or flat amount\n\n"
+"        <state> should be any of these combinations, `on/off`, `yes/no`, `1/0`, `true/false`\n"
+"        "
+msgstr ""
+
+#: payday/payday.py:731
+#, docstring
+msgid "Pull some config data for a specific user/member, useful for Support questions"
+msgstr ""
+
+#: payday/payday.py:738 payday/payday.py:748
+msgid "Global Settings"
+msgstr ""
+
+#: payday/payday.py:740
+msgid "User Settings for {person}"
+msgstr ""
+
+#: payday/payday.py:750
+msgid "Member Settings for {person}"
+msgstr ""
+
+#: payday/payday.py:760
+#, docstring
+msgid "\n"
+"        Forcibly reset the time for a user. WARNING, this will allow the user to claim the credits right away\n\n"
+"        For <options>, you can provide any combination of the following (seperate by a space to include multiple)\n"
+"        hour\n"
+"        day\n"
+"        week\n"
+"        month\n"
+"        quarter\n"
+"        year\n"
+"        "
+msgstr ""
+
+#: payday/payday.py:784
+msgid "The provided times for {person} have been reset"
+msgstr ""
+
