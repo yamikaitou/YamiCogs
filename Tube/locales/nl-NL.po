@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: yamicogs\n"
 "POT-Creation-Date: 2024-04-13 19:14+0000\n"
-"PO-Revision-Date: 2024-04-14 04:15\n"
+"PO-Revision-Date: 2024-04-15 22:53\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -60,12 +60,12 @@ msgstr ""
 #: Tube/tube.py:199
 #, docstring
 msgid "List current subscriptions"
-msgstr ""
+msgstr "Toon huidige abonnementen"
 
 #: Tube/tube.py:248
 #, docstring
 msgid "List current subscriptions for all guilds"
-msgstr ""
+msgstr "Toon huidige abonnementen voor alle servers"
 
 #: Tube/tube.py:264
 #, docstring
