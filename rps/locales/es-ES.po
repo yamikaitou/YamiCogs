@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: yamicogs\n"
 "POT-Creation-Date: 2024-04-15 02:03+0000\n"
-"PO-Revision-Date: 2024-04-15 02:04\n"
+"PO-Revision-Date: 2024-04-15 16:52\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -23,33 +23,41 @@ msgid "\n"
 "    Rock, Paper, Scissors (Lizard, Spock)\n\n"
 "    More detailed docs: <https://cogs.yamikaitou.dev/rps.html>\n"
 "    "
-msgstr ""
+msgstr "\n"
+"    Piedra, Papel, Tijeras (Lagarto, Spock)\n\n"
+"    Documentación más detallada: <https://cogs.yamikaitou.dev/rps.html>\n"
+"    "
 
 #: rps/rps.py:29
 #, docstring
 msgid "Rules of Rock, Paper, Scissors (Lizard, Spock)"
-msgstr ""
+msgstr "Reglas de Piedra, Papel, Tijeras (Lagarto, Spock)"
 
 #: rps/rps.py:35
 msgid "A game of skill (chance).\n"
 "Simply select your choice and see if you can defeat the computer\n\n"
 "2 versions are included, the rules are below\n"
-msgstr ""
+msgstr "Un juego de habilidad (azar).\n"
+"Simplemente selecciona tu opción y mira si puedes vencer al bot\n\n"
+"Se incluyen 2 versiones, las reglas están abajo\n"
 
 #: rps/rps.py:40 rps/rpsview.py:76
 msgid "Rock, Paper, Scissors"
-msgstr ""
+msgstr "Piedra, Papel, Tijeras"
 
 #: rps/rps.py:43
 msgid "Rock {ROCK} beats Scissors {SCISSORS}\n"
 "Scissors {SCISSORS} beats Paper {PAPER}\n"
 "Paper {PAPER} beats Rock {ROCK}\n\n"
 "Play with `{PREFIX}rps`\n"
-msgstr ""
+msgstr "Piedra {ROCK} gana a Tijeras {SCISSORS}\n"
+"Tijeras {SCISSORS} gana a Papel {PAPER}\n"
+"Papel {PAPER} gana a Piedra {ROCK}\n\n"
+"Juega con `{PREFIX}rps`\n"
 
 #: rps/rps.py:52 rps/rpslsview.py:100
 msgid "Rock, Paper, Scissors, Lizard, Spock"
-msgstr ""
+msgstr "Piedra, Papel, Tijeras, Lagarto, Spock"
 
 #: rps/rps.py:54
 msgid "Rock {ROCK} beats Scissors {SCISSORS} and Lizard {LIZARD}\n"
@@ -58,21 +66,26 @@ msgid "Rock {ROCK} beats Scissors {SCISSORS} and Lizard {LIZARD}\n"
 "Lizard {LIZARD} beats Paper {PAPER} and Spock {SPOCK}\n"
 "Spock {SPOCK} beats Rock {ROCK} and Scissors {SCISSORS}\n\n"
 "Play with `{PREFIX}rpsls`\n"
-msgstr ""
+msgstr "Piedra {ROCK} gana a Tijeras {SCISSORS} y Lagarto {LIZARD}\n"
+"Papel {PAPER} gana a Piedra {ROCK} y Spock {SPOCK}\n"
+"Tijeras {SCISSORS} gana a Papel {PAPER} y Lagarto {LIZARD}\n"
+"Lagarto {LIZARD} gana a Papel {PAPER} y Spock {SPOCK}\n"
+"Spock {SPOCK} gana a Piedra {ROCK} y Tijeras {SCISSORS}\n\n"
+"Juega con `{PREFIX}rpsls`\n"
 
 #: rps/rps.py:70
 #, docstring
 msgid "Play a game of Rock, Paper, Scissors"
-msgstr ""
+msgstr "Juega una partida de Piedra, Papel, Tijeras"
 
 #: rps/rps.py:77 rps/rps.py:88 rps/rpslsview.py:87 rps/rpsview.py:63
 msgid "Very well, maybe later"
-msgstr ""
+msgstr "Muy bien, quizás más tarde"
 
 #: rps/rps.py:81
 #, docstring
 msgid "Play a game of Rock, Paper, Scissors, Lizard, Spock"
-msgstr ""
+msgstr "Juega una partida de Piedra, Papel, Tijeras, Lagarto, Spock"
 
 #: rps/rps.py:93
 msgid "Congrats, you win!\n\n"
