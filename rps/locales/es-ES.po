@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: yamicogs\n"
 "POT-Creation-Date: 2024-04-15 02:03+0000\n"
-"PO-Revision-Date: 2024-04-15 16:52\n"
+"PO-Revision-Date: 2024-04-15 22:53\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -90,21 +90,24 @@ msgstr "Juega una partida de Piedra, Papel, Tijeras, Lagarto, Spock"
 #: rps/rps.py:93
 msgid "Congrats, you win!\n\n"
 "You {player_icon} - {computer_icon} Me"
-msgstr ""
+msgstr "¡Felicidades, tú ganas!\n\n"
+"Tú {player_icon} - {computer_icon} Yo"
 
 #: rps/rps.py:99
 msgid "Look at that, I win!\n\n"
 "You {player_icon} - {computer_icon} Me"
-msgstr ""
+msgstr "¡Mira eso, yo gano!\n\n"
+"Tú {player_icon} - {computer_icon} Yo"
 
 #: rps/rps.py:105
 msgid "Well, we must be mind-readers!\n\n"
 "You {player_icon} - {computer_icon} Me"
-msgstr ""
+msgstr "¡Bueno, debemos de leernos la mente!\n\n"
+"Tú {player_icon} - {computer_icon} Yo"
 
 #: rps/rps.py:111
 msgid "Well, this is embarrassing. No idea what happens now"
-msgstr ""
+msgstr "Bueno, esto es embarazoso. No tengo ni idea de qué pasa ahora"
 
 #: rps/rpslsview.py:102
 msgid "A game of skill (chance).\n"
@@ -114,7 +117,13 @@ msgid "A game of skill (chance).\n"
 "Scissors {SCISSORS} beats Paper {PAPER} and Lizard {LIZARD}\n"
 "Lizard {LIZARD} beats Paper {PAPER} and Spock {SPOCK}\n"
 "Spock {SPOCK} beats Rock {ROCK} and Scissors {SCISSORS}\n"
-msgstr ""
+msgstr "Un juego de habilidad (azar).\n"
+"Simplemente selecciona tu opción y mira si puedes vencer al bot\n\n\n"
+"Piedra {ROCK} gana a Tijeras {SCISSORS} y Lagarto {LIZARD}\n"
+"Papel {PAPER} gana a Piedra {ROCK} y Spock {SPOCK}\n"
+"Tijeras {SCISSORS} gana a Papel {PAPER} y Lagarto {LIZARD}\n"
+"Lagarto {LIZARD} gana a Papel {PAPER} y Spock {SPOCK}\n"
+"Spock {SPOCK} gana a Piedra {ROCK} y Tijeras {SCISSORS}\n"
 
 #: rps/rpsview.py:78
 msgid "A game of skill (chance).\n"
@@ -122,5 +131,9 @@ msgid "A game of skill (chance).\n"
 "Rock {ROCK} beats Scissors {SCISSORS}\n"
 "Scissors {SCISSORS} beats Paper {PAPER}\n"
 "Paper {PAPER} beats Rock {ROCK}\n"
-msgstr ""
+msgstr "Un juego de habilidad (azar).\n"
+"Simplemente selecciona tu opción y mira si puedes vencer al bot\n\n\n"
+"Piedra {ROCK} gana a Tijeras {SCISSORS}\n"
+"Tijeras {SCISSORS} gana a Papel {PAPER}\n"
+"Papel {PAPER} gana a Piedra {ROCK}\n"
 
