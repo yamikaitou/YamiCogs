@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: yamicogs\n"
-"POT-Creation-Date: 2024-04-15 01:16+0000\n"
-"PO-Revision-Date: 2024-04-15 01:21\n"
+"POT-Creation-Date: 2024-04-15 02:03+0000\n"
+"PO-Revision-Date: 2024-04-15 02:04\n"
 "Last-Translator: \n"
 "Language-Team: Danish\n"
 "MIME-Version: 1.0\n"
@@ -36,7 +36,7 @@ msgid "A game of skill (chance).\n"
 "2 versions are included, the rules are below\n"
 msgstr ""
 
-#: rps/rps.py:40 rps/rpsview.py:88
+#: rps/rps.py:40 rps/rpsview.py:76
 msgid "Rock, Paper, Scissors"
 msgstr ""
 
@@ -47,7 +47,7 @@ msgid "Rock {ROCK} beats Scissors {SCISSORS}\n"
 "Play with `{PREFIX}rps`\n"
 msgstr ""
 
-#: rps/rps.py:52 rps/rpslsview.py:120
+#: rps/rps.py:52 rps/rpslsview.py:100
 msgid "Rock, Paper, Scissors, Lizard, Spock"
 msgstr ""
 
@@ -65,7 +65,7 @@ msgstr ""
 msgid "Play a game of Rock, Paper, Scissors"
 msgstr ""
 
-#: rps/rps.py:77 rps/rps.py:88 rps/rpslsview.py:107 rps/rpsview.py:75
+#: rps/rps.py:77 rps/rps.py:88 rps/rpslsview.py:87 rps/rpsview.py:63
 msgid "Very well, maybe later"
 msgstr ""
 
@@ -74,19 +74,26 @@ msgstr ""
 msgid "Play a game of Rock, Paper, Scissors, Lizard, Spock"
 msgstr ""
 
-#: rps/rpslsview.py:28 rps/rpslsview.py:44 rps/rpslsview.py:60
-#: rps/rpslsview.py:76 rps/rpslsview.py:92 rps/rpsview.py:28 rps/rpsview.py:44
-#: rps/rpsview.py:60
-msgid "You"
+#: rps/rps.py:93
+msgid "Congrats, you win!\n\n"
+"You {player_icon} - {computer_icon} Me"
 msgstr ""
 
-#: rps/rpslsview.py:28 rps/rpslsview.py:44 rps/rpslsview.py:60
-#: rps/rpslsview.py:76 rps/rpslsview.py:92 rps/rpsview.py:28 rps/rpsview.py:44
-#: rps/rpsview.py:60
-msgid "Me"
+#: rps/rps.py:99
+msgid "Look at that, I win!\n\n"
+"You {player_icon} - {computer_icon} Me"
 msgstr ""
 
-#: rps/rpslsview.py:122
+#: rps/rps.py:105
+msgid "Well, we must be mind-readers!\n\n"
+"You {player_icon} - {computer_icon} Me"
+msgstr ""
+
+#: rps/rps.py:111
+msgid "Well, this is embarrassing. No idea what happens now"
+msgstr ""
+
+#: rps/rpslsview.py:102
 msgid "A game of skill (chance).\n"
 "Simply select your choice and see if you can defeat the computer\n\n\n"
 "Rock {ROCK} beats Scissors {SCISSORS} and Lizard {LIZARD}\n"
@@ -96,23 +103,11 @@ msgid "A game of skill (chance).\n"
 "Spock {SPOCK} beats Rock {ROCK} and Scissors {SCISSORS}\n"
 msgstr ""
 
-#: rps/rpsview.py:90
+#: rps/rpsview.py:78
 msgid "A game of skill (chance).\n"
 "Simply select your choice and see if you can defeat the computer\n\n\n"
 "Rock {ROCK} beats Scissors {SCISSORS}\n"
 "Scissors {SCISSORS} beats Paper {PAPER}\n"
 "Paper {PAPER} beats Rock {ROCK}\n"
-msgstr ""
-
-#: rps/vars.py:7
-msgid "Look at that, I win!"
-msgstr ""
-
-#: rps/vars.py:8
-msgid "Congrats, you win!"
-msgstr ""
-
-#: rps/vars.py:9
-msgid "Well, we must be mind-readers!"
 msgstr ""
 
