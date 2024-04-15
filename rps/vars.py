@@ -1,10 +1,12 @@
 from enum import Enum
+from redbot.core.i18n import Translator
 
+_ = Translator("RPS", __file__)
 
 class Result(str, Enum):
-    LOSE = "Look at that, I win!"
-    WIN = "Congrats, you win!"
-    TIE = "Well, we must be mind-readers!"
+    LOSE = _("Look at that, I win!")
+    WIN = _("Congrats, you win!")
+    TIE = _("Well, we must be mind-readers!")
 
     def __str__(self) -> str:
         return self.value

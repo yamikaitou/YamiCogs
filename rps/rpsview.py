@@ -1,9 +1,11 @@
 import random
 
 import discord
+from redbot.core.i18n import Translator
 
 from .vars import Result, RPSChoice, RPSIcon
 
+_ = Translator("RPS", __file__)
 
 class RPSView(discord.ui.View):
     def __init__(self, cog, user):
@@ -23,7 +25,7 @@ class RPSView(discord.ui.View):
     async def rpsrock(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
         await interaction.message.edit(
-            content=f"{self._check(RPSChoice.ROCK)}\n\nYou {RPSIcon.ROCK} - {RPSIcon[self.computer.name]} Me",
+            content=f"{self._check(RPSChoice.ROCK)}\n\n{_('You')} {RPSIcon.ROCK} - {RPSIcon[self.computer.name]} {_('Me')}",
             embed=None,
             view=None,
         )
@@ -39,7 +41,7 @@ class RPSView(discord.ui.View):
     async def rpspaper(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
         await interaction.message.edit(
-            content=f"{self._check(RPSChoice.PAPER)}\n\nYou {RPSIcon.PAPER} - {RPSIcon[self.computer.name]} Me",
+            content=f"{self._check(RPSChoice.PAPER)}\n\n{_('You')} {RPSIcon.PAPER} - {RPSIcon[self.computer.name]} {_('Me')}",
             embed=None,
             view=None,
         )
@@ -55,7 +57,7 @@ class RPSView(discord.ui.View):
     async def rpsscissors(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
         await interaction.message.edit(
-            content=f"{self._check(RPSChoice.SCISSORS)}\n\nYou {RPSIcon.SCISSORS} - {RPSIcon[self.computer.name]} Me",
+            content=f"{self._check(RPSChoice.SCISSORS)}\n\n{_('You')} {RPSIcon.SCISSORS} - {RPSIcon[self.computer.name]} {_('Me')}",
             embed=None,
             view=None,
         )
@@ -70,7 +72,7 @@ class RPSView(discord.ui.View):
     )
     async def rpscancel(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(content="Very well, maybe later", embed=None, view=None)
+        await interaction.message.edit(content=_("Very well, maybe later"), embed=None, view=None)
         self.value = False
 
     @discord.ui.button(
@@ -83,14 +85,16 @@ class RPSView(discord.ui.View):
     async def rpsrules(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
         embed = discord.Embed()
-        embed.title = "Rock, Paper, Scissors"
+        embed.title = _("Rock, Paper, Scissors")
         embed.color = interaction.user.color
-        embed.description = (
-            f"A game of skill (chance).\n"
-            f"Simply select your choice and see if you can defeat the computer\n\n\n"
-            f"Rock {RPSIcon.ROCK} beats Scissors {RPSIcon.SCISSORS}\n"
-            f"Paper {RPSIcon.PAPER} beats Rock {RPSIcon.ROCK}\n"
-            f"Scissors {RPSIcon.SCISSORS} beats Paper {RPSIcon.PAPER}\n"
+        embed.description = (_(
+            "A game of skill (chance).\n"
+            "Simply select your choice and see if you can defeat the computer\n\n\n"
+            "Rock {ROCK} beats Scissors {SCISSORS}\n"
+            "Scissors {SCISSORS} beats Paper {PAPER}\n"
+            "Paper {PAPER} beats Rock {ROCK}\n").format(
+                ROCK=RPSIcon.ROCK, PAPER=RPSIcon.PAPER, SCISSORS=RPSIcon.SCISSORS
+            )
         )
         await interaction.followup.send(embed=embed, ephemeral=True)
 

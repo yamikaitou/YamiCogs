@@ -1,9 +1,11 @@
 import random
 
 import discord
+from redbot.core.i18n import Translator
 
 from .vars import Result, RPSLSChoice, RPSLSIcon
 
+_ = Translator("RPS", __file__)
 
 class RPSLSView(discord.ui.View):
     def __init__(self, cog, user):
@@ -23,7 +25,7 @@ class RPSLSView(discord.ui.View):
     async def rpslsrock(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
         await interaction.message.edit(
-            content=f"{self._check(RPSLSChoice.ROCK)}\n\nYou {RPSLSIcon.ROCK} - {RPSLSIcon[self.computer.name]} Me",
+            content=f"{self._check(RPSLSChoice.ROCK)}\n\n{_('You')} {RPSLSIcon.ROCK} - {RPSLSIcon[self.computer.name]} {_('Me')}",
             embed=None,
             view=None,
         )
@@ -39,7 +41,7 @@ class RPSLSView(discord.ui.View):
     async def rpslspaper(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
         await interaction.message.edit(
-            content=f"{self._check(RPSLSChoice.PAPER)}\n\nYou {RPSLSIcon.PAPER} - {RPSLSIcon[self.computer.name]} Me",
+            content=f"{self._check(RPSLSChoice.PAPER)}\n\n{_('You')} {RPSLSIcon.PAPER} - {RPSLSIcon[self.computer.name]} {_('Me')}",
             embed=None,
             view=None,
         )
@@ -55,7 +57,7 @@ class RPSLSView(discord.ui.View):
     async def rpslsscissors(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
         await interaction.message.edit(
-            content=f"{self._check(RPSLSChoice.SCISSORS)}\n\nYou {RPSLSIcon.SCISSORS} - {RPSLSIcon[self.computer.name]} Me",
+            content=f"{self._check(RPSLSChoice.SCISSORS)}\n\n{_('You')} {RPSLSIcon.SCISSORS} - {RPSLSIcon[self.computer.name]} {_('Me')}",
             embed=None,
             view=None,
         )
@@ -71,7 +73,7 @@ class RPSLSView(discord.ui.View):
     async def rpslslizard(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
         await interaction.message.edit(
-            content=f"{self._check(RPSLSChoice.LIZARD)}\n\nYou {RPSLSIcon.LIZARD} - {RPSLSIcon[self.computer.name]} Me",
+            content=f"{self._check(RPSLSChoice.LIZARD)}\n\n{_('You')} {RPSLSIcon.LIZARD} - {RPSLSIcon[self.computer.name]} {_('Me')}",
             embed=None,
             view=None,
         )
@@ -87,7 +89,7 @@ class RPSLSView(discord.ui.View):
     async def rpslsspock(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
         await interaction.message.edit(
-            content=f"{self._check(RPSLSChoice.SPOCK)}\n\nYou {RPSLSIcon.SPOCK} - {RPSLSIcon[self.computer.name]} Me",
+            content=f"{self._check(RPSLSChoice.SPOCK)}\n\n{_('You')} {RPSLSIcon.SPOCK} - {RPSLSIcon[self.computer.name]} {_('Me')}",
             embed=None,
             view=None,
         )
@@ -102,7 +104,7 @@ class RPSLSView(discord.ui.View):
     )
     async def rpslscancel(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await interaction.message.edit(content="Very well, maybe later", embed=None, view=None)
+        await interaction.message.edit(content=_("Very well, maybe later"), embed=None, view=None)
         self.value = False
 
     @discord.ui.button(
@@ -115,16 +117,18 @@ class RPSLSView(discord.ui.View):
     async def rpslsrules(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
         embed = discord.Embed()
-        embed.title = "Rock, Paper, Scissors"
+        embed.title = _("Rock, Paper, Scissors, Lizard, Spock")
         embed.color = interaction.user.color
-        embed.description = (
-            f"A game of skill (chance).\n"
-            f"Simply select your choice and see if you can defeat the computer\n\n\n"
-            f"Rock {RPSLSIcon.ROCK} beats Scissors {RPSLSIcon.SCISSORS} and Lizard {RPSLSIcon.LIZARD}\n"
-            f"Paper {RPSLSIcon.PAPER} beats Rock {RPSLSIcon.ROCK} and Spock {RPSLSIcon.SPOCK}\n"
-            f"Scissors {RPSLSIcon.SCISSORS} beats Paper {RPSLSIcon.PAPER} and Lizard {RPSLSIcon.LIZARD}\n"
-            f"Lizard {RPSLSIcon.LIZARD} beats Paper {RPSLSIcon.PAPER} and Spock {RPSLSIcon.SPOCK}\n"
-            f"Spock {RPSLSIcon.SPOCK} beats Rock {RPSLSIcon.ROCK} and Scissors {RPSLSIcon.SCISSORS}\n"
+        embed.description = (_(
+            "A game of skill (chance).\n"
+            "Simply select your choice and see if you can defeat the computer\n\n\n"
+            "Rock {ROCK} beats Scissors {SCISSORS} and Lizard {LIZARD}\n"
+            "Paper {PAPER} beats Rock {ROCK} and Spock {SPOCK}\n"
+            "Scissors {SCISSORS} beats Paper {PAPER} and Lizard {LIZARD}\n"
+            "Lizard {LIZARD} beats Paper {PAPER} and Spock {SPOCK}\n"
+            "Spock {SPOCK} beats Rock {ROCK} and Scissors {SCISSORS}\n").format(
+                ROCK=RPSLSIcon.ROCK, PAPER=RPSLSIcon.PAPER, SCISSORS=RPSLSIcon.SCISSORS, LIZARD=RPSLSIcon.LIZARD, SPOCK=RPSLSIcon.SPOCK,  PREFIX=ctx.clean_prefix
+            )
         )
         await interaction.followup.send(embed=embed, ephemeral=True)
 
