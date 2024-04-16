@@ -1,7 +1,7 @@
 import random
 
 import discord
-from redbot.core.i18n import Translator
+from redbot.core.i18n import Translator, set_contextual_locales_from_guild
 
 from .vars import Result, RPSLSChoice, RPSLSIcon
 
@@ -83,6 +83,7 @@ class RPSLSView(discord.ui.View):
         row=1,
     )
     async def rpslscancel(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await set_contextual_locales_from_guild(self.bot, interaction.guild)
         await interaction.response.defer()
         await interaction.message.edit(content=_("Very well, maybe later"), embed=None, view=None)
         self.value = False
@@ -95,6 +96,7 @@ class RPSLSView(discord.ui.View):
         row=1,
     )
     async def rpslsrules(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await set_contextual_locales_from_guild(self.bot, interaction.guild)
         await interaction.response.defer()
         embed = discord.Embed()
         embed.title = _("Rock, Paper, Scissors, Lizard, Spock")

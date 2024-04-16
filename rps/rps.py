@@ -3,7 +3,7 @@ import logging
 import discord
 from redbot.core import commands
 from redbot.core.bot import Red
-from redbot.core.i18n import Translator, cog_i18n
+from redbot.core.i18n import Translator, cog_i18n, set_contextual_locales_from_guild
 
 from .rpslsview import RPSLSView
 from .rpsview import RPSView
@@ -70,24 +70,25 @@ class RPS(commands.Cog):
         """Play a game of Rock, Paper, Scissors"""
 
         view = RPSView(self, ctx.author.id)
-        await ctx.send(view=view)
+        msg = await ctx.send(view=view)
 
         await view.wait()
         if view.value is None:
-            await ctx.message.edit(content=_("Very well, maybe later"), embed=None, view=None)
+            await msg.edit(content=_("Very well, maybe later"), embed=None, view=None)
 
     @commands.command(name="rpsls")
     async def _rpsls(self, ctx):
         """Play a game of Rock, Paper, Scissors, Lizard, Spock"""
 
         view = RPSLSView(self, ctx.author.id)
-        await ctx.send(view=view)
+        msg = await ctx.send(view=view)
 
         await view.wait()
         if view.value is None:
-            await ctx.message.edit(content=_("Very well, maybe later"), embed=None, view=None)
+            await msg.edit(content=_("Very well, maybe later"), embed=None, view=None)
     
-    async def _outcome(self, interaction: discord.Interaction, outcome, player, computer):
+    async def _outcome(self, interaction, outcome, player, computer):
+        await set_contextual_locales_from_guild(self.bot, interaction.guild)
         if outcome == "win":
             await interaction.message.edit(
                 content=_("Congrats, you win!\n\nYou {player_icon} - {computer_icon} Me").format(player_icon=player, computer_icon=computer),
