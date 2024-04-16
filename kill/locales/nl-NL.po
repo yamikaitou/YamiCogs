@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: yamicogs\n"
 "POT-Creation-Date: 2024-04-14 18:44+0000\n"
-"PO-Revision-Date: 2024-04-14 18:49\n"
+"PO-Revision-Date: 2024-04-15 22:53\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -91,7 +91,7 @@ msgstr ""
 
 #: kill/kill.py:102
 msgid "There are no messages configured"
-msgstr ""
+msgstr "Er zijn geen berichten geconfigureerd"
 
 #: kill/kill.py:110
 #, docstring
