@@ -6,9 +6,9 @@ from typing import Literal, Union
 import discord
 from redbot.core import Config, bank, checks, commands
 from redbot.core.bot import Red
+from redbot.core.i18n import Translator, cog_i18n
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import box, humanize_timedelta
-from redbot.core.i18n import Translator, cog_i18n
 from tabulate import tabulate
 
 log = logging.getLogger("red.yamicogs.payday")
@@ -75,6 +75,7 @@ def is_owner_if_bank_global():
             return await ctx.bot.is_owner(author)
 
     return commands.check(pred)
+
 
 @cog_i18n(_)
 class PayDay(commands.Cog):
@@ -210,19 +211,21 @@ class PayDay(commands.Cog):
         if total_streak > 0:
             await bank.deposit_credits(ctx.author, total_amount + total_streak)
             await ctx.send(
-                _("You have claimed all available {bankname} from the `freecredits` program! +{total_amount} {bankname}\nPlus an additional {total_streak} for maintaining your streaks").format(
-                    bankname=bankname, total_amount=total_amount, total_streak=total_streak
-                )
+                _(
+                    "You have claimed all available {bankname} from the `freecredits` program! +{total_amount} {bankname}\nPlus an additional {total_streak} for maintaining your streaks"
+                ).format(bankname=bankname, total_amount=total_amount, total_streak=total_streak)
             )
         elif total_amount > 0:
             await bank.deposit_credits(ctx.author, total_amount)
             await ctx.send(
-                _("You have claimed all available {bankname} from the `freecredits` program! +{total_amount} {bankname}").format(
-                    bankname=bankname, total_amount=total_amount
-                )
+                _(
+                    "You have claimed all available {bankname} from the `freecredits` program! +{total_amount} {bankname}"
+                ).format(bankname=bankname, total_amount=total_amount)
             )
         else:
-            await ctx.send(_("You have no available {bankname} for claiming.").format(bankname=bankname))
+            await ctx.send(
+                _("You have no available {bankname} for claiming.").format(bankname=bankname)
+            )
 
     @cmd_check("hour")
     @freecredits.command(name="hourly")
@@ -232,16 +235,26 @@ class PayDay(commands.Cog):
         free, streak, remain = await self.grant_award(ctx, "hour")
 
         if remain != -1:
-            await ctx.send(_("Sorry, you still have {remain} until your next hourly bonus").format(remain=remain))
+            await ctx.send(
+                _("Sorry, you still have {remain} until your next hourly bonus").format(
+                    remain=remain
+                )
+            )
         elif streak != -1:
             await ctx.send(
-                _("You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak").format(
-                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)), streak_bonus=streak
+                _(
+                    "You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak"
+                ).format(
+                    free_credits=free,
+                    bankname=(await bank.get_currency_name(ctx.guild)),
+                    streak_bonus=streak,
                 )
             )
         elif free != -1:
             await ctx.send(
-                _("You have been given {free_credits} {bankname}").format(free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)))
+                _("You have been given {free_credits} {bankname}").format(
+                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild))
+                )
             )
         else:
             log.debug("grant_award returned no results")
@@ -254,16 +267,26 @@ class PayDay(commands.Cog):
         free, streak, remain = await self.grant_award(ctx, "day")
 
         if remain != -1:
-            await ctx.send(_("Sorry, you still have {remain} until your next dailya bonus").format(remain=remain))
+            await ctx.send(
+                _("Sorry, you still have {remain} until your next dailya bonus").format(
+                    remain=remain
+                )
+            )
         elif streak != -1:
             await ctx.send(
-                _("You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak").format(
-                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)), streak_bonus=streak
+                _(
+                    "You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak"
+                ).format(
+                    free_credits=free,
+                    bankname=(await bank.get_currency_name(ctx.guild)),
+                    streak_bonus=streak,
                 )
             )
         elif free != -1:
             await ctx.send(
-                _("You have been given {free_credits} {bankname}").format(free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)))
+                _("You have been given {free_credits} {bankname}").format(
+                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild))
+                )
             )
         else:
             log.debug("grant_award returned no results")
@@ -276,16 +299,26 @@ class PayDay(commands.Cog):
         free, streak, remain = await self.grant_award(ctx, "week")
 
         if remain != -1:
-            await ctx.send(_("Sorry, you still have {remain} until your next weekly bonus").format(remain=remain))
+            await ctx.send(
+                _("Sorry, you still have {remain} until your next weekly bonus").format(
+                    remain=remain
+                )
+            )
         elif streak != -1:
             await ctx.send(
-                _("You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak").format(
-                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)), streak_bonus=streak
+                _(
+                    "You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak"
+                ).format(
+                    free_credits=free,
+                    bankname=(await bank.get_currency_name(ctx.guild)),
+                    streak_bonus=streak,
                 )
             )
         elif free != -1:
             await ctx.send(
-                _("You have been given {free_credits} {bankname}").format(free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)))
+                _("You have been given {free_credits} {bankname}").format(
+                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild))
+                )
             )
         else:
             log.debug("grant_award returned no results")
@@ -298,16 +331,26 @@ class PayDay(commands.Cog):
         free, streak, remain = await self.grant_award(ctx, "month")
 
         if remain != -1:
-            await ctx.send(_("Sorry, you still have {remain} until your next monthly bonus").format(remain=remain))
+            await ctx.send(
+                _("Sorry, you still have {remain} until your next monthly bonus").format(
+                    remain=remain
+                )
+            )
         elif streak != -1:
             await ctx.send(
-                _("You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak").format(
-                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)), streak_bonus=streak
+                _(
+                    "You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak"
+                ).format(
+                    free_credits=free,
+                    bankname=(await bank.get_currency_name(ctx.guild)),
+                    streak_bonus=streak,
                 )
             )
         elif free != -1:
             await ctx.send(
-                _("You have been given {free_credits} {bankname}").format(free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)))
+                _("You have been given {free_credits} {bankname}").format(
+                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild))
+                )
             )
         else:
             log.debug("grant_award returned no results")
@@ -320,16 +363,26 @@ class PayDay(commands.Cog):
         free, streak, remain = await self.grant_award(ctx, "quarter")
 
         if remain != -1:
-            await ctx.send(_("Sorry, you still have {remain} until your next quarterly bonus").format(remain=remain))
+            await ctx.send(
+                _("Sorry, you still have {remain} until your next quarterly bonus").format(
+                    remain=remain
+                )
+            )
         elif streak != -1:
             await ctx.send(
-                _("You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak").format(
-                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)), streak_bonus=streak
+                _(
+                    "You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak"
+                ).format(
+                    free_credits=free,
+                    bankname=(await bank.get_currency_name(ctx.guild)),
+                    streak_bonus=streak,
                 )
             )
         elif free != -1:
             await ctx.send(
-                _("You have been given {free_credits} {bankname}").format(free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)))
+                _("You have been given {free_credits} {bankname}").format(
+                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild))
+                )
             )
         else:
             log.debug("grant_award returned no results")
@@ -342,16 +395,26 @@ class PayDay(commands.Cog):
         free, streak, remain = await self.grant_award(ctx, "year")
 
         if remain != -1:
-            await ctx.send(_("Sorry, you still have {remain} until your next yearly bonus").format(remain=remain))
+            await ctx.send(
+                _("Sorry, you still have {remain} until your next yearly bonus").format(
+                    remain=remain
+                )
+            )
         elif streak != -1:
             await ctx.send(
-                _("You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak").format(
-                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)), streak_bonus=streak
+                _(
+                    "You have been given {free_credits} {bankname} plus {streak_bonus} for maintaining a streak"
+                ).format(
+                    free_credits=free,
+                    bankname=(await bank.get_currency_name(ctx.guild)),
+                    streak_bonus=streak,
                 )
             )
         elif free != -1:
             await ctx.send(
-                _("You have been given {free_credits} {bankname}").format(free_credits=free, bankname=(await bank.get_currency_name(ctx.guild)))
+                _("You have been given {free_credits} {bankname}").format(
+                    free_credits=free, bankname=(await bank.get_currency_name(ctx.guild))
+                )
             )
         else:
             log.debug("grant_award returned no results")
@@ -734,22 +797,26 @@ class PayDay(commands.Cog):
             amounts = await self.config.all()
             times = await self.config.user(person).all()
 
-            await ctx.send("```{global_label}\n{global_items}\n\n{user_label}\n{user_items}```".format(
-                global_label=_("Global Settings"),
-                global_items=tabulate(amounts.items()),
-                user_label=_("User Settings for {person}").format(person=person.id),
-                user_items=tabulate(times.items())
-            ))
+            await ctx.send(
+                "```{global_label}\n{global_items}\n\n{user_label}\n{user_items}```".format(
+                    global_label=_("Global Settings"),
+                    global_items=tabulate(amounts.items()),
+                    user_label=_("User Settings for {person}").format(person=person.id),
+                    user_items=tabulate(times.items()),
+                )
+            )
         else:
             amounts = await self.config.guild(ctx.guild).all()
             times = await self.config.member(person).all()
 
-            await ctx.send("```{global_label}\n{global_items}\n\n{user_label}\n{user_items}```".format(
-                global_label=_("Global Settings"),
-                global_items=tabulate(amounts.items()),
-                user_label=_("Member Settings for {person}").format(person=person.id),
-                user_items=tabulate(times.items())
-            ))
+            await ctx.send(
+                "```{global_label}\n{global_items}\n\n{user_label}\n{user_items}```".format(
+                    global_label=_("Global Settings"),
+                    global_items=tabulate(amounts.items()),
+                    user_label=_("Member Settings for {person}").format(person=person.id),
+                    user_items=tabulate(times.items()),
+                )
+            )
 
     @is_owner_if_bank_global()
     @checks.guildowner_or_permissions(administrator=True)
@@ -781,7 +848,11 @@ class PayDay(commands.Cog):
         except Exception as e:
             raise e
         else:
-            await ctx.send(_("The provided times for {person} have been reset").format(person=person.display_name))
+            await ctx.send(
+                _("The provided times for {person} have been reset").format(
+                    person=person.display_name
+                )
+            )
 
     async def red_delete_data_for_user(
         self,
