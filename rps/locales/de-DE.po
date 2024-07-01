@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: yamicogs\n"
-"POT-Creation-Date: 2024-04-30 02:50+0000\n"
-"PO-Revision-Date: 2024-07-01 17:10\n"
+"POT-Creation-Date: 2024-07-01 17:23+0000\n"
+"PO-Revision-Date: 2024-07-01 17:32\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -17,28 +17,28 @@ msgstr ""
 "X-Crowdin-File-ID: 170\n"
 "Language: de_DE\n"
 
-#: rps/duelview.py:23
+#: rps/duelview.py:27
 msgid "Sorry, but you are not in this duel"
 msgstr ""
 
-#: rps/duelview.py:36
+#: rps/duelview.py:42
 msgid "You have already accepted it by starting the duel."
 msgstr ""
 
-#: rps/duelview.py:55
+#: rps/duelview.py:63
 msgid "Duel has been rejected"
 msgstr ""
 
-#: rps/playerview.py:94 rps/rps.py:152 rps/rps.py:163 rps/rpslsview.py:114
+#: rps/playerview.py:92 rps/rps.py:152 rps/rps.py:163 rps/rpslsview.py:116
 #: rps/rpsview.py:74
 msgid "Very well, maybe later"
 msgstr ""
 
-#: rps/playerview.py:110 rps/rps.py:45 rps/rpsview.py:88
+#: rps/playerview.py:108 rps/rps.py:45 rps/rpsview.py:88
 msgid "Rock, Paper, Scissors"
 msgstr ""
 
-#: rps/playerview.py:111 rps/rpsview.py:90
+#: rps/playerview.py:109 rps/rpsview.py:90
 msgid "A game of skill (chance).\n"
 "Simply select your choice and see if you can defeat the computer\n\n\n"
 "Rock {ROCK} beats Scissors {SCISSORS}\n"
@@ -46,11 +46,11 @@ msgid "A game of skill (chance).\n"
 "Paper {PAPER} beats Rock {ROCK}\n"
 msgstr ""
 
-#: rps/playerview.py:119 rps/rps.py:62 rps/rpslsview.py:128
+#: rps/playerview.py:117 rps/rps.py:62 rps/rpslsview.py:130
 msgid "Rock, Paper, Scissors, Lizard, Spock"
 msgstr ""
 
-#: rps/playerview.py:120 rps/rpslsview.py:130
+#: rps/playerview.py:118 rps/rpslsview.py:132
 msgid "A game of skill (chance).\n"
 "Simply select your choice and see if you can defeat the computer\n\n\n"
 "Rock {ROCK} beats Scissors {SCISSORS} and Lizard {LIZARD}\n"
@@ -100,7 +100,7 @@ msgstr ""
 msgid "Play a game of Rock, Paper, Scissors"
 msgstr ""
 
-#: rps/rps.py:120
+#: rps/rps.py:122
 msgid "An {choice} Duel is starting"
 msgstr ""
 
@@ -113,40 +113,40 @@ msgstr ""
 msgid "Play a game of Rock, Paper, Scissors, Lizard, Spock"
 msgstr ""
 
-#: rps/rps.py:168
+#: rps/rps.py:169
 msgid "Duel has been rejected (timed out)"
 msgstr ""
 
-#: rps/rps.py:185
+#: rps/rps.py:188
 msgid "{player1_mention} wins!!\n\n"
 "{player1_name} {player1_icon} - {player2_icon} {player2_name}"
 msgstr ""
 
-#: rps/rps.py:193
+#: rps/rps.py:202
 msgid "{player2_mention} wins!!\n\n"
 "{player1_name} {player1_icon} - {player2_icon} {player2_name}"
 msgstr ""
 
-#: rps/rps.py:201
+#: rps/rps.py:216
 msgid "Well, we must be mind-readers!\n\n"
 "{player1_name} {player1_icon} - {player2_icon} {player2_name}"
 msgstr ""
 
-#: rps/rps.py:209 rps/rps.py:271
+#: rps/rps.py:229 rps/rps.py:291
 msgid "Well, this is embarrassing. No idea what happens now"
 msgstr ""
 
-#: rps/rps.py:247
+#: rps/rps.py:267
 msgid "Congrats, you win!\n\n"
 "You {player_icon} - {computer_icon} Me"
 msgstr ""
 
-#: rps/rps.py:255
+#: rps/rps.py:275
 msgid "Look at that, I win!\n\n"
 "You {player_icon} - {computer_icon} Me"
 msgstr ""
 
-#: rps/rps.py:263
+#: rps/rps.py:283
 msgid "Well, we must be mind-readers!\n\n"
 "You {player_icon} - {computer_icon} Me"
 msgstr ""
