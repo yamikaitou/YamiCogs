@@ -3,9 +3,10 @@ import random
 import discord
 from redbot.core.i18n import Translator, set_contextual_locales_from_guild
 
-from .vars import Result, RPSLSChoice, RPSLSIcon
+from .vars import Choice, Icon, Result
 
 _ = Translator("RPS", __file__)
+
 
 class RPSLSView(discord.ui.View):
     def __init__(self, cog, user):
@@ -13,66 +14,93 @@ class RPSLSView(discord.ui.View):
         self.cog = cog
         self.user = user
         self.value = None
-        self.computer = random.choice(list(RPSLSChoice))
+        self.computer = random.choice(
+            [Choice.ROCK, Choice.PAPER, Choice.SCISSORS, Choice.LIZARD, Choice.SPOCK]
+        )
 
     @discord.ui.button(
         label="Rock",
         style=discord.ButtonStyle.blurple,
         custom_id="rpslsrock",
-        emoji=RPSLSIcon.ROCK,
+        emoji=Icon.ROCK,
         row=0,
     )
     async def rpslsrock(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await self.cog._outcome(interaction, self._check(RPSLSChoice.ROCK), RPSLSIcon.ROCK, RPSLSIcon[self.computer.name])
+        await self.cog._outcome(
+            interaction,
+            self._check(Choice.ROCK),
+            Icon.ROCK,
+            Icon[self.computer.name],
+        )
         self.value = True
 
     @discord.ui.button(
         label="Paper",
         style=discord.ButtonStyle.blurple,
         custom_id="rpslspaper",
-        emoji=RPSLSIcon.PAPER,
+        emoji=Icon.PAPER,
         row=0,
     )
     async def rpslspaper(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await self.cog._outcome(interaction, self._check(RPSLSChoice.PAPER), RPSLSIcon.PAPER, RPSLSIcon[self.computer.name])
+        await self.cog._outcome(
+            interaction,
+            self._check(Choice.PAPER),
+            Icon.PAPER,
+            Icon[self.computer.name],
+        )
         self.value = True
 
     @discord.ui.button(
         label="Scissors",
         style=discord.ButtonStyle.blurple,
         custom_id="rpslsscissors",
-        emoji=RPSLSIcon.SCISSORS,
+        emoji=Icon.SCISSORS,
         row=0,
     )
     async def rpslsscissors(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await self.cog._outcome(interaction, self._check(RPSLSChoice.SCISSORS), RPSLSIcon.SCISSORS, RPSLSIcon[self.computer.name])
+        await self.cog._outcome(
+            interaction,
+            self._check(Choice.SCISSORS),
+            Icon.SCISSORS,
+            Icon[self.computer.name],
+        )
         self.value = True
 
     @discord.ui.button(
         label="Lizard",
         style=discord.ButtonStyle.blurple,
         custom_id="rpslslizard",
-        emoji=RPSLSIcon.LIZARD,
+        emoji=Icon.LIZARD,
         row=0,
     )
     async def rpslslizard(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await self.cog._outcome(interaction, self._check(RPSLSChoice.LIZARD), RPSLSIcon.LIZARD, RPSLSIcon[self.computer.name])
+        await self.cog._outcome(
+            interaction,
+            self._check(Choice.LIZARD),
+            Icon.LIZARD,
+            Icon[self.computer.name],
+        )
         self.value = True
 
     @discord.ui.button(
         label="Spock",
         style=discord.ButtonStyle.blurple,
         custom_id="rpslsspock",
-        emoji=RPSLSIcon.SPOCK,
+        emoji=Icon.SPOCK,
         row=0,
     )
     async def rpslsspock(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
-        await self.cog._outcome(interaction, self._check(RPSLSChoice.SPOCK), RPSLSIcon.SPOCK, RPSLSIcon[self.computer.name])
+        await self.cog._outcome(
+            interaction,
+            self._check(Choice.SPOCK),
+            Icon.SPOCK,
+            Icon[self.computer.name],
+        )
         self.value = True
 
     @discord.ui.button(
@@ -101,16 +129,20 @@ class RPSLSView(discord.ui.View):
         embed = discord.Embed()
         embed.title = _("Rock, Paper, Scissors, Lizard, Spock")
         embed.color = interaction.user.color
-        embed.description = (_(
+        embed.description = _(
             "A game of skill (chance).\n"
             "Simply select your choice and see if you can defeat the computer\n\n\n"
             "Rock {ROCK} beats Scissors {SCISSORS} and Lizard {LIZARD}\n"
             "Paper {PAPER} beats Rock {ROCK} and Spock {SPOCK}\n"
             "Scissors {SCISSORS} beats Paper {PAPER} and Lizard {LIZARD}\n"
             "Lizard {LIZARD} beats Paper {PAPER} and Spock {SPOCK}\n"
-            "Spock {SPOCK} beats Rock {ROCK} and Scissors {SCISSORS}\n").format(
-                ROCK=RPSLSIcon.ROCK, PAPER=RPSLSIcon.PAPER, SCISSORS=RPSLSIcon.SCISSORS, LIZARD=RPSLSIcon.LIZARD, SPOCK=RPSLSIcon.SPOCK,  PREFIX=ctx.clean_prefix
-            )
+            "Spock {SPOCK} beats Rock {ROCK} and Scissors {SCISSORS}\n"
+        ).format(
+            ROCK=Icon.ROCK,
+            PAPER=Icon.PAPER,
+            SCISSORS=Icon.SCISSORS,
+            LIZARD=Icon.LIZARD,
+            SPOCK=Icon.SPOCK,
         )
         await interaction.followup.send(embed=embed, ephemeral=True)
 
@@ -120,28 +152,28 @@ class RPSLSView(discord.ui.View):
     def _check(self, choice) -> str:
         if self.computer == choice:
             return Result.TIE
-        elif self.computer == RPSLSChoice.ROCK:
-            if choice in [RPSLSChoice.SCISSORS, RPSLSChoice.LIZARD]:
+        elif self.computer == Choice.ROCK:
+            if choice in [Choice.SCISSORS, Choice.LIZARD]:
                 return Result.LOSE
             else:
                 return Result.WIN
-        elif self.computer == RPSLSChoice.PAPER:
-            if choice in [RPSLSChoice.ROCK, RPSLSChoice.SPOCK]:
+        elif self.computer == Choice.PAPER:
+            if choice in [Choice.ROCK, Choice.SPOCK]:
                 return Result.LOSE
             else:
                 return Result.WIN
-        elif self.computer == RPSLSChoice.SCISSORS:
-            if choice in [RPSLSChoice.PAPER, RPSLSChoice.LIZARD]:
+        elif self.computer == Choice.SCISSORS:
+            if choice in [Choice.PAPER, Choice.LIZARD]:
                 return Result.LOSE
             else:
                 return Result.WIN
-        elif self.computer == RPSLSChoice.LIZARD:
-            if choice in [RPSLSChoice.PAPER, RPSLSChoice.SPOCK]:
+        elif self.computer == Choice.LIZARD:
+            if choice in [Choice.PAPER, Choice.SPOCK]:
                 return Result.LOSE
             else:
                 return Result.WIN
-        elif self.computer == RPSLSChoice.SPOCK:
-            if choice in [RPSLSChoice.SCISSORS, RPSLSChoice.ROCK]:
+        elif self.computer == Choice.SPOCK:
+            if choice in [Choice.SCISSORS, Choice.ROCK]:
                 return Result.LOSE
             else:
                 return Result.WIN
