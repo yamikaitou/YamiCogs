@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: yamicogs\n"
 "POT-Creation-Date: 2024-04-22 21:53+0000\n"
-"PO-Revision-Date: 2024-07-01 17:34\n"
+"PO-Revision-Date: 2024-07-17 18:56\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -159,7 +159,7 @@ msgstr ""
 #: payday/payday.py:721 payday/payday.py:744 payday/payday.py:767
 #: payday/payday.py:788
 msgid "Setting saved"
-msgstr ""
+msgstr "Instelling opgeslagen"
 
 #: payday/payday.py:515
 #, docstring
