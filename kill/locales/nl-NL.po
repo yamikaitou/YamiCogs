@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: yamicogs\n"
 "POT-Creation-Date: 2024-04-14 18:44+0000\n"
-"PO-Revision-Date: 2024-04-15 22:53\n"
+"PO-Revision-Date: 2024-07-17 18:56\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -44,7 +44,7 @@ msgstr ""
 
 #: kill/kill.py:53
 msgid "Message added"
-msgstr ""
+msgstr "Bericht toegevoegd"
 
 #: kill/kill.py:57
 #, docstring
@@ -55,7 +55,7 @@ msgstr ""
 
 #: kill/kill.py:62
 msgid "Negative numbers are not supported"
-msgstr ""
+msgstr "Negatieve getallen zijn niet toegestaan"
 
 #: kill/kill.py:66
 msgid "Sorry, but you don't have a kill message with that number. Please use `[p]killset list` to get the number of the message you wish to delete"
@@ -63,31 +63,34 @@ msgstr ""
 
 #: kill/kill.py:75
 msgid "Message removed"
-msgstr ""
+msgstr "Bericht verwijderd"
 
 #: kill/kill.py:80
 #, docstring
 msgid "\n"
 "        List all the kill messages\n"
 "        "
-msgstr ""
+msgstr "\n"
+"        Toon alle dodingsberichten\n"
+"        "
 
 #: kill/kill.py:86
 msgid "{killer} and {victim} will be replaced with a users mention\n"
 "{killer2} and {victim2} will be replaced with a users name in italics"
-msgstr ""
+msgstr "{killer} en {victim} worden vervangen door een gebruikers vermelding\n"
+"{killer2} en {victim2} worden vervangen door een gebruikers naam in cursief"
 
 #: kill/kill.py:92
 msgid "Bot Kill"
-msgstr ""
+msgstr "Bot Dood"
 
 #: kill/kill.py:94
 msgid "Self Kill"
-msgstr ""
+msgstr "Zelf dood"
 
 #: kill/kill.py:102 kill/kill.py:104
 msgid "Kill Messages"
-msgstr ""
+msgstr "Stop berichten"
 
 #: kill/kill.py:102
 msgid "There are no messages configured"
@@ -104,7 +107,7 @@ msgstr ""
 
 #: kill/kill.py:120 kill/kill.py:134
 msgid "Message saved"
-msgstr ""
+msgstr "Bericht opgeslagen"
 
 #: kill/kill.py:124
 #, docstring
