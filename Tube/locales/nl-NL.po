@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: yamicogs\n"
 "POT-Creation-Date: 2024-04-13 19:14+0000\n"
-"PO-Revision-Date: 2024-04-15 22:53\n"
+"PO-Revision-Date: 2024-07-17 18:56\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -40,7 +40,9 @@ msgstr ""
 msgid "Unsubscribe a Discord channel from a YouTube channel\n\n"
 "        If no Discord channel is specified and the asAnnouncement flag not set to True, the subscription will be removed from all channels\n"
 "        "
-msgstr ""
+msgstr "Schrijf een Discord-kanaal uit via een YouTube-kanaal\n\n"
+"        Als er geen Discord kanaal is opgegeven en de asAnnouncement vlag niet op waar staat ingesteld het abonnement zal van alle kanalen\n"
+"        worden verwijderd        "
 
 #: Tube/tube.py:157
 #, docstring
@@ -99,5 +101,5 @@ msgstr ""
 #: Tube/tube.py:456
 #, docstring
 msgid "Enable the feed debugger"
-msgstr ""
+msgstr "Schakel de feed debugger in"
 
