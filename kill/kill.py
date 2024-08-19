@@ -80,30 +80,30 @@ class Kill(commands.Cog):
         """
         List all the kill messages
         """
-
-        embed = discord.Embed(
-            colour=discord.Colour(0x636BD6),
-            description=_(
-                "{killer} and {victim} will be replaced with a users mention\n"
-                "{killer2} and {victim2} will be replaced with a users name in italics"
-            ),
-        )
-        botkill = await self.config.guild(ctx.guild).botkill()
-        embed.add_field(name=_("Bot Kill"), value=botkill)
-        selfkill = await self.config.guild(ctx.guild).selfkill()
-        embed.add_field(name=_("Self Kill"), value=selfkill)
+        
         killmsgs = await self.config.guild(ctx.guild).msg()
-        k = 0
-        killmsg = ""
-        for msg in killmsgs:
-            killmsg += "`" + str(k) + ") " + msg + "`\n"
-            k += 1
-        if k == 0:
-            embed.add_field(name=_("Kill Messages"), value=_("There are no messages configured"))
-        else:
-            embed.add_field(name=_("Kill Messages"), value=killmsg)
+        if not killmsgs:
+            return await ctx.send(_("There are no messages configured"))
 
-        await ctx.send(embed=embed)
+        # Pagination settings
+        messages_per_page = 5  # Number of messages per embed
+        total_pages = (len(killmsgs) + messages_per_page - 1) // messages_per_page  # Calculate total pages
+
+        for page in range(total_pages):
+            embed = discord.Embed(
+                colour=discord.Colour(0x636BD6),
+                title=_("Kill Messages - Page {}/{}".format(page + 1, total_pages)),
+                description=_(
+                    "{killer} and {victim} will be replaced with a users mention\n"
+                    "{killer2} and {victim2} will be replaced with a users name in italics"
+                ),
+            )
+            start_index = page * messages_per_page
+            end_index = start_index + messages_per_page
+            for k in range(start_index, min(end_index, len(killmsgs))):
+                embed.add_field(name=f"{k})", value=killmsgs[k], inline=False)
+
+            await ctx.send(embed=embed)
 
     @killset.command(name="bot")
     async def _bot(self, ctx, *, msg):
