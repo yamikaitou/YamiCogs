@@ -78,32 +78,52 @@ class Kill(commands.Cog):
     @checks.bot_has_permissions(embed_links=True)
     async def _list(self, ctx):
         """
-        List all the kill messages
+        List all the kill messages with pagination buttons
         """
         
         killmsgs = await self.config.guild(ctx.guild).msg()
         if not killmsgs:
             return await ctx.send(_("There are no messages configured"))
 
-        # Pagination settings
         messages_per_page = 5  # Number of messages per embed
         total_pages = (len(killmsgs) + messages_per_page - 1) // messages_per_page  # Calculate total pages
 
-        for page in range(total_pages):
-            embed = discord.Embed(
-                colour=discord.Colour(0x636BD6),
-                title=_("Kill Messages - Page {}/{}".format(page + 1, total_pages)),
-                description=_(
-                    "{killer} and {victim} will be replaced with a users mention\n"
-                    "{killer2} and {victim2} will be replaced with a users name in italics"
-                ),
-            )
-            start_index = page * messages_per_page
-            end_index = start_index + messages_per_page
-            for k in range(start_index, min(end_index, len(killmsgs))):
-                embed.add_field(name=f"{k})", value=killmsgs[k], inline=False)
+        class PaginationView(View):
+            def __init__(self, total_pages):
+                super().__init__()
+                self.current_page = 0
+                self.total_pages = total_pages
 
-            await ctx.send(embed=embed)
+            @discord.ui.button(label="Previous", style=discord.ButtonStyle.primary)
+            async def previous(self, button: Button, interaction):
+                if self.current_page > 0:
+                    self.current_page -= 1
+                    await self.update_embed(interaction)
+
+            @discord.ui.button(label="Next", style=discord.ButtonStyle.primary)
+            async def next(self, button: Button, interaction):
+                if self.current_page < self.total_pages - 1:
+                    self.current_page += 1
+                    await self.update_embed(interaction)
+
+            async def update_embed(self, interaction):
+                embed = discord.Embed(
+                    colour=discord.Colour(0x636BD6),
+                    title=_("Kill Messages - Page {}/{}".format(self.current_page + 1, self.total_pages)),
+                    description=_(
+                        "{killer} and {victim} will be replaced with a users mention\n"
+                        "{killer2} and {victim2} will be replaced with a users name in italics"
+                    ),
+                )
+                start_index = self.current_page * messages_per_page
+                end_index = start_index + messages_per_page
+                for k in range(start_index, min(end_index, len(killmsgs))):
+                    embed.add_field(name=f"{k})", value=killmsgs[k], inline=False)
+
+                await interaction.response.edit_message(embed=embed)
+
+        view = PaginationView(total_pages)
+        await ctx.send(embed=view.update_embed(0), view=view)
 
     @killset.command(name="bot")
     async def _bot(self, ctx, *, msg):
