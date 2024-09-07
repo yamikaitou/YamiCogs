@@ -4,6 +4,7 @@ import random
 import discord
 from redbot.core import Config, checks, commands
 from redbot.core.i18n import Translator, cog_i18n
+from redbot.core.utils.views import SimpleMenu
 
 log = logging.getLogger("red.yamicogs.kill")
 _ = Translator("Kill", __file__)
@@ -88,6 +89,7 @@ class Kill(commands.Cog):
         # Pagination settings
         messages_per_page = 5  # Number of messages per embed
         total_pages = (len(killmsgs) + messages_per_page - 1) // messages_per_page  # Calculate total pages
+        pages = []
 
         for page in range(total_pages):
             embed = discord.Embed(
@@ -103,7 +105,9 @@ class Kill(commands.Cog):
             for k in range(start_index, min(end_index, len(killmsgs))):
                 embed.add_field(name=f"{k})", value=killmsgs[k], inline=False)
 
-            await ctx.send(embed=embed)
+            pages.append(embed)
+        
+        await SimpleMenu(pages).start(ctx)
 
     @killset.command(name="bot")
     async def _bot(self, ctx, *, msg):
