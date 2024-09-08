@@ -81,20 +81,22 @@ class Kill(commands.Cog):
         """
         List all the kill messages
         """
-        
+
         killmsgs = await self.config.guild(ctx.guild).msg()
         if not killmsgs:
             return await ctx.send(_("There are no messages configured"))
 
         # Pagination settings
         messages_per_page = 5  # Number of messages per embed
-        total_pages = (len(killmsgs) + messages_per_page - 1) // messages_per_page  # Calculate total pages
+        total_pages = (
+            len(killmsgs) + messages_per_page - 1
+        ) // messages_per_page  # Calculate total pages
         pages = []
 
         for page in range(total_pages):
             embed = discord.Embed(
                 colour=discord.Colour(0x636BD6),
-                title=_("Kill Messages - Page {}/{}".format(page + 1, total_pages)),
+                title=_("Kill Messages - Page {page}/{total_page}").format(page=page + 1, total_page=total_pages),
                 description=_(
                     "{killer} and {victim} will be replaced with a users mention\n"
                     "{killer2} and {victim2} will be replaced with a users name in italics"
@@ -106,7 +108,7 @@ class Kill(commands.Cog):
                 embed.add_field(name=f"{k})", value=killmsgs[k], inline=False)
 
             pages.append(embed)
-        
+
         await SimpleMenu(pages).start(ctx)
 
     @killset.command(name="bot")

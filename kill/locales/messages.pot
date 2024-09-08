@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-04-14 18:44+0000\n"
+"POT-Creation-Date: 2024-09-08 13:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: redgettext 3.4.2\n"
 
-#: kill/kill.py:14
+#: kill/kill.py:15
 #, docstring
 msgid ""
 "\n"
@@ -21,7 +21,7 @@ msgid ""
 "    "
 msgstr ""
 
-#: kill/kill.py:34
+#: kill/kill.py:35
 #, docstring
 msgid ""
 "\n"
@@ -31,7 +31,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: kill/kill.py:42
+#: kill/kill.py:43
 #, docstring
 msgid ""
 "\n"
@@ -42,11 +42,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: kill/kill.py:53
+#: kill/kill.py:54
 msgid "Message added"
 msgstr ""
 
-#: kill/kill.py:57
+#: kill/kill.py:58
 #, docstring
 msgid ""
 "\n"
@@ -54,21 +54,21 @@ msgid ""
 "        "
 msgstr ""
 
-#: kill/kill.py:62
+#: kill/kill.py:63
 msgid "Negative numbers are not supported"
 msgstr ""
 
-#: kill/kill.py:66
+#: kill/kill.py:67
 msgid ""
 "Sorry, but you don't have a kill message with that number. Please use "
 "`[p]killset list` to get the number of the message you wish to delete"
 msgstr ""
 
-#: kill/kill.py:75
+#: kill/kill.py:76
 msgid "Message removed"
 msgstr ""
 
-#: kill/kill.py:80
+#: kill/kill.py:81
 #, docstring
 msgid ""
 "\n"
@@ -76,29 +76,21 @@ msgid ""
 "        "
 msgstr ""
 
-#: kill/kill.py:86
+#: kill/kill.py:87
+msgid "There are no messages configured"
+msgstr ""
+
+#: kill/kill.py:99
+msgid "Kill Messages - Page {page}/{total_page}"
+msgstr ""
+
+#: kill/kill.py:100
 msgid ""
 "{killer} and {victim} will be replaced with a users mention\n"
 "{killer2} and {victim2} will be replaced with a users name in italics"
 msgstr ""
 
-#: kill/kill.py:92
-msgid "Bot Kill"
-msgstr ""
-
-#: kill/kill.py:94
-msgid "Self Kill"
-msgstr ""
-
-#: kill/kill.py:102 kill/kill.py:104
-msgid "Kill Messages"
-msgstr ""
-
-#: kill/kill.py:102
-msgid "There are no messages configured"
-msgstr ""
-
-#: kill/kill.py:110
+#: kill/kill.py:116
 #, docstring
 msgid ""
 "\n"
@@ -109,11 +101,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: kill/kill.py:120 kill/kill.py:134
+#: kill/kill.py:126 kill/kill.py:140
 msgid "Message saved"
 msgstr ""
 
-#: kill/kill.py:124
+#: kill/kill.py:130
 #, docstring
 msgid ""
 "\n"
@@ -124,7 +116,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: kill/kill.py:138
+#: kill/kill.py:144
 #, docstring
 msgid ""
 "\n"
@@ -132,13 +124,13 @@ msgid ""
 "        "
 msgstr ""
 
-#: kill/kill.py:150
+#: kill/kill.py:156
 msgid ""
 "Your life has been spared this time as I do not have any kill methods "
 "configured"
 msgstr ""
 
-#: kill/kill.py:165
+#: kill/kill.py:171
 #, docstring
 msgid ""
 "\n"
