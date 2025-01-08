@@ -131,7 +131,6 @@ dmypy.json
 
 .vscode/
 .utils/
-.devcontainer/devcontainer.json
 
 # Do not translate
 locales/messages.pot
