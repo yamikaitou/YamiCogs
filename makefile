@@ -1,6 +1,6 @@
 # thanks zeph
 # thanks flare
-PYTHON ?= python3.11
+PYTHON ?= .venv/bin/python3
 DIFF := $(shell git diff --name-only --staged "*.py" "*.pyi")
 ifeq ($(DIFF),)
 	DIFF := $(shell git ls-files "*.py" "*.pyi")
