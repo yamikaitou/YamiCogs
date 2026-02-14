@@ -10,6 +10,8 @@
     "short": "Updating server info channel",
     "end_user_data_statement": "This cog does not store any End User Data",
     "tags": [
-        "utils"
+        "utils",
+        "stats",
+        "server stats"
     ]
   }
